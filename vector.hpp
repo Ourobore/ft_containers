@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/03 13:50:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/03 14:51:46 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 		_alloc.construct(&_c[i], val);
 }
 
+
 // Destructor
 template < class T, class Allocator >
 vector<T, Allocator>::~vector()
@@ -86,6 +87,7 @@ vector<T, Allocator>::~vector()
 		_alloc.destroy(&_c[i]);
 	_alloc.deallocate(_c, _capacity);
 }
+
 
 // Capacity
 template < class T, class Allocator >
@@ -111,6 +113,7 @@ bool	vector<T, Allocator>::empty() const
 {
 	return (_size == 0);
 }
+
 
 // Element access
 template < class T, class Allocator >
