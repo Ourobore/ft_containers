@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/03 12:00:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/03 13:50:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,18 @@ class vector
 		allocator_type	_alloc;
 
 	public:
-		// Constructors
+		// Constructors and destructor
 		explicit	vector(const allocator_type& alloc = allocator_type());
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
+		
+		virtual ~vector();
 
 		// Capacity
 		size_type	size() const;
+		size_type	capacity() const;
+		size_type	max_size() const;
+		bool		empty() const;
 
 		// Overloads
 		reference		operator[](size_type n);
@@ -73,14 +78,41 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 		_alloc.construct(&_c[i], val);
 }
 
+// Destructor
+template < class T, class Allocator >
+vector<T, Allocator>::~vector()
+{
+	for (size_type i = 0; i < _size; i++)
+		_alloc.destroy(&_c[i]);
+	_alloc.deallocate(_c, _capacity);
+}
+
 // Capacity
 template < class T, class Allocator >
-typename vector<T, Allocator>::size_type	size() const
+typename vector<T, Allocator>::size_type	vector<T, Allocator>::size() const
 {
 	return (_size);
 }
 
-// Overloads
+template < class T, class Allocator >
+typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
+{
+	return (_capacity);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::size_type	vector<T, Allocator>::max_size() const
+{
+	return (_alloc.max_size());
+}
+
+template < class T, class Allocator>
+bool	vector<T, Allocator>::empty() const
+{
+	return (_size == 0);
+}
+
+// Element access
 template < class T, class Allocator >
 typename vector<T, Allocator>::reference	vector<T, Allocator>::operator[](size_type n)
 {
