@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RandomAccessIterator.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/05 19:20:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/09/06 10:35:26 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class RandomAccessIterator
 	public:
 		// Constructors, assignation and destructor
 		RandomAccessIterator();
+		RandomAccessIterator(pointer p);
 		RandomAccessIterator(const RandomAccessIterator& rhs);
 		RandomAccessIterator&	operator=(const RandomAccessIterator& rhs);
 		virtual ~RandomAccessIterator();
@@ -79,7 +80,12 @@ RandomAccessIterator<T>::RandomAccessIterator() : _it(NULL)
 }
 
 template <typename T>
-RandomAccessIterator<T>::RandomAccessIterator(const RandomAccessIterator& rhs) : _it(rhs._ptr)
+RandomAccessIterator<T>::RandomAccessIterator(pointer p) : _it(p)
+{
+}
+
+template <typename T>
+RandomAccessIterator<T>::RandomAccessIterator(const RandomAccessIterator& rhs) : _it(rhs._it)
 {
 }
 
@@ -139,7 +145,8 @@ typename RandomAccessIterator<T>::reference	RandomAccessIterator<T>::operator[](
 template <typename T>
 RandomAccessIterator<T>&	RandomAccessIterator<T>::operator++()
 {
-	return (++_it);
+	_it += 1;
+	return (*this);
 }
 
 template <typename T>
@@ -153,7 +160,8 @@ RandomAccessIterator<T>	RandomAccessIterator<T>::operator++(int)
 template <typename T>
 RandomAccessIterator<T>&	RandomAccessIterator<T>::operator--()
 {
-	return (--_it);
+	_it -= 1;
+	return (*this);
 }
 
 template <typename T>

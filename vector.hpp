@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/05 16:36:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/09/06 11:50:12 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <memory>
+# include "iterator/RandomAccessIterator.hpp"
 
 namespace ft
 {
@@ -32,7 +33,7 @@ class vector
 		typedef std::ptrdiff_t		difference_type;
 		typedef std::size_t			size_type;
 
-		//typedef 					iterator;
+		typedef RandomAccessIterator<value_type>	iterator;
 		//typedef 					const_iterator;
 		//typedef reverse_iterator<iterator>			reverse_iterator;
 		//typedef reverse_iterator<const_iterator>	const_reverse_operator;
@@ -50,6 +51,10 @@ class vector
 							const allocator_type& alloc = allocator_type());
 		virtual ~vector();
 
+		// Iterators
+		iterator	begin();
+		iterator	end();
+
 		// Capacity
 		size_type	size() const;
 		size_type	capacity() const;
@@ -59,7 +64,11 @@ class vector
 		// Overloads
 		reference		operator[](size_type n);
 		const_reference	operator[](size_type n) const;
+
+	private:
+		void	_reallocate(difference_type n);
 };
+
 
 // Constructors
 template < class T, class Allocator >
@@ -78,6 +87,7 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 }
 
 
+
 // Destructor
 template < class T, class Allocator >
 vector<T, Allocator>::~vector()
@@ -88,6 +98,22 @@ vector<T, Allocator>::~vector()
 }
 
 
+
+// Iterators
+template < class T, class Allocator >
+typename vector<T, Allocator>::iterator	vector<T, Allocator>::begin()
+{
+	return (_c);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::iterator	vector<T, Allocator>::end()
+{
+	return (_c + _size);
+}
+
+
+
 // Capacity
 template < class T, class Allocator >
 typename vector<T, Allocator>::size_type	vector<T, Allocator>::size() const
@@ -96,15 +122,15 @@ typename vector<T, Allocator>::size_type	vector<T, Allocator>::size() const
 }
 
 template < class T, class Allocator >
-typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
-{
-	return (_capacity);
-}
-
-template < class T, class Allocator >
 typename vector<T, Allocator>::size_type	vector<T, Allocator>::max_size() const
 {
 	return (_alloc.max_size());
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
+{
+	return (_capacity);
 }
 
 template < class T, class Allocator>
@@ -112,6 +138,7 @@ bool	vector<T, Allocator>::empty() const
 {
 	return (_size == 0);
 }
+
 
 
 // Element access
@@ -132,6 +159,41 @@ typename vector<T, Allocator>::const_reference	vector<T, Allocator>::operator[](
 	else
 		return (_c[n]);
 }
+
+
+
+// Modifiers
+
+
+
+
+// Private functions
+template <class T, class Allocator>
+void	vector<T, Allocator>::_reallocate(difference_type n)
+{
+	pointer	realloc;
+	difference_type	mult = 2;
+
+	while (_size + n > _capacity * 2 * mult)
+		mult++;
+	size_type	newCapacity =  _capacity * 2 * mult;
+	realloc = _alloc.allocate(newCapacity);
+
+	int	i = 0;
+	for (typename vector<value_type>::iterator it = this->begin(); it != this->end(); ++it)
+	{
+		_alloc.construct(&realloc[i], *it);
+		i++;
+	}
+	
+	for (typename vector<value_type>::iterator it = this->begin(); it != this->end(); ++it)
+		_alloc.destroy(it);
+	_alloc.deallocate(_c, _capacity);
+	
+	_c = realloc;
+	_capacity = newCapacity;
+}
+
 
 }
 
