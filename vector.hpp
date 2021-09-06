@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/06 16:22:57 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,24 @@ class vector
 		size_type	max_size() const;
 		void		resize(size_type n, value_type val = value_type());
 		bool		empty() const;
+		void		reserve(size_type n);
+
+		// Element access
+		reference		operator[](size_type n);
+		const_reference	operator[](size_type n) const;
+		reference		at(size_type n);
+		const_reference	at(size_type n) const;
+		reference		front();
+		const_reference	front() const;
+		reference		back();
+		const_reference	back() const;
 
 		// Modifiers
 		void	push_back(const_reference val);
-
-		// Overloads
-		reference		operator[](size_type n);
-		const_reference	operator[](size_type n) const;
+		void	pop_back();
+		
+		//Allocator
+		allocator_type	get_allocator() const;
 
 	private:
 		void	_reallocate(difference_type n = 1);
@@ -152,13 +163,6 @@ typename vector<T, Allocator>::size_type	vector<T, Allocator>::max_size() const
 	return (_alloc.max_size());
 }
 
-template < class T, class Allocator >
-typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
-{
-	return (_capacity);
-}
-
-
 template < class T, class Allocator>
 void	vector<T, Allocator>::resize(size_type n, value_type val)
 {
@@ -175,10 +179,23 @@ void	vector<T, Allocator>::resize(size_type n, value_type val)
 	_size = n;
 }
 
+template < class T, class Allocator >
+typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
+{
+	return (_capacity);
+}
+
 template < class T, class Allocator>
 bool	vector<T, Allocator>::empty() const
 {
 	return (_size == 0);
+}
+
+template < class T, class Allocator >
+void	vector<T, Allocator>::reserve(size_type n)
+{
+	if (n > _capacity)
+		_reallocate(n);
 }
 
 
@@ -187,6 +204,18 @@ bool	vector<T, Allocator>::empty() const
 template < class T, class Allocator >
 typename vector<T, Allocator>::reference	vector<T, Allocator>::operator[](size_type n)
 {
+	return (_c[n]);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::const_reference	vector<T, Allocator>::operator[](size_type n) const
+{
+	return (_c[n]);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::reference	vector<T, Allocator>::at(size_type n)
+{
 	if (n < 0 || n >= _size)
 		throw std::out_of_range("Index is out of range");
 	else
@@ -194,12 +223,36 @@ typename vector<T, Allocator>::reference	vector<T, Allocator>::operator[](size_t
 }
 
 template < class T, class Allocator >
-typename vector<T, Allocator>::const_reference	vector<T, Allocator>::operator[](size_type n) const
+typename vector<T, Allocator>::const_reference	vector<T, Allocator>::at(size_type n) const
 {
 	if (n < 0 || n >= _size)
 		throw std::out_of_range("Index is out of range");
 	else
 		return (_c[n]);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::reference	vector<T, Allocator>::front()
+{
+	return (*_c);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::const_reference	vector<T, Allocator>::front() const
+{
+	return (*_c);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::reference	vector<T, Allocator>::back()
+{
+	return (*(_c + _size - 1));
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::const_reference	vector<T, Allocator>::back() const
+{
+	return (*(_c + _size - 1));
 }
 
 
@@ -211,10 +264,24 @@ void	vector<T, Allocator>::push_back(const_reference val)
 	if (_size == _capacity)
 		_reallocate();
 	_alloc.construct(&_c[_size], val);
-	_size++;
+	++_size;
+}
+
+template < class T, class Allocator>
+void	vector<T, Allocator>::pop_back()
+{
+	_alloc.destroy(&_c[_size - 1]);
+	--_size;
 }
 
 
+
+// Allocator
+template <class T, class Allocator>
+typename vector<T, Allocator>::allocator_type	vector<T, Allocator>::get_allocator() const
+{
+	return (_alloc);
+}
 
 // Private functions
 template <class T, class Allocator>
