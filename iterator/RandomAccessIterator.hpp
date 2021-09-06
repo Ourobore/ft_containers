@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/06 10:35:26 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:04:56 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ RandomAccessIterator<T>	RandomAccessIterator<T>::operator--(int)
 template <typename T>
 RandomAccessIterator<T>	RandomAccessIterator<T>::operator+(difference_type n) const
 {
-	RandomAccessIterator<T> sum(this);
+	RandomAccessIterator<T> sum(*this);
 	sum._it += n;
 	return (sum);
 }
@@ -186,7 +186,7 @@ RandomAccessIterator<T>	RandomAccessIterator<T>::operator+(difference_type n) co
 template <typename T>
 RandomAccessIterator<T>	RandomAccessIterator<T>::operator-(difference_type n) const
 {
-	RandomAccessIterator<T> diff(this);
+	RandomAccessIterator<T> diff(*this);
 	diff._it -= n;
 	return (diff);
 }
