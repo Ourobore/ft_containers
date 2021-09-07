@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/06 16:22:57 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/07 10:10:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ class vector
 		explicit	vector(const allocator_type& alloc = allocator_type());
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
+		template <class InputIterator>
+		vector(InputIterator first, InputIterator last, \
+				const allocator_type& alloc = allocator_type());
 		vector(const vector<T, Allocator>& x);
 		virtual ~vector();
 
@@ -79,6 +82,7 @@ class vector
 		// Modifiers
 		void	push_back(const_reference val);
 		void	pop_back();
+		void	clear();
 		
 		//Allocator
 		allocator_type	get_allocator() const;
@@ -272,6 +276,14 @@ void	vector<T, Allocator>::pop_back()
 {
 	_alloc.destroy(&_c[_size - 1]);
 	--_size;
+}
+
+template < class T, class Allocator>
+void	vector<T, Allocator>::clear()
+{
+	for (size_type i = 0; i < _size; i++)
+		_alloc.destroy(&_c[i]);
+	_size = 0;
 }
 
 

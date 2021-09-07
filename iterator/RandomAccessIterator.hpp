@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/06 13:04:56 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/07 10:58:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ namespace ft
 {
 
 template <typename T>
-class RandomAccessIterator
+class RandomAccessIterator : public IteratorTraits
 {
 	public:
 		typedef T					value_type;
