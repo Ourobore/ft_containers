@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 10:11:05 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/07 10:32:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/07 14:21:40 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class InputIterator
 		reference	operator*();
 		pointer		operator->();
 
-		// Increment and Decrement
+		// Increment
 		InputIterator&	operator++();
 		InputIterator	operator++(int);
 };

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/07 10:58:48 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:19:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ namespace ft
 {
 
 template <typename T>
-class RandomAccessIterator : public IteratorTraits
+class RandomAccessIterator
 {
 	public:
 		typedef T					value_type;
@@ -70,7 +70,6 @@ class RandomAccessIterator : public IteratorTraits
 		RandomAccessIterator&	operator+=(difference_type n);
 		RandomAccessIterator&	operator-=(difference_type n);
 };
-
 
 
 // Constructors and destructor
@@ -145,7 +144,7 @@ typename RandomAccessIterator<T>::reference	RandomAccessIterator<T>::operator[](
 template <typename T>
 RandomAccessIterator<T>&	RandomAccessIterator<T>::operator++()
 {
-	_it += 1;
+	++_it;
 	return (*this);
 }
 
@@ -160,7 +159,7 @@ RandomAccessIterator<T>	RandomAccessIterator<T>::operator++(int)
 template <typename T>
 RandomAccessIterator<T>&	RandomAccessIterator<T>::operator--()
 {
-	_it -= 1;
+	--_it;
 	return (*this);
 }
 

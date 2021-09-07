@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/07 10:10:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/07 17:57:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,12 @@
 
 # include <iostream>
 # include <memory>
+
 # include "iterator/RandomAccessIterator.hpp"
+# include "iterator/InputIterator.hpp"
+
+# include "tool/EnableIf.hpp"
+# include "tool/IsIntegral.hpp"
 
 namespace ft
 {
@@ -97,7 +102,7 @@ class vector
 template < class T, class Allocator >
 vector<T, Allocator>::vector(const allocator_type& alloc) : _size(0), _capacity(0), _alloc(alloc)
 {
-	_c = _alloc.allocate(0);
+	_c = _alloc.allocate(_capacity);
 }
 
 template < class T, class Allocator >
@@ -109,8 +114,28 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 		_alloc.construct(&_c[i], val);
 }
 
+template< class T, class Allocator >
+template< class InputIterator >
+vector<T, Allocator>::vector(InputIterator first, InputIterator last, const allocator_type& alloc) \
+: _size(0), _capacity(0), _alloc(alloc)
+{
+	InputIterator count = first;
+
+	for (; count != last; count++)
+		_size++;
+
+	_capacity = _size;
+	_c = _alloc.allocate(_capacity);
+	for (size_type i = 0; i < _size; ++i)
+	{
+		_alloc.construct(&_c[i], *first);
+		++first;
+	}
+}
+
 template < class T, class Allocator >
-vector<T, Allocator>::vector(const vector<T, Allocator>& x) : _size(x._size), _capacity(x._size), _alloc(x._alloc)
+vector<T, Allocator>::vector(const vector<T, Allocator>& x) \
+: _size(x._size), _capacity(x._size), _alloc(x._alloc)
 {
 	_c = _alloc.allocate(_capacity);
 	for (size_type i = 0; i < _size; ++i)
@@ -301,10 +326,14 @@ void	vector<T, Allocator>::_reallocate(difference_type n)
 {
 	pointer	realloc;
 	difference_type	doublingCounter = 1;
+	size_type	newCapacity = 1;
 
-	while (_size + n > _capacity * 2 * doublingCounter)
-		doublingCounter++;
-	size_type	newCapacity =  _capacity * 2 * doublingCounter;
+	if (_capacity != 0)
+	{
+		while (_size + n > _capacity * 2 * doublingCounter)
+			doublingCounter++;
+		newCapacity =  _capacity * 2 * doublingCounter;
+	}
 	realloc = _alloc.allocate(newCapacity);
 
 	for (size_type i = 0; i < _size; ++i)
