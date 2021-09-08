@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/07 16:19:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/08 15:07:15 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class RandomAccessIterator
 		// Arithmetic
 		RandomAccessIterator	operator+(difference_type n) const;
 		RandomAccessIterator	operator-(difference_type n) const;
-		RandomAccessIterator	operator-(const RandomAccessIterator& rhs) const;
+		difference_type	operator-(const RandomAccessIterator& rhs) const;
 
 		// Relational
 		bool	operator<(const RandomAccessIterator& rhs) const;
@@ -191,11 +191,9 @@ RandomAccessIterator<T>	RandomAccessIterator<T>::operator-(difference_type n) co
 }
 
 template <typename T>
-RandomAccessIterator<T>	RandomAccessIterator<T>::operator-(const RandomAccessIterator<T>& rhs) const
+typename RandomAccessIterator<T>::difference_type	RandomAccessIterator<T>::operator-(const RandomAccessIterator<T>& rhs) const
 {
-	RandomAccessIterator<T> diff;
-	diff._it = _it - rhs._it;
-	return (diff);
+	return (_it - rhs._it);
 }
 
 

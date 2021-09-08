@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/08 12:09:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:59:05 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,13 @@ class vector
 
 		// Modifiers
 		template <class InputIterator>
-		void	assign(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+		void		assign(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
 						InputIterator last);
-		void	assign(size_type n, const_reference val);
-		void	push_back(const_reference val);
-		void	pop_back();
-		void	clear();
+		void		assign(size_type n, const_reference val);
+		void		push_back(const_reference val);
+		void		pop_back();
+		iterator	insert(iterator position, const_reference val);
+		void		clear();
 		
 		//Allocator
 		allocator_type	get_allocator() const;
@@ -157,25 +158,25 @@ vector<T, Allocator>::~vector()
 template < class T, class Allocator >
 typename vector<T, Allocator>::iterator	vector<T, Allocator>::begin()
 {
-	return iterator(_c);
+	return (_c);
 }
 
 template < class T, class Allocator >
 typename vector<T, Allocator>::const_iterator	vector<T, Allocator>::begin() const
 {
-	return iterator(_c);
+	return (_c);
 }
 
 template < class T, class Allocator >
 typename vector<T, Allocator>::iterator	vector<T, Allocator>::end()
 {
-	return iterator(_c + _size);
+	return (_c + _size);
 }
 
 template < class T, class Allocator >
 typename vector<T, Allocator>::const_iterator	vector<T, Allocator>::end() const
 {
-	return iterator(_c + _size);
+	return (_c + _size);
 }
 
 
@@ -223,7 +224,9 @@ bool	vector<T, Allocator>::empty() const
 template < class T, class Allocator >
 void	vector<T, Allocator>::reserve(size_type n)
 {
-	if (n > _capacity)
+	if (n > max_size())
+		throw std::length_error("vector::reserve : n is greater than vector::max_size()");
+	else if (n > _capacity)
 		_reallocate(n);
 }
 
@@ -333,6 +336,23 @@ void	vector<T, Allocator>::pop_back()
 	--_size;
 }
 
+template < class T, class Allocator >
+typename vector<T, Allocator>::iterator	vector<T, Allocator>::insert(iterator position, const_reference val)
+{
+	difference_type	pos = position - this->begin();
+	if (_size == _capacity)
+		_reallocate();
+
+	for (difference_type i = _size; i != pos; --i)
+	{
+		_alloc.construct(&_c[i], _c[i - 1]);
+		_alloc.destroy(&_c[i - 1]);
+	}
+	_alloc.construct(&_c[pos], val);
+	++_size;
+	return (position);
+}
+
 template < class T, class Allocator>
 void	vector<T, Allocator>::clear()
 {
@@ -361,7 +381,7 @@ void	vector<T, Allocator>::_reallocate(difference_type n)
 	if (_capacity != 0)
 	{
 		while (_size + n > _capacity * 2 * doublingCounter)
-			doublingCounter++;
+			++doublingCounter;
 		newCapacity =  _capacity * 2 * doublingCounter;
 	}
 	realloc = _alloc.allocate(newCapacity);
