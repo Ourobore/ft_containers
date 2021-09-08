@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/07 17:57:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/08 12:09:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include "iterator/RandomAccessIterator.hpp"
 # include "iterator/InputIterator.hpp"
 
-# include "tool/EnableIf.hpp"
-# include "tool/IsIntegral.hpp"
+# include "utils/EnableIf.hpp"
+# include "utils/IsIntegral.hpp"
 
 namespace ft
 {
@@ -55,8 +55,8 @@ class vector
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
 		template <class InputIterator>
-		vector(InputIterator first, InputIterator last, \
-				const allocator_type& alloc = allocator_type());
+		vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+				InputIterator last, const allocator_type& alloc = allocator_type());
 		vector(const vector<T, Allocator>& x);
 		virtual ~vector();
 
@@ -68,9 +68,9 @@ class vector
 
 		// Capacity
 		size_type	size() const;
-		size_type	capacity() const;
 		size_type	max_size() const;
 		void		resize(size_type n, value_type val = value_type());
+		size_type	capacity() const;
 		bool		empty() const;
 		void		reserve(size_type n);
 
@@ -85,6 +85,10 @@ class vector
 		const_reference	back() const;
 
 		// Modifiers
+		template <class InputIterator>
+		void	assign(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+						InputIterator last);
+		void	assign(size_type n, const_reference val);
 		void	push_back(const_reference val);
 		void	pop_back();
 		void	clear();
@@ -114,9 +118,10 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 		_alloc.construct(&_c[i], val);
 }
 
-template< class T, class Allocator >
-template< class InputIterator >
-vector<T, Allocator>::vector(InputIterator first, InputIterator last, const allocator_type& alloc) \
+template < class T, class Allocator >
+template < class InputIterator >
+vector<T, Allocator>::vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+							InputIterator last, const allocator_type& alloc) \
 : _size(0), _capacity(0), _alloc(alloc)
 {
 	InputIterator count = first;
@@ -126,11 +131,8 @@ vector<T, Allocator>::vector(InputIterator first, InputIterator last, const allo
 
 	_capacity = _size;
 	_c = _alloc.allocate(_capacity);
-	for (size_type i = 0; i < _size; ++i)
-	{
+	for (size_type i = 0; i < _size; ++i, ++first)
 		_alloc.construct(&_c[i], *first);
-		++first;
-	}
 }
 
 template < class T, class Allocator >
@@ -145,8 +147,7 @@ vector<T, Allocator>::vector(const vector<T, Allocator>& x) \
 template < class T, class Allocator >
 vector<T, Allocator>::~vector()
 {
-	for (size_type i = 0; i < _size; ++i)
-		_alloc.destroy(&_c[i]);
+	this->clear();
 	_alloc.deallocate(_c, _capacity);
 }
 
@@ -196,8 +197,7 @@ template < class T, class Allocator>
 void	vector<T, Allocator>::resize(size_type n, value_type val)
 {
 	if (n < _size)
-		for (size_type i = n; i < _size; ++i)
-			_alloc.destroy(&_c[i]);
+		this->clear();
 	else if (n > _size)
 	{
 		if (n + _size > _capacity)
@@ -287,6 +287,36 @@ typename vector<T, Allocator>::const_reference	vector<T, Allocator>::back() cons
 
 
 // Modifiers
+template < class T, class Allocator >
+template < class InputIterator >
+void	vector<T, Allocator>::assign(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+								InputIterator last)
+{
+	this->clear();
+
+	InputIterator count = first;
+	for (; count != last; count++)
+		_size++;
+
+	if (_size > _capacity)
+		_reallocate(_size);
+	
+	for (size_type i = 0; i < _size; ++i, ++first)
+		_alloc.construct(&_c[i], *first);
+}
+
+template < class T, class Allocator >
+void	vector<T, Allocator>::assign(size_type n, const_reference val)
+{
+	this->clear();
+
+	if (n > _capacity)
+		_reallocate(n);
+
+	for (size_type i = 0; i < n; ++i, ++_size)
+		_c[i] = val;
+}
+
 template < class T, class Allocator>
 void	vector<T, Allocator>::push_back(const_reference val)
 {
