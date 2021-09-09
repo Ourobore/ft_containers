@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 16:05:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:47:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,9 @@ vector<T, Allocator>&	vector<T, Allocator>::operator=(const vector<T, Allocator>
 	if (this != &x)
 	{
 		this->clear();
-		this->reserve(x.capacity());
+		this->reserve(x.size());
 	
-		for (size_type i = 0; i < x.size(); ++i)
+		for (size_type i = 0; i < x.size(); ++i, ++_size)
 			_alloc.construct(&_c[i], x[i]);
 	}
 	return (*this);
@@ -247,7 +247,7 @@ template < class T, class Allocator >
 void	vector<T, Allocator>::reserve(size_type n)
 {
 	if (n > max_size())
-		throw std::length_error("vector::reserve : n is greater than vector::max_size()");
+		throw std::length_error("vector::reserve() : n is greater than vector::max_size()");
 	else if (n > _capacity)
 		_reallocate(n);
 }
@@ -483,7 +483,7 @@ void	vector<T, Allocator>::_reallocate(difference_type n)
 {
 	pointer	realloc;
 	difference_type	doublingCounter = 1;
-	size_type	newCapacity = 1;
+	size_type	newCapacity = 1 * n;
 
 	if (_capacity != 0)
 	{
