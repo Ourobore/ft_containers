@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 12:20:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 16:05:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <memory>
 
 # include "iterator/RandomAccessIterator.hpp"
-# include "iterator/InputIterator.hpp"
 
 # include "utils/EnableIf.hpp"
 # include "utils/IsIntegral.hpp"
@@ -39,7 +38,7 @@ class vector
 		typedef std::size_t			size_type;
 
 		typedef RandomAccessIterator<value_type>		iterator;
-		typedef const RandomAccessIterator<value_type>	const_iterator;
+		typedef RandomAccessIterator<const value_type>	const_iterator;
 		//typedef reverse_iterator<iterator>			reverse_iterator;
 		//typedef reverse_iterator<const_iterator>	const_reverse_operator;
 
@@ -54,6 +53,7 @@ class vector
 		explicit	vector(const allocator_type& alloc = allocator_type());
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
+		vector&		operator=(const vector<T, Allocator>& x);
 		template < class InputIterator >
 		vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
 								InputIterator last, const allocator_type& alloc = allocator_type());
@@ -99,6 +99,7 @@ class vector
 							InputIterator last);
 		iterator	erase(iterator position);
 		iterator	erase(iterator first, iterator last);
+		void		swap(vector<value_type>& x);
 		void		clear();
 		
 		//Allocator
@@ -124,6 +125,20 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 	_c = _alloc.allocate(_capacity);
 	for (size_type i = 0; i < _size; ++i)
 		_alloc.construct(&_c[i], val);
+}
+
+template < class T, class Allocator >
+vector<T, Allocator>&	vector<T, Allocator>::operator=(const vector<T, Allocator>& x)
+{
+	if (this != &x)
+	{
+		this->clear();
+		this->reserve(x.capacity());
+	
+		for (size_type i = 0; i < x.size(); ++i)
+			_alloc.construct(&_c[i], x[i]);
+	}
+	return (*this);
 }
 
 template < class T, class Allocator >
@@ -425,9 +440,24 @@ typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator fi
 	for (size_type i = posFirst; i < posLast; ++i)
 		_alloc.destroy(&_c[i]);
 	for (size_type i = posLast; i < _size; ++i)
-		_alloc.construct(&_c[posFirst + i - posLast], _c[i]);
+		_alloc.construct(&_c[i - n], _c[i]);
 	_size -= n;
 	return iterator(&_c[posLast]);
+}
+
+template < class T, class Allocator >
+void	vector<T, Allocator>::swap(vector<value_type>& x)
+{
+	pointer		tmpContainer = _c;
+	size_type	tmpSize = _size;
+	size_type	tmpCapacity = _capacity;
+
+	_c = x._c;
+	_size = x._size;
+	_capacity = x._capacity;
+	x._c = tmpContainer;
+	x._size = tmpSize;
+	x._capacity = tmpCapacity;
 }
 
 template < class T, class Allocator>

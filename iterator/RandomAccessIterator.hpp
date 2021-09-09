@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 11:13:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 15:13:32 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define RANDOMACCESSITERATOR_HPP
 
 # include <iostream>
+
+# include "utils/IsConst.hpp"
+# include "utils/IteratorType.hpp"
 
 namespace ft
 {
