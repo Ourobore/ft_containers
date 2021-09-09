@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/08 16:44:24 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 10:24:05 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int main()
 	test.push_back(6);
 	test.push_back(42);
 	test.push_back(-21);
-	//test.push_back(15);
 	test.push_back(69);
 
 	std::cout << "test" << std::endl;
@@ -29,12 +28,20 @@ int main()
 		std::cout << *it << std::endl;
 
 	std::cout << std::endl;
-	std::cout << test.size() << std::endl;
-	std::cout << test.capacity() << std::endl;
 	ft::vector<int>::iterator it = test.insert(test.begin(), -33);
 	test.insert(test.begin(), -46);
 	test.insert(test.begin(), -555);
 	std::cout << std::endl;
+	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
+		std::cout << *it << std::endl;
+
+	std::cout << std::endl;
+	test.insert(test.end(), 4, 7);
+	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
+		std::cout << *it << std::endl;
+
+	std::cout << std::endl;
+	test.insert(test.end(), test.begin(), test.begin() + 3);
 	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
 		std::cout << *it << std::endl;
 	/*std::cout << test.size() << std::endl;

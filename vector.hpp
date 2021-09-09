@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/08 16:59:05 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 10:25:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class vector
 		explicit	vector(const allocator_type& alloc = allocator_type());
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
-		template <class InputIterator>
+		template < class InputIterator >
 		vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
 				InputIterator last, const allocator_type& alloc = allocator_type());
 		vector(const vector<T, Allocator>& x);
@@ -85,13 +85,18 @@ class vector
 		const_reference	back() const;
 
 		// Modifiers
-		template <class InputIterator>
+		template < class InputIterator >
 		void		assign(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
-						InputIterator last);
+							InputIterator last);
 		void		assign(size_type n, const_reference val);
 		void		push_back(const_reference val);
 		void		pop_back();
 		iterator	insert(iterator position, const_reference val);
+		void		insert(iterator position, size_type n, const_reference val);
+		template < class InputIterator >
+		void		insert(iterator position, \
+							typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
+							InputIterator last);
 		void		clear();
 		
 		//Allocator
@@ -194,7 +199,7 @@ typename vector<T, Allocator>::size_type	vector<T, Allocator>::max_size() const
 	return (_alloc.max_size());
 }
 
-template < class T, class Allocator>
+template < class T, class Allocator >
 void	vector<T, Allocator>::resize(size_type n, value_type val)
 {
 	if (n < _size)
@@ -215,7 +220,7 @@ typename vector<T, Allocator>::size_type	vector<T, Allocator>::capacity() const
 	return (_capacity);
 }
 
-template < class T, class Allocator>
+template < class T, class Allocator >
 bool	vector<T, Allocator>::empty() const
 {
 	return (_size == 0);
@@ -320,7 +325,7 @@ void	vector<T, Allocator>::assign(size_type n, const_reference val)
 		_c[i] = val;
 }
 
-template < class T, class Allocator>
+template < class T, class Allocator >
 void	vector<T, Allocator>::push_back(const_reference val)
 {
 	if (_size == _capacity)
@@ -329,7 +334,7 @@ void	vector<T, Allocator>::push_back(const_reference val)
 	++_size;
 }
 
-template < class T, class Allocator>
+template < class T, class Allocator >
 void	vector<T, Allocator>::pop_back()
 {
 	_alloc.destroy(&_c[_size - 1]);
@@ -339,18 +344,59 @@ void	vector<T, Allocator>::pop_back()
 template < class T, class Allocator >
 typename vector<T, Allocator>::iterator	vector<T, Allocator>::insert(iterator position, const_reference val)
 {
-	difference_type	pos = position - this->begin();
+	size_type	pos = static_cast<size_type>(position - this->begin());
 	if (_size == _capacity)
 		_reallocate();
 
-	for (difference_type i = _size; i != pos; --i)
+	++_size;
+	for (size_type i = _size - 1; i != pos; --i)
 	{
 		_alloc.construct(&_c[i], _c[i - 1]);
 		_alloc.destroy(&_c[i - 1]);
 	}
 	_alloc.construct(&_c[pos], val);
-	++_size;
-	return (position);
+	return iterator(&_c[pos]);
+}
+
+template < class T, class Allocator >
+void	vector<T, Allocator>::insert(iterator position, size_type n, const_reference val)
+{
+	size_type	pos = static_cast<size_type>(position - this->begin());
+	if (_size + n > _capacity)
+		_reallocate(n);
+
+	_size += n;
+	for (size_type i = _size - 1; i != pos + n - 1; --i)
+	{
+		_alloc.construct(&_c[i], _c[i - n]);
+		_alloc.destroy(&_c[i - n]);
+	}
+	for (size_type i = pos + n - 1; i != pos - 1; --i)
+		_alloc.construct(&_c[i], val);
+}
+
+template < class T, class Allocator >
+template < class InputIterator >
+void	vector<T, Allocator>::insert(iterator position, \
+			typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
+			InputIterator last)
+{
+	size_type	pos = static_cast<size_type>(position - this->begin());
+	size_type	n = 0;
+	for (InputIterator it = first; it != last; ++it, ++n);
+
+	if (_size + n > _capacity)
+		_reallocate(n);
+
+	_size += n;
+	for (size_type i = _size - 1; i != pos + n - 1; --i)
+	{
+		_alloc.construct(&_c[i], _c[i - n]);
+		_alloc.destroy(&_c[i - n]);
+	}
+	InputIterator val = first;
+	for (size_type i = pos + n - 1; i != pos - 1; --i, ++first)
+		_alloc.construct(&_c[i], *val);
 }
 
 template < class T, class Allocator>
@@ -371,7 +417,7 @@ typename vector<T, Allocator>::allocator_type	vector<T, Allocator>::get_allocato
 }
 
 // Private functions
-template <class T, class Allocator>
+template < class T, class Allocator >
 void	vector<T, Allocator>::_reallocate(difference_type n)
 {
 	pointer	realloc;
