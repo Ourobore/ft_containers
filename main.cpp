@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 10:24:05 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:19:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,35 +27,12 @@ int main()
 	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
 		std::cout << *it << std::endl;
 
-	std::cout << std::endl;
-	ft::vector<int>::iterator it = test.insert(test.begin(), -33);
-	test.insert(test.begin(), -46);
-	test.insert(test.begin(), -555);
-	std::cout << std::endl;
-	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
-		std::cout << *it << std::endl;
-
-	std::cout << std::endl;
-	test.insert(test.end(), 4, 7);
-	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
-		std::cout << *it << std::endl;
-
-	std::cout << std::endl;
-	test.insert(test.end(), test.begin(), test.begin() + 3);
-	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
-		std::cout << *it << std::endl;
-	/*std::cout << test.size() << std::endl;
-	std::cout << test.capacity() << std::endl;
-	std::cout << *it << std::endl;
-	ft::vector<int>::iterator ip = test.insert(test.begin(), -99);
-	std::cout << test.size() << std::endl;
-	std::cout << test.capacity() << std::endl;
-	std::cout << *ip << std::endl;
-	ft::vector<int>::iterator iq = test.insert(test.begin(), 555);
-	std::cout << *iq << std::endl;
+	//std::cout << std::endl;
+	//test.erase(test.end());
+	//for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
+	//	std::cout << *it << std::endl;
 
 	std::cout << std::endl;
 	for (ft::vector<int>::iterator it = test.begin(); it != test.end(); ++it)
 		std::cout << *it << std::endl;
-*/
 }

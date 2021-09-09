@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 10:25:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:20:14 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,16 @@ class vector
 		pointer			_c;
 		size_type		_size;
 		size_type		_capacity;
+		allocator_type	_alloc;
 
 	public:
-		allocator_type	_alloc;
 		// Constructors and destructor
 		explicit	vector(const allocator_type& alloc = allocator_type());
 		explicit	vector(size_type n, const_reference val = value_type(), \
 							const allocator_type& alloc = allocator_type());
 		template < class InputIterator >
 		vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
-				InputIterator last, const allocator_type& alloc = allocator_type());
+								InputIterator last, const allocator_type& alloc = allocator_type());
 		vector(const vector<T, Allocator>& x);
 		virtual ~vector();
 
@@ -97,6 +97,8 @@ class vector
 		void		insert(iterator position, \
 							typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
 							InputIterator last);
+		iterator	erase(iterator position);
+		iterator	erase(iterator first, iterator last);
 		void		clear();
 		
 		//Allocator
@@ -127,7 +129,7 @@ vector<T, Allocator>::vector(size_type n, const_reference val, const allocator_t
 template < class T, class Allocator >
 template < class InputIterator >
 vector<T, Allocator>::vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, \
-							InputIterator last, const allocator_type& alloc) \
+								InputIterator last, const allocator_type& alloc) \
 : _size(0), _capacity(0), _alloc(alloc)
 {
 	InputIterator count = first;
@@ -397,6 +399,35 @@ void	vector<T, Allocator>::insert(iterator position, \
 	InputIterator val = first;
 	for (size_type i = pos + n - 1; i != pos - 1; --i, ++first)
 		_alloc.construct(&_c[i], *val);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator position)
+{
+	size_type	pos = static_cast<size_type>(position - this->begin());
+
+	for (size_type i = pos; i != _size; ++i)
+	{
+		_alloc.destroy(&_c[i]);
+		_alloc.construct(&_c[i], _c[i + 1]);
+	}
+	--_size;
+	return iterator(&_c[pos]);
+}
+
+template < class T, class Allocator >
+typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator first, iterator last)
+{
+	size_type posFirst = static_cast<size_type>(first - this->begin());
+	size_type posLast = static_cast<size_type>(last - this->begin());
+	size_type n = posLast - posFirst;
+
+	for (size_type i = posFirst; i < posLast; ++i)
+		_alloc.destroy(&_c[i]);
+	for (size_type i = posLast; i < _size; ++i)
+		_alloc.construct(&_c[posFirst + i - posLast], _c[i]);
+	_size -= n;
+	return iterator(&_c[posLast]);
 }
 
 template < class T, class Allocator>
