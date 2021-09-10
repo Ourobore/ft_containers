@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 11:39:03 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 16:28:26 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <memory>
 
 # include "iterator/RandomAccessIterator.hpp"
+# include "iterator/ReverseIterator.hpp"
 
 # include "utils/EnableIf.hpp"
 # include "utils/IsIntegral.hpp"
@@ -37,11 +38,11 @@ class vector
 		typedef const value_type*	const_pointer;
 		typedef std::ptrdiff_t		difference_type;
 		typedef std::size_t			size_type;
-
+	
 		typedef RandomAccessIterator<value_type>		iterator;
 		typedef RandomAccessIterator<const value_type>	const_iterator;
-		//typedef reverse_iterator<iterator>			reverse_iterator;
-		//typedef reverse_iterator<const_iterator>	const_reverse_operator;
+		typedef reverse_iterator<iterator>				reverse_iterator;
+		typedef reverse_iterator<const_iterator>		const_reverse_iterator;
 
 	protected:
 		pointer			_c;
