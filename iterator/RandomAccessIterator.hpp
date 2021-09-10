@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 15:13:32 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 12:46:06 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ class RandomAccessIterator
 		bool	operator<=(const RandomAccessIterator& rhs) const;
 		bool	operator>=(const RandomAccessIterator& rhs) const;
 
-		// Assignment arithmetics
+		// Assignment arithmetic
 		RandomAccessIterator&	operator+=(difference_type n);
 		RandomAccessIterator&	operator-=(difference_type n);
 };

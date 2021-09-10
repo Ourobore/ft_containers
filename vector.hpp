@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 11:35:13 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 11:39:03 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -558,6 +558,12 @@ bool	operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs
 		return (true);
 	else
 		return (false);
+}
+
+template < class T, class Allocator >
+void	swap(vector<T, Allocator>& x, vector<T, Allocator>& y)
+{
+	x.swap(y);
 }
 
 }
