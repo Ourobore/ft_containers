@@ -6,12 +6,15 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 12:46:51 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 13:53:22 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSEITERATOR_HPP
 # define REVERSEITERATOR_HPP
+
+namespace ft
+{
 
 template < class Iterator >
 class reverse_iterator
@@ -31,7 +34,6 @@ class reverse_iterator
 		// Constructors
 		reverse_iterator();
 		explicit reverse_iterator(iterator_type it);
-		template < class Iterator >
 		reverse_iterator(const reverse_iterator<Iterator>& rev_it);
 
 		// Dereference
@@ -53,5 +55,54 @@ class reverse_iterator
 		reverse_iterator&	operator+=(difference_type n);
 		reverse_iterator&	operator-=(difference_type n);
 };
+
+
+// Constructors
+template < class Iterator >
+reverse_iterator<Iterator>::reverse_iterator() : _it(NULL)
+{
+}
+
+template < class Iterator >
+reverse_iterator<Iterator>::reverse_iterator(iterator_type it) : _it(it)
+{
+}
+
+template < class Iterator >
+reverse_iterator<Iterator>::reverse_iterator(const reverse_iterator<Iterator>& rev_it) : _it(rev_it._it)
+{
+}
+
+
+
+// Dereference
+template < class Iterator >
+typename reverse_iterator<Iterator>::reference	reverse_iterator<Iterator>::operator*()
+{
+	return (*_it);
+}
+
+template < class Iterator >
+typename reverse_iterator<Iterator>::pointer	reverse_iterator<Iterator>::operator->()
+{
+	return (_it);
+}
+
+template < class Iterator >
+typename reverse_iterator<Iterator>::reference	reverse_iterator<Iterator>::operator[](difference_type n)
+{
+	return (_it[n]);
+}
+
+
+
+// Increment and Decrement
+template < class Iterator >
+reverse_iterator<Iterator>&	reverse_iterator<Iterator>::operator++()
+{
+	
+}
+
+}
 
 #endif

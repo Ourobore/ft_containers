@@ -6,12 +6,15 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 11:14:19 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 11:21:09 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 13:32:31 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXICOGRAPHICALCOMPARE_HPP
 # define LEXICOGRAPHICALCOMPARE_HPP
+
+namespace ft
+{
 
 template < class InputIterator1, class InputIterator2 >
 bool	lexicographical_compare(InputIterator1 first1, InputIterator1 last1, \
@@ -27,6 +30,8 @@ bool	lexicographical_compare(InputIterator1 first1, InputIterator1 last1, \
 		++first2;
 	}
 	return (first2 != last2);
+}
+
 }
 
 #endif
