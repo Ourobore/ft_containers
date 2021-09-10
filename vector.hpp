@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 16:28:26 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 16:31:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ class vector
 	
 		typedef RandomAccessIterator<value_type>		iterator;
 		typedef RandomAccessIterator<const value_type>	const_iterator;
-		typedef reverse_iterator<iterator>				reverse_iterator;
-		typedef reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef ReverseIterator<iterator>				reverse_iterator;
+		typedef ReverseIterator<const_iterator>			const_reverse_iterator;
 
 	protected:
 		pointer			_c;

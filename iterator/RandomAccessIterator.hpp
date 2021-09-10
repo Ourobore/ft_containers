@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 12:46:06 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 16:38:05 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,20 @@ RandomAccessIterator<T>&	RandomAccessIterator<T>::operator-=(difference_type n)
 {
 	_it -= n;
 	return (*this);
+}
+
+
+// Non member function overloads
+template < typename T >
+RandomAccessIterator<T>	operator+(typename RandomAccessIterator<T>::difference_type n, const RandomAccessIterator<T>& rev_it)
+{
+	return RandomAccessIterator<T>(rev_it + n);
+}
+
+template < typename T >
+RandomAccessIterator<T>		operator-(typename RandomAccessIterator<T>::difference_type n, const RandomAccessIterator<T>& rev_it)
+{
+	return RandomAccessIterator<T>(rev_it - n);
 }
 
 }
