@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 17:47:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 11:35:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # include "utils/EnableIf.hpp"
 # include "utils/IsIntegral.hpp"
+# include "utils/LexicographicalCompare.hpp"
 
 namespace ft
 {
@@ -104,9 +105,6 @@ class vector
 		
 		//Allocator
 		allocator_type	get_allocator() const;
-
-	private:
-		void	_reallocate(difference_type n = 1);
 };
 
 
@@ -220,11 +218,19 @@ template < class T, class Allocator >
 void	vector<T, Allocator>::resize(size_type n, value_type val)
 {
 	if (n < _size)
-		this->clear();
+	{
+		for (size_type i = n; i < _size; ++i)
+			_alloc.destroy(&_c[i]);
+	}
 	else if (n > _size)
 	{
-		if (n + _size > _capacity)
-			_reallocate(n - _size);
+		if (n > _capacity)
+		{
+			if (_capacity * 2 < n)
+				reserve(n);
+			else
+				reserve(_capacity * 2);
+		}
 		for (size_type i = _size; i < n; ++i)
 			_alloc.construct(&_c[i], val);
 	}
@@ -249,7 +255,20 @@ void	vector<T, Allocator>::reserve(size_type n)
 	if (n > max_size())
 		throw std::length_error("vector::reserve() : n is greater than vector::max_size()");
 	else if (n > _capacity)
-		_reallocate(n);
+	{
+		pointer	realloc;
+
+		realloc = _alloc.allocate(n);
+		for (size_type i = 0; i < _size; ++i)
+		{
+			_alloc.construct(&realloc[i], _c[i]);
+			_alloc.destroy(&_c[i]);
+		}
+		_alloc.deallocate(_c, _capacity);
+	
+		_c = realloc;
+		_capacity = n;
+	}
 }
 
 
@@ -324,7 +343,7 @@ void	vector<T, Allocator>::assign(typename enable_if<!is_integral<InputIterator>
 		_size++;
 
 	if (_size > _capacity)
-		_reallocate(_size);
+		reserve(_size);
 	
 	for (size_type i = 0; i < _size; ++i, ++first)
 		_alloc.construct(&_c[i], *first);
@@ -336,17 +355,17 @@ void	vector<T, Allocator>::assign(size_type n, const_reference val)
 	this->clear();
 
 	if (n > _capacity)
-		_reallocate(n);
+		reserve(n);
 
 	for (size_type i = 0; i < n; ++i, ++_size)
-		_c[i] = val;
+		_alloc.construct(&_c[i], val);
 }
 
 template < class T, class Allocator >
 void	vector<T, Allocator>::push_back(const_reference val)
 {
 	if (_size == _capacity)
-		_reallocate();
+		reserve(_capacity == 0 ? 1 : _capacity * 2);;
 	_alloc.construct(&_c[_size], val);
 	++_size;
 }
@@ -363,7 +382,7 @@ typename vector<T, Allocator>::iterator	vector<T, Allocator>::insert(iterator po
 {
 	size_type	pos = static_cast<size_type>(position - this->begin());
 	if (_size == _capacity)
-		_reallocate();
+		reserve(_capacity == 0 ? 1 : _capacity * 2);
 
 	++_size;
 	for (size_type i = _size - 1; i != pos; --i)
@@ -380,7 +399,7 @@ void	vector<T, Allocator>::insert(iterator position, size_type n, const_referenc
 {
 	size_type	pos = static_cast<size_type>(position - this->begin());
 	if (_size + n > _capacity)
-		_reallocate(n);
+		reserve(_size + n);
 
 	_size += n;
 	for (size_type i = _size - 1; i != pos + n - 1; --i)
@@ -388,7 +407,7 @@ void	vector<T, Allocator>::insert(iterator position, size_type n, const_referenc
 		_alloc.construct(&_c[i], _c[i - n]);
 		_alloc.destroy(&_c[i - n]);
 	}
-	for (size_type i = pos + n - 1; i != pos - 1; --i)
+	for (size_type i = pos; i != pos + n; ++i)
 		_alloc.construct(&_c[i], val);
 }
 
@@ -403,7 +422,12 @@ void	vector<T, Allocator>::insert(iterator position, \
 	for (InputIterator it = first; it != last; ++it, ++n);
 
 	if (_size + n > _capacity)
-		_reallocate(n);
+	{
+		if (_capacity * 2 < _size + n)
+			reserve(_size + n);
+		else
+			reserve(_capacity * 2);
+	}
 
 	_size += n;
 	for (size_type i = _size - 1; i != pos + n - 1; --i)
@@ -411,15 +435,15 @@ void	vector<T, Allocator>::insert(iterator position, \
 		_alloc.construct(&_c[i], _c[i - n]);
 		_alloc.destroy(&_c[i - n]);
 	}
-	InputIterator val = first;
-	for (size_type i = pos + n - 1; i != pos - 1; --i, ++first)
-		_alloc.construct(&_c[i], *val);
+	
+	for (size_type i = pos; i != pos + n; ++i, ++first)
+		_alloc.construct(&_c[i], *first);
 }
 
 template < class T, class Allocator >
 typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator position)
 {
-	size_type	pos = static_cast<size_type>(position - this->begin());
+	size_type	pos = static_cast<size_type>(position - begin());
 
 	for (size_type i = pos; i != _size; ++i)
 	{
@@ -433,8 +457,8 @@ typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator po
 template < class T, class Allocator >
 typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator first, iterator last)
 {
-	size_type posFirst = static_cast<size_type>(first - this->begin());
-	size_type posLast = static_cast<size_type>(last - this->begin());
+	size_type posFirst = static_cast<size_type>(first - begin());
+	size_type posLast = static_cast<size_type>(last - begin());
 	size_type n = posLast - posFirst;
 
 	for (size_type i = posFirst; i < posLast; ++i)
@@ -477,33 +501,64 @@ typename vector<T, Allocator>::allocator_type	vector<T, Allocator>::get_allocato
 	return (_alloc);
 }
 
-// Private functions
+
+//Non member function overloads
 template < class T, class Allocator >
-void	vector<T, Allocator>::_reallocate(difference_type n)
+bool	operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
 {
-	pointer	realloc;
-	difference_type	doublingCounter = 1;
-	size_type	newCapacity = 1 * n;
-
-	if (_capacity != 0)
-	{
-		while (_size + n > _capacity * 2 * doublingCounter)
-			++doublingCounter;
-		newCapacity =  _capacity * 2 * doublingCounter;
-	}
-	realloc = _alloc.allocate(newCapacity);
-
-	for (size_type i = 0; i < _size; ++i)
-	{
-		_alloc.construct(&realloc[i], _c[i]);
-		_alloc.destroy(&_c[i]);
-	}
-	_alloc.deallocate(_c, _capacity);
-	
-	_c = realloc;
-	_capacity = newCapacity;
+	if (lhs.size() != rhs.size())
+		return (false);
+	if (!(lhs < rhs) && !(rhs < lhs))
+		return (true);
+	else
+		return (false);
 }
 
+template < class T, class Allocator >
+bool	operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
+{
+	if (!(lhs == rhs))
+		return (true);
+	else
+		return (false);
+}
+
+template < class T, class Allocator >
+bool	operator<(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
+{
+	if (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+		return (true);
+	else
+		return (false);
+}
+
+template < class T, class Allocator >
+bool	operator<=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
+{
+	if (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) \
+		|| lhs == rhs)
+		return (true);
+	else
+		return (false);
+}
+
+template < class T, class Allocator >
+bool	operator>(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
+{
+	if (!(lhs < rhs) && !(lhs == rhs))
+		return (true);
+	else
+		return (false);
+}
+
+template < class T, class Allocator >
+bool	operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
+{
+	if (lhs > rhs || lhs == rhs)
+		return (true);
+	else
+		return (false);
+}
 
 }
 

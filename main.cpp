@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/09 17:42:22 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/10 10:31:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,105 +31,159 @@ int main()
 		*/
 
 {
-	const int start_size = 7;
-	ft::vector<int> vct(start_size, 20);
+	ft::vector<int> vct(10);
 	ft::vector<int> vct2;
-	ft::vector<int>::iterator it = vct.begin();
 
-	for (int i = 2; i < start_size; ++i)
-		it[i] = (start_size - i) * 3;
-	std::cout << vct.capacity() << std::endl;;
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	std::cout << "=============================== 1" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct);
 
-	
-	std::cout << std::endl << "################################ 14" << std::endl << std::endl;;
-	vct.resize(10, 42);
-	std::cout << vct.capacity() << std::endl;;
+	vct2.insert(vct2.end(), 42);
+	std::cout << "=============================== 2" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	vct2.insert(vct2.begin(), 2, 21);
+	std::cout << "=============================== 3" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
 
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(18, 43);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(10);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(23, 44);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(5);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.reserve(5);
-	vct.reserve(3);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 87" << std::endl << std::endl;;
-	vct.resize(87);
-	vct.resize(5);
-	std::cout << vct.capacity() << std::endl;;
+	vct2.insert(vct2.end() - 2, 42);
+	std::cout << "=============================== 4" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
 
-	//is_empty(vct2);
-	vct2 = vct;
-	std::cout << vct2.capacity() << std::endl;;
-	//is_empty(vct2);
-	std::cout << std::endl << "################################" << std::endl << std::endl;;
-	vct.reserve(vct.capacity() + 1);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << vct2.capacity() << std::endl;;
-	std::cout << std::endl << "################################" << std::endl << std::endl;;
-	vct2.resize(0);
-	//is_empty(vct2);
-	std::cout << vct2.capacity() << std::endl;;
+	vct2.insert(vct2.end(), 2, 84);
+	std::cout << "=============================== 5" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	vct2.resize(4);
+	std::cout << "=============================== 6" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "=============================== " << std::endl;
+	//printSize(vct2);
+
+	vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
+	std::cout << "=============================== 7" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	vct.clear();
+	std::cout << "=============================== 8" << std::endl;
+	std::cout << "size: " << vct.size() << std::endl;
+	std::cout << "capacity: " << vct.capacity() << std::endl;
+	for (size_t i = 0; i < vct.size(); ++i)
+		std::cout << vct[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	//printSize(vct);
+	//return (0);
 }
 	
+	std::cout << std::endl << "################################" << std::endl;;
 	std::cout << "################################" << std::endl;;
-	std::cout << "################################" << std::endl;;
-	std::cout << "################################" << std::endl;;
+	std::cout << "################################" << std::endl << std::endl;;
 {
-	const int start_size = 7;
-	std::vector<int> vct(start_size, 20);
-	std::vector<int> vct2;
-	std::vector<int>::iterator it = vct.begin();
-
-	for (int i = 2; i < start_size; ++i)
-		it[i] = (start_size - i) * 3;
-	std::cout << vct.capacity() << std::endl;;
-
-	
-	std::cout << std::endl << "################################ 7" << std::endl << std::endl;;
-	vct.resize(10, 42);
-	std::cout << vct.capacity() << std::endl;;
-
-	std::cout << std::endl << "################################ 14" << std::endl << std::endl;;
-	vct.resize(18, 43);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(10);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(23, 44);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.resize(5);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 28" << std::endl << std::endl;;
-	vct.reserve(5);
-	vct.reserve(3);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << std::endl << "################################ 87" << std::endl << std::endl;;
-	vct.resize(87);
-	vct.resize(5);
-	std::cout << vct.capacity() << std::endl;;
-
-	//is_empty(vct2);
-	vct2 = vct;
-	std::cout << vct2.capacity() << std::endl;;
-	//is_empty(vct2);
-	std::cout << std::endl << "################################" << std::endl << std::endl;;
-	vct.reserve(vct.capacity() + 1);
-	std::cout << vct.capacity() << std::endl;;
-	std::cout << vct2.capacity() << std::endl;;
-	std::cout << std::endl << "################################" << std::endl << std::endl;;
-	vct2.resize(0);
-	//is_empty(vct2);
-	std::cout << vct2.capacity() << std::endl;;
 }
+	std::vector<int> vct(10);
+	std::vector<int> vct2;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	std::cout << "=============================== 1" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct);
+
+	vct2.insert(vct2.end(), 42);
+	std::cout << "=============================== 2" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	vct2.insert(vct2.begin(), 2, 21);
+	std::cout << "=============================== 3" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	vct2.insert(vct2.end() - 2, 42);
+	std::cout << "=============================== 4" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	vct2.insert(vct2.end(), 2, 84);
+	std::cout << "=============================== 5" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	vct2.resize(4);
+	std::cout << "=============================== 6" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
+	std::cout << "=============================== 7" << std::endl;
+	std::cout << "size: " << vct2.size() << std::endl;
+	std::cout << "capacity: " << vct2.capacity() << std::endl;
+	for (size_t i = 0; i < vct2.size(); ++i)
+		std::cout << vct2[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	vct.clear();
+	std::cout << "===============================8" << std::endl;
+	std::cout << "size: " << vct.size() << std::endl;
+	std::cout << "capacity: " << vct.capacity() << std::endl;
+	for (size_t i = 0; i < vct.size(); ++i)
+		std::cout << vct[i] << std::endl;
+	std::cout << "===============================" << std::endl;
+	//printSize(vct2);
+
+	//printSize(vct);
+	//return (0);
 }
