@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/11 11:24:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/11 11:42:31 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ ft::vector<int>::const_iterator cite = v.end();
 {
 // Non const iterator with const vector doesn't work
 // Conversion needed?
-const ft::vector<int> v;
-ft::vector<int>::iterator it = v.begin();
-ft::vector<int>::iterator ite = v.end();
+//const ft::vector<int> v;//
+//t::vector<int>::iterator it = v.begin();
+//ft::vector<int>::iterator ite = v.end();
 }
 /*
 {

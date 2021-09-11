@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/11 10:59:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/11 11:51:02 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ class vector
 		typedef std::ptrdiff_t		difference_type;
 		typedef std::size_t			size_type;
 	
-		typedef RandomAccessIterator<value_type>		iterator;
-		typedef RandomAccessIterator<const value_type>	const_iterator;
+		typedef RandomAccessIterator<vector, value_type>		iterator;
+		typedef RandomAccessIterator<const vector, value_type>	const_iterator;
 		typedef ReverseIterator<iterator>				reverse_iterator;
 		typedef ReverseIterator<const_iterator>			const_reverse_iterator;
 
@@ -185,7 +185,6 @@ typename vector<T, Allocator>::iterator	vector<T, Allocator>::begin()
 template < class T, class Allocator >
 typename vector<T, Allocator>::const_iterator	vector<T, Allocator>::begin() const
 {
-	std::cout << "cbegin" << std::endl;
 	return const_iterator(_c);
 }
 
@@ -198,7 +197,6 @@ typename vector<T, Allocator>::iterator	vector<T, Allocator>::end()
 template < class T, class Allocator >
 typename vector<T, Allocator>::const_iterator	vector<T, Allocator>::end() const
 {
-	std::cout << "cend" << std::endl;
 	return const_iterator(_c + _size);
 }
 
