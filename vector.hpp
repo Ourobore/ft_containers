@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/11 11:51:02 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/11 13:49:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ class vector
 		typedef std::ptrdiff_t		difference_type;
 		typedef std::size_t			size_type;
 	
-		typedef RandomAccessIterator<vector, value_type>		iterator;
-		typedef RandomAccessIterator<const vector, value_type>	const_iterator;
+		typedef RandomAccessIterator<vector>		iterator;
+		typedef RandomAccessIterator<const vector>	const_iterator;
 		typedef ReverseIterator<iterator>				reverse_iterator;
 		typedef ReverseIterator<const_iterator>			const_reverse_iterator;
 
