@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/11 13:49:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/13 10:12:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,18 @@ class vector
 	public:
 		typedef T 			value_type;
 		typedef Allocator	allocator_type;
+		
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer			pointer;
-		typedef typename allocator_type::const_pointer	const_pointer;
+		typedef typename allocator_type::const_pointer		const_pointer;
 		typedef std::ptrdiff_t		difference_type;
 		typedef std::size_t			size_type;
 	
 		typedef RandomAccessIterator<vector>		iterator;
 		typedef RandomAccessIterator<const vector>	const_iterator;
-		typedef ReverseIterator<iterator>				reverse_iterator;
-		typedef ReverseIterator<const_iterator>			const_reverse_iterator;
+		typedef ReverseIterator<iterator>			reverse_iterator;
+		typedef ReverseIterator<const_iterator>		const_reverse_iterator;
 
 	protected:
 		pointer			_c;
@@ -338,16 +339,18 @@ void	vector<T, Allocator>::assign(typename enable_if<!is_integral<InputIterator>
 								InputIterator last)
 {
 	this->clear();
+	size_type	newSize = 0;
 
 	InputIterator count = first;
-	for (; count != last; count++)
-		_size++;
+	for (; count != last; ++count)
+		++newSize;
 
-	if (_size > _capacity)
-		reserve(_size);
+	if (newSize > _capacity)
+		reserve(newSize);
 	
-	for (size_type i = 0; i < _size; ++i, ++first)
+	for (size_type i = 0; i < newSize; ++i, ++first)
 		_alloc.construct(&_c[i], *first);
+	_size = newSize;
 }
 
 template < class T, class Allocator >
@@ -452,7 +455,7 @@ typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator po
 		_alloc.construct(&_c[i], _c[i + 1]);
 	}
 	--_size;
-	return iterator(&_c[pos]);
+	return iterator(position);
 }
 
 template < class T, class Allocator >
@@ -467,7 +470,7 @@ typename vector<T, Allocator>::iterator		vector<T, Allocator>::erase(iterator fi
 	for (size_type i = posLast; i < _size; ++i)
 		_alloc.construct(&_c[i - n], _c[i]);
 	_size -= n;
-	return iterator(&_c[posLast]);
+	return iterator(first);
 }
 
 template < class T, class Allocator >

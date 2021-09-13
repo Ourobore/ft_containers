@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/10 16:36:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/13 10:54:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ class ReverseIterator
 		typedef typename Iterator::iterator_category	iterator_category;
 
 	protected:
-		Iterator	_it;
+		Iterator	_base;
 
 	public:
 		// Constructors
 		ReverseIterator();
 		explicit ReverseIterator(iterator_type it);
 		ReverseIterator(const ReverseIterator<Iterator>& rev_it);
+
+		// Access element
 		Iterator	base() const;
 
 		// Dereference
@@ -44,13 +46,13 @@ class ReverseIterator
 
 		// Increment and Decrement
 		ReverseIterator&	operator++();
-		ReverseIterator	operator++(int);
+		ReverseIterator		operator++(int);
 		ReverseIterator&	operator--();
-		ReverseIterator	operator--(int);
+		ReverseIterator		operator--(int);
 
 		// Arithmetic
-		ReverseIterator	operator+(difference_type n) const;
-		ReverseIterator	operator-(difference_type n) const;
+		ReverseIterator		operator+(difference_type n) const;
+		ReverseIterator		operator-(difference_type n) const;
 
 		// Assignment arithmetic
 		ReverseIterator&	operator+=(difference_type n);
@@ -61,24 +63,27 @@ class ReverseIterator
 
 // Constructors
 template < class Iterator >
-ReverseIterator<Iterator>::ReverseIterator() : _it(NULL)
+ReverseIterator<Iterator>::ReverseIterator() : _base(NULL)
 {
 }
 
 template < class Iterator >
-ReverseIterator<Iterator>::ReverseIterator(iterator_type it) : _it(it)
+ReverseIterator<Iterator>::ReverseIterator(iterator_type it) : _base(it)
 {
 }
 
 template < class Iterator >
-ReverseIterator<Iterator>::ReverseIterator(const ReverseIterator<Iterator>& rev_it) : _it(rev_it._it)
+ReverseIterator<Iterator>::ReverseIterator(const ReverseIterator<Iterator>& rev_it) : _base(rev_it.base())
 {
 }
 
+
+
+// Access element
 template < class Iterator >
 Iterator	ReverseIterator<Iterator>::base() const
 {
-	return Iterator(_it);
+	return Iterator(_base);
 }
 
 
@@ -87,19 +92,19 @@ Iterator	ReverseIterator<Iterator>::base() const
 template < class Iterator >
 typename ReverseIterator<Iterator>::reference	ReverseIterator<Iterator>::operator*() const
 {
-	return (*(_it - 1));
+	return (*(_base - 1));
 }
 
 template < class Iterator >
 typename ReverseIterator<Iterator>::pointer	ReverseIterator<Iterator>::operator->() const
 {
-	return (_it - 1);
+	return &(operator*());
 }
 
 template < class Iterator >
 typename ReverseIterator<Iterator>::reference	ReverseIterator<Iterator>::operator[](difference_type n) const
 {
-	return (_it[n - 1]);
+	return (_base[-n - 1]);
 }
 
 
@@ -108,7 +113,7 @@ typename ReverseIterator<Iterator>::reference	ReverseIterator<Iterator>::operato
 template < class Iterator >
 ReverseIterator<Iterator>&		ReverseIterator<Iterator>::operator++()
 {
-	return (--_it);
+	return (--_base);
 }
 
 template < class Iterator >
@@ -122,7 +127,7 @@ ReverseIterator<Iterator>		ReverseIterator<Iterator>::operator++(int)
 template < class Iterator >
 ReverseIterator<Iterator>&		ReverseIterator<Iterator>::operator--()
 {
-	return (++_it);
+	return (++_base);
 }
 
 template < class Iterator >
@@ -139,13 +144,13 @@ ReverseIterator<Iterator>		ReverseIterator<Iterator>::operator--(int)
 template < class Iterator >
 ReverseIterator<Iterator>	ReverseIterator<Iterator>::operator+(difference_type n) const
 {
-	return ReverseIterator(_it - n);
+	return ReverseIterator(_base - n);
 }
 
 template < class Iterator >
 ReverseIterator<Iterator>	ReverseIterator<Iterator>::operator-(difference_type n) const
 {
-	return ReverseIterator(_it + n);
+	return ReverseIterator(_base + n);
 }
 
 
@@ -154,14 +159,14 @@ ReverseIterator<Iterator>	ReverseIterator<Iterator>::operator-(difference_type n
 template < class Iterator >
 ReverseIterator<Iterator>&	ReverseIterator<Iterator>::operator+=(difference_type n)
 {
-	_it - n;
+	_base -= n;
 	return (*this);
 }
 
 template < class Iterator >
 ReverseIterator<Iterator>&	ReverseIterator<Iterator>::operator-=(difference_type n)
 {
-	_it + n;
+	_base += n;
 	return (*this);
 }
 
@@ -189,7 +194,7 @@ bool	operator!=(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Iter
 template < class Iterator >
 bool	operator<(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Iterator>& rhs)
 {
-	if (lhs.base() > rhs.base() && lhs != rhs)
+	if (lhs.base() > rhs.base())
 		return (true);
 	else
 		return (false);
@@ -207,7 +212,7 @@ bool	operator<=(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Iter
 template < class Iterator >
 bool	operator>(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Iterator>& rhs)
 {
-	if (!(rhs < lhs))
+	if (!(rhs < lhs) && lhs != rhs)
 		return (true);
 	else
 		return (false);
