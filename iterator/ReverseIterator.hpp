@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/13 10:54:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/13 16:16:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ class ReverseIterator
 		// Constructors
 		ReverseIterator();
 		explicit ReverseIterator(iterator_type it);
-		ReverseIterator(const ReverseIterator<Iterator>& rev_it);
+		ReverseIterator(ReverseIterator<iterator_type>& rev_it);
+		template < class is_const >
+		ReverseIterator(const ReverseIterator<is_const>& rev_it);
 
 		// Access element
 		Iterator	base() const;
@@ -73,7 +75,13 @@ ReverseIterator<Iterator>::ReverseIterator(iterator_type it) : _base(it)
 }
 
 template < class Iterator >
-ReverseIterator<Iterator>::ReverseIterator(const ReverseIterator<Iterator>& rev_it) : _base(rev_it.base())
+ReverseIterator<Iterator>::ReverseIterator(ReverseIterator<Iterator>& rev_it) : _base(rev_it.base())
+{
+}
+
+template < class Iterator >
+template < class is_const >
+ReverseIterator<Iterator>::ReverseIterator(const ReverseIterator<is_const>& rev_it) : _base(rev_it.base())
 {
 }
 
