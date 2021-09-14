@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/14 15:01:35 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/14 15:09:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ bool	operator<(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Const
 template < class Iterator, class ConstIterator >
 bool	operator<=(const ReverseIterator<Iterator>& lhs, const ReverseIterator<ConstIterator>& rhs)
 {
-	if (lhs < rhs || lhs == rhs)
+	if (lhs.base() >= rhs.base())
 		return (true);
 	else
 		return (false);
@@ -222,7 +222,7 @@ bool	operator<=(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Cons
 template < class Iterator, class ConstIterator >
 bool	operator>(const ReverseIterator<Iterator>& lhs, const ReverseIterator<ConstIterator>& rhs)
 {
-	if (!(rhs < lhs) && lhs != rhs)
+	if (lhs.base() < rhs.base())
 		return (true);
 	else
 		return (false);
@@ -231,7 +231,7 @@ bool	operator>(const ReverseIterator<Iterator>& lhs, const ReverseIterator<Const
 template < class Iterator, class ConstIterator >
 bool	operator>=(const ReverseIterator<Iterator>& lhs, const ReverseIterator<ConstIterator>& rhs)
 {
-	if (lhs > rhs || lhs == rhs)
+	if (lhs.base() <= rhs.base())
 		return (true);
 	else
 		return (false);
