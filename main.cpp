@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/14 14:01:07 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/14 14:59:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,78 +29,153 @@ void	printContainer(Container c)
 	std::cout << "=============================================" << std::endl;
 }
 
+class foo {
+	public:
+		foo(void) { };
+		~foo(void) { };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(int src) { this->value = src; return *this; };
+		int getValue(void) const { return this->value; };
+	private:
+		int	value;
+};
+
+std::ostream	&operator<<(std::ostream &o, foo const &bar) {
+	o << bar.getValue();
+	return o;
+}
+
+template <typename Ite_1, typename Ite_2>
+void ft_eq_ope(const Ite_1 &first, const Ite_2 &second)
+{
+	std::cout << "###################################################" << std::endl;
+	std::cout << (first < second) << std::endl;
+	std::cout << (first <= second) << std::endl;
+	std::cout << (first > second) << std::endl;
+	std::cout << (first >= second) << std::endl;
+	std::cout << "###################################################" << std::endl;
+	//if (redo)
+	//{
+	//	std::cout << "redo" << std::endl;
+	//	ft_eq_ope(second, first, 0);
+	//}
+}
+
 int main(int argc, char **argv)
 {
+
 (void)argv;
 if (argc == 2)
 {
-	
 	const int size = 5;
-	ft::vector<int> vct(size);
-	ft::vector<int>::reverse_iterator it = vct.rbegin();
-	ft::vector<int>::const_reverse_iterator ite = vct.rbegin();
-	for (int i = 0; i < size; ++i)
-		it[i] = (size - i) * 5;
+	ft::vector<foo> vct(size);
+	ft::vector<foo>::reverse_iterator it_0(vct.rbegin());
+	ft::vector<foo>::reverse_iterator it_1(vct.rend());
+	ft::vector<foo>::reverse_iterator it_mid;
+
+	ft::vector<foo>::const_reverse_iterator cit_0 = vct.rbegin();
+	ft::vector<foo>::const_reverse_iterator cit_1;
+	ft::vector<foo>::const_reverse_iterator cit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
 	printContainer(vct);
+	//printSize(vct, 1);
+	it_0 = vct.rbegin();
+	cit_1 = vct.rend();
+	it_mid = it_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
 
-	std::cout << "rbegin: " << *it << std::endl;
-	it = it + 5;
-	//std::cout << *it << std::endl;
-	it = 1 + it;
-	//std::cout << *it << std::endl;
-	it = it - 4;
-	//std::cout << *it << std::endl; //15
-	std::cout << *(it += 2) << std::endl;
-	std::cout << *(it -= 1) << std::endl;
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
 
-	std::cout << *(it -  2) << std::endl;
-	*(it -= 2) = 42;
-	*(it += 2) = 21;
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	// regular it
+	std::cout << "95" << std::endl;
+	ft_eq_ope(it_0 + 3, it_mid);
+	std::cout << "97" << std::endl; // here
+	ft_eq_ope(it_0, it_1);
+	std::cout << "99" << std::endl; // here
+	ft_eq_ope(it_1 - 3, it_mid);
+	// const it
+	std::cout << "102" << std::endl;
+	ft_eq_ope(cit_0 + 3, cit_mid);
+	std::cout << "104" << std::endl; // here
+	ft_eq_ope(cit_0, cit_1);
+	std::cout << "106" << std::endl;
+	ft_eq_ope(cit_1 - 3, cit_mid);
+	// both it
+	std::cout << "109" << std::endl;
+	ft_eq_ope(it_0 + 3, cit_mid);
+	std::cout << "111" << std::endl;
+	ft_eq_ope(it_mid, cit_0 + 3);
+	std::cout << "113" << std::endl; // here
+	ft_eq_ope(it_0, cit_1);
+	std::cout << "115" << std::endl; // here
+	ft_eq_ope(it_1, cit_0);
+	std::cout << "117" << std::endl; // here
+	ft_eq_ope(it_1 - 3, cit_mid);
+	std::cout << "119" << std::endl; // here
+	ft_eq_ope(it_mid, cit_1 - 3);
 
-	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
-
-	std::cout << "(it == const_it): " << (ite == it) << std::endl;
-	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
-	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
-
-	printContainer(vct);
-	//printSize(vct, true);
 	return (0);
+	
 }
-//std::cout << std::endl << std::endl <<std::endl;
 else
 {
 	const int size = 5;
-	std::vector<int> vct(size);
-	std::vector<int>::reverse_iterator it = vct.rbegin();
-	std::vector<int>::const_reverse_iterator ite = vct.rbegin();
-	for (int i = 0; i < size; ++i)
-		it[i] = (size - i) * 5;
+	std::vector<foo> vct(size);
+	std::vector<foo>::reverse_iterator it_0(vct.rbegin());
+	std::vector<foo>::reverse_iterator it_1(vct.rend());
+	std::vector<foo>::reverse_iterator it_mid;
+
+	std::vector<foo>::const_reverse_iterator cit_0 = vct.rbegin();
+	std::vector<foo>::const_reverse_iterator cit_1;
+	std::vector<foo>::const_reverse_iterator cit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
 	printContainer(vct);
+	//printSize(vct, 1);
+	it_0 = vct.rbegin();
+	cit_1 = vct.rend();
+	it_mid = it_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
 
-	std::cout << "rbegin: " << *it << std::endl;
-	it = it + 5;
-	//std::cout << *it << std::endl;
-	//it = 1 + it;
-	//std::cout << *it << std::endl;
-	it = it - 4;
-	//std::cout << *it << std::endl;
-	//std::cout << *it << std::endl;
-	std::cout << *(it += 2) << std::endl;
-	std::cout << *(it -= 1) << std::endl;
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
 
-	std::cout << *(it -  2) << std::endl;
-	*(it -= 2) = 42;
-	*(it += 2) = 21;
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	// regular it
+	std::cout << "95" << std::endl;
+	ft_eq_ope(it_0 + 3, it_mid);
+	std::cout << "97" << std::endl;
+	ft_eq_ope(it_0, it_1);
+	std::cout << "99" << std::endl;
+	ft_eq_ope(it_1 - 3, it_mid);
+	// const it
+	std::cout << "102" << std::endl;
+	ft_eq_ope(cit_0 + 3, cit_mid);
+	std::cout << "104" << std::endl;
+	ft_eq_ope(cit_0, cit_1);
+	std::cout << "106" << std::endl;
+	ft_eq_ope(cit_1 - 3, cit_mid);
+	// both it
+	std::cout << "109" << std::endl;
+	ft_eq_ope(it_0 + 3, cit_mid);
+	std::cout << "111" << std::endl;
+	ft_eq_ope(it_mid, cit_0 + 3);
+	std::cout << "113" << std::endl;
+	ft_eq_ope(it_0, cit_1);
+	std::cout << "115" << std::endl;
+	ft_eq_ope(it_1, cit_0);
+	std::cout << "117" << std::endl;
+	ft_eq_ope(it_1 - 3, cit_mid);
+	std::cout << "119" << std::endl;
+	ft_eq_ope(it_mid, cit_1 - 3);
 
-	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
-
-	std::cout << "(it == const_it): " << (ite == it) << std::endl;
-	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
-	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
-
-	printContainer(vct);
-	//printSize(vct, true);
 	return (0);
 }
+
 }
