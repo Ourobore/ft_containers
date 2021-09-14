@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/13 10:53:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/14 12:27:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,40 @@ void	printContainer(Container c)
 
 int main()
 {
+	const int size = 5;
+	std::vector<int> vct(size);
+	std::vector<int>::reverse_iterator it = vct.rbegin();
+	std::vector<int>::const_reverse_iterator ite = vct.rbegin();
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
+	printContainer(vct);
+	
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
 
+	it = it + 5;
+	//std::cout << *it << std::endl;
+	it = 1 + it;
+	//std::cout << *it << std::endl;
+	it = it - 4;
+	//std::cout << *it << std::endl;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
+
+	std::cout << *(it -  2) << std::endl;
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	printContainer(vct);
+	//printSize(vct, true);
+	return (0);
+	/*
 {
 	const int size = 5;
 	ft::vector<int> vct(size);
@@ -63,7 +96,7 @@ int main()
 	std::cout << *(it - 1).base() << std::endl;
 }
 
-/*
+
 {
 	ft::vector<int>	v;
 	for (int i = 0; i < 10; ++i)
@@ -79,7 +112,7 @@ int main()
 
 	printContainer(v);
 }
-*/
+
 	std::cout << std::endl << "################################" << std::endl;;
 	std::cout << "################################" << std::endl;;
 	std::cout << "################################" << std::endl << std::endl;;
@@ -112,7 +145,7 @@ int main()
 	std::cout << *(it - 0).base() << std::endl;
 	std::cout << *(it - 1).base() << std::endl;
 }
-/*
+
 {
 	std::vector<int>	v;
 	for (int i = 0; i < 10; ++i)
@@ -126,6 +159,6 @@ int main()
 	//	std::cout << *it << std::endl;
 
 	printContainer(v);
-}
+
 */
 }

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/13 15:53:24 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/14 12:03:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ class RandomAccessIterator
 		RandomAccessIterator();
 		RandomAccessIterator(pointer p);
 		template <bool is_const>
-		RandomAccessIterator (const RandomAccessIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0) { _it = rhs.getPointer(); }
+		RandomAccessIterator (const RandomAccessIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0) \
+		{ _it = rhs.getPointer(); }
 		//RandomAccessIterator(const RandomAccessIterator& rhs);
 		RandomAccessIterator&	operator=(const RandomAccessIterator& rhs);
 		virtual ~RandomAccessIterator();
@@ -69,7 +70,8 @@ class RandomAccessIterator
 		// Arithmetic
 		RandomAccessIterator	operator+(difference_type n) const;
 		RandomAccessIterator	operator-(difference_type n) const;
-		difference_type	operator-(const RandomAccessIterator& rhs) const;
+		template < bool is_const >
+		difference_type	operator-(const RandomAccessIterator<T, is_const>& rhs) const;
 
 		// Relational
 		template < bool is_const >
@@ -217,9 +219,10 @@ RandomAccessIterator<T, IsConst>	RandomAccessIterator<T, IsConst>::operator-(dif
 }
 
 template < class T, bool IsConst >
-typename RandomAccessIterator<T, IsConst>::difference_type	RandomAccessIterator<T, IsConst>::operator-(const RandomAccessIterator<T, IsConst>& rhs) const
+template < bool is_const >
+typename RandomAccessIterator<T, IsConst>::difference_type	RandomAccessIterator<T, IsConst>::operator-(const RandomAccessIterator<T, is_const>& rhs) const
 {
-	return (_it - rhs._it);
+	return (getPointer() - rhs.getPointer());
 }
 
 
