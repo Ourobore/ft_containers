@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/09/14 12:03:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/09/14 14:31:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,13 +278,14 @@ RandomAccessIterator<T, IsConst>&	RandomAccessIterator<T, IsConst>::operator-=(d
 template < class T, bool IsConst >
 RandomAccessIterator<T, IsConst>	operator+(typename RandomAccessIterator<T, IsConst>::difference_type n, const RandomAccessIterator<T, IsConst>& rev_it)
 {
+	//std::cout << "here" << std::endl;
 	return RandomAccessIterator<T, IsConst>(rev_it + n);
 }
 
-template < class T, bool IsConst >
+template < class T, bool IsConst>
 RandomAccessIterator<T, IsConst>		operator-(typename RandomAccessIterator<T, IsConst>::difference_type n, const RandomAccessIterator<T, IsConst>& rev_it)
 {
-	return RandomAccessIterator<T, IsConst>(rev_it - n);
+	return RandomAccessIterator<T, IsConst>(-n - rev_it);
 }
 
 }
