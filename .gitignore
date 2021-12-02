@@ -1,0 +1,7 @@
+a.out*
+*.o
+obj/
+ft_containers
+.vscode-ctags
+.DS_Store
+.nfs*
