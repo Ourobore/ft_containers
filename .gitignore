@@ -1,6 +1,7 @@
 a.out*
 *.o
 obj/
+containers_test/
 ft_containers
 .vscode-ctags
 .DS_Store
