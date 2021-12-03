@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/03 13:34:15 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/03 14:04:26 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include <iostream>
 #include <memory>
 
-#include "RandomAccessIterator.hpp"
-#include "ReverseIterator.hpp"
+#include "iterator/RandomAccessIterator.hpp"
+#include "iterator/ReverseIterator.hpp"
 
-#include "EnableIf.hpp"
-#include "IsIntegral.hpp"
-#include "LexicographicalCompare.hpp"
+#include "utils/EnableIf.hpp"
+#include "utils/IsIntegral.hpp"
+#include "utils/LexicographicalCompare.hpp"
 
 namespace ft
 {
