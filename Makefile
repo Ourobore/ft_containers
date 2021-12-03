@@ -2,10 +2,8 @@ SRCS		= main.cpp
 
 OBJS		= $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
-INCLUDE		= -I . 
-			  #-include iterator/RandomAccessIterator.hpp \
-			  #-include iterator/BidirectionalIterator.hpp \
-			  #-include iterator/InputIterator.hpp
+INCLUDE		= -Iiterator \
+			  -Iutils
 
 OBJS_DIR	= objs/
 

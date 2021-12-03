@@ -5,8 +5,10 @@ AlignConsecutiveDeclarations: true
 BreakBeforeBraces: Allman
 UseTab: Never
 IndentWidth: 4
-NamespaceIndentation: All
 AllowShortBlocksOnASingleLine: Never
 AllowShortFunctionsOnASingleLine: None
 AlwaysBreakTemplateDeclarations: Yes
 IndentCaseLabels: true
+ColumnLimit: 0
+BreakBeforeConceptDeclarations: true
+SpacesInAngles: Leave
