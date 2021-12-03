@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/03 14:04:26 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/03 14:45:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -467,7 +467,8 @@ typename vector< T, Allocator >::iterator vector< T, Allocator >::erase(iterator
     for (size_type i = pos; i != _size; ++i)
     {
         _alloc.destroy(&_c[i]);
-        _alloc.construct(&_c[i], _c[i + 1]);
+        if (i + 1 != _size)
+            _alloc.construct(&_c[i], _c[i + 1]);
     }
     --_size;
     return iterator(position);

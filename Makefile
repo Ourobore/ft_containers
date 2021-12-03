@@ -9,7 +9,7 @@ OBJS_DIR	= objs/
 
 CC			= clang++
 
-CPPFLAGS	= -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+CPPFLAGS	= -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
 
 NAME		= ft_containers
 

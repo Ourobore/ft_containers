@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "clang build",
+        "command": "clang++",
+        "args": [
+          "-g",
+          "-fstandalone-debug",
+          "-std=c++98",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Iiterator",
+          "-Iutils",
+          "-I.",
+          "main.cpp",
+          "-o",
+          "ft_containers"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+  }

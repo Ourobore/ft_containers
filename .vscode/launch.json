@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "build",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/ft_containers",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            //"preLaunchTask": "clang build",
+            "initCommands": [
+                "settings set target.disable-aslr false"
+            ]
+        }
+    ]
+}
