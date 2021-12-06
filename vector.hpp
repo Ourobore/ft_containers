@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 11:28:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/06 16:11:44 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ class vector
     // Constructors and destructor
     explicit vector(const allocator_type& alloc = allocator_type());
     explicit vector(size_type n, const_reference val = value_type(), const allocator_type& alloc = allocator_type());
-    vector& operator=(const vector< T, Allocator >& x);
     template < class InputIterator >
     vector(typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type first, InputIterator last, const allocator_type& alloc = allocator_type());
     vector(const vector< T, Allocator >& x);
+    vector& operator=(const vector< T, Allocator >& x);
     virtual ~vector();
 
     // Iterators
@@ -127,20 +127,6 @@ vector< T, Allocator >::vector(size_type n, const_reference val, const allocator
 }
 
 template < class T, class Allocator >
-vector< T, Allocator >& vector< T, Allocator >::operator=(const vector< T, Allocator >& x)
-{
-    if (this != &x)
-    {
-        this->clear();
-        this->reserve(x.size());
-
-        for (size_type i = 0; i < x.size(); ++i, ++_size)
-            _alloc.construct(&_c[i], x[i]);
-    }
-    return (*this);
-}
-
-template < class T, class Allocator >
 template < class InputIterator >
 vector< T, Allocator >::vector(typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type first, InputIterator last, const allocator_type& alloc)
     : _size(0), _capacity(0), _alloc(alloc)
@@ -163,6 +149,20 @@ vector< T, Allocator >::vector(const vector< T, Allocator >& x)
     _c = _alloc.allocate(_capacity);
     for (size_type i = 0; i < _size; ++i)
         _alloc.construct(&_c[i], x[i]);
+}
+
+template < class T, class Allocator >
+vector< T, Allocator >& vector< T, Allocator >::operator=(const vector< T, Allocator >& x)
+{
+    if (this != &x)
+    {
+        this->clear();
+        this->reserve(x.size());
+
+        for (size_type i = 0; i < x.size(); ++i, ++_size)
+            _alloc.construct(&_c[i], x[i]);
+    }
+    return (*this);
 }
 
 template < class T, class Allocator >
@@ -384,7 +384,6 @@ void vector< T, Allocator >::push_back(const_reference val)
 {
     if (_size == _capacity)
         reserve(_capacity == 0 ? 1 : _capacity * 2);
-    ;
     _alloc.construct(&_c[_size], val);
     ++_size;
 }
