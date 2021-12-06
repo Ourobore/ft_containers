@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IsIntegral.hpp                                     :+:      :+:    :+:   */
+/*   IteratorTraits.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/07 17:54:02 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 09:33:47 by lchapren         ###   ########.fr       */
+/*   Created: 2021/12/06 09:30:37 by lchapren          #+#    #+#             */
+/*   Updated: 2021/12/06 09:38:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ISINTEGRAL_HPP
-#define ISINTEGRAL_HPP
+#ifndef ITERATORTRAITS_HPP
+#define ITERATORTRAITS_HPP
 
 namespace ft
 {
 
-/* Templated struct to determinate if a type is integral or not */
-template < class T >
-struct is_integral
+template <class Iterator>
+struct iterator_traits
 {
-    const static bool value = false;
-};
-
-template <>
-struct is_integral<int>
-{
-    const static bool value = true;
+    typedef typename Iterator::difference_type   difference_type;
+    typedef typename Iterator::value_type        value_type;
+    typedef typename Iterator::pointer           pointer;
+    typedef typename Iterator::reference         reference;
+    typedef typename Iterator::iterator_category iterator_category;
 };
 
 } // namespace ft

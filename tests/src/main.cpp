@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IsIntegral.hpp                                     :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/07 17:54:02 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 09:33:47 by lchapren         ###   ########.fr       */
+/*   Created: 2021/08/31 13:23:12 by lchapren          #+#    #+#             */
+/*   Updated: 2021/12/06 14:49:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ISINTEGRAL_HPP
-#define ISINTEGRAL_HPP
+#include "Tests.hpp"
 
-namespace ft
+int main()
 {
+    std::vector<int> v;
+    ft::vector<int>  vv;
 
-/* Templated struct to determinate if a type is integral or not */
-template < class T >
-struct is_integral
-{
-    const static bool value = false;
-};
-
-template <>
-struct is_integral<int>
-{
-    const static bool value = true;
-};
-
-} // namespace ft
-
-#endif
+    ft::printTraits(v.begin());
+    ft::printTraits(vv.begin());
+}

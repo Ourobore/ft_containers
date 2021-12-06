@@ -1,4 +1,8 @@
--Iutils/
--Iiterator/
+-I../utils/
+-I../iterator/
+-I../
+-I./
+-I./src/
+-I./src/utils/
 -std=c++98
 -I/Library/Developer/CommandLineTools/usr/include/c++/v1/

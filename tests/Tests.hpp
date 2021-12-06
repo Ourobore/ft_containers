@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IsIntegral.hpp                                     :+:      :+:    :+:   */
+/*   Tests.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/07 17:54:02 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 09:33:47 by lchapren         ###   ########.fr       */
+/*   Created: 2021/12/06 12:05:09 by lchapren          #+#    #+#             */
+/*   Updated: 2021/12/06 14:58:27 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ISINTEGRAL_HPP
-#define ISINTEGRAL_HPP
+#ifndef TESTS_HPP
+#define TESTS_HPP
 
-namespace ft
-{
+#include <iostream>
 
-/* Templated struct to determinate if a type is integral or not */
-template < class T >
-struct is_integral
-{
-    const static bool value = false;
-};
+// Tester includes
+#include "print_container.hpp"
+#include "print_traits.hpp"
 
-template <>
-struct is_integral<int>
-{
-    const static bool value = true;
-};
-
-} // namespace ft
+// Containers includes
+#include "vector.hpp"
+#include <vector>
 
 #endif

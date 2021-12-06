@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/03 15:47:01 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/06 09:28:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include <iostream>
 
-//# include "../utils/IsConst.hpp"
 #include "../utils/EnableIf.hpp"
 #include "../utils/IteratorType.hpp"
 
@@ -26,7 +25,7 @@ template < class T, bool IsConst >
 class RandomAccessIterator
 {
   public:
-    typedef typename iterator_type<IsConst, const T, T>::type value_type;
+    typedef typename iterator_type<IsConst, T, const T>::type value_type;
     typedef value_type&                                       reference;
     typedef const value_type&                                 const_reference;
     typedef value_type*                                       pointer;
