@@ -6,11 +6,14 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 11:30:59 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 14:48:31 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/07 10:33:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+
+namespace ft
+{
 
 template <class Container>
 void printContainer(Container c)
@@ -29,3 +32,5 @@ void printContainer(Container c)
 
     std::cout << "=============================================" << std::endl;
 }
+
+} // namespace ft
