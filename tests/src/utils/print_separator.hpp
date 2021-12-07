@@ -1,37 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Tests.hpp                                          :+:      :+:    :+:   */
+/*   print_separator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/06 12:05:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/07 15:15:24 by lchapren         ###   ########.fr       */
+/*   Created: 2021/12/07 15:14:13 by lchapren          #+#    #+#             */
+/*   Updated: 2021/12/07 15:15:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_HPP
-#define TESTS_HPP
+#ifndef PRINT_SEPARATOR_HPP
+#define PRINT_SEPARATOR_HPP
 
-#ifndef NAMESPACE
-#define NAMESPACE std
-#endif
-
-#ifndef TYPE
-#define TYPE int
-#endif
-
+#include <iomanip>
 #include <iostream>
 
-// Tester includes
-#include "print_container.hpp"
-#include "print_separator.hpp"
-#include "print_traits.hpp"
+namespace ft
+{
 
-// Containers includes
-#include "stack.hpp"
-#include "vector.hpp"
-#include <stack>
-#include <vector>
+void printSeparator(char separator = '#', size_t nb_lines = 3, size_t width = 60)
+{
+    for (size_t lines = 0; lines < nb_lines; ++lines)
+    {
+        for (size_t columns = 0; columns < width; ++columns)
+            std::cout << separator;
+        std::cout << std::endl;
+    }
+}
+
+} // namespace ft
 
 #endif

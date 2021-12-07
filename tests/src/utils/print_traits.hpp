@@ -6,9 +6,12 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 12:10:20 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 14:48:25 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:20:06 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef PRINT_TRAITS_HPP
+#define PRINT_TRAITS_HPP
 
 #include <iomanip>
 #include <iostream>
@@ -27,11 +30,11 @@ struct iterator_traits;
 template <class Iterator>
 void printTraits(Iterator it)
 {
-    typename ft::iterator_traits<Iterator>::difference_type   difference_type;
-    typename ft::iterator_traits<Iterator>::value_type        value_type;
-    typename ft::iterator_traits<Iterator>::pointer           pointer;
-    typename ft::iterator_traits<Iterator>::reference         reference = *it;
-    typename ft::iterator_traits<Iterator>::iterator_category category;
+    typename NAMESPACE::iterator_traits<Iterator>::difference_type   difference_type;
+    typename NAMESPACE::iterator_traits<Iterator>::value_type        value_type;
+    typename NAMESPACE::iterator_traits<Iterator>::pointer           pointer;
+    typename NAMESPACE::iterator_traits<Iterator>::reference         reference = *it;
+    typename NAMESPACE::iterator_traits<Iterator>::iterator_category category;
 
     size_t width = 20;
 
@@ -59,3 +62,5 @@ void printTraits(Iterator it)
 }
 
 } // namespace ft
+
+#endif
