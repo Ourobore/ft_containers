@@ -10,6 +10,7 @@ RUN apt-get update && apt-get -y install \
     valgrind \
     # Utilities
     git \
+    curl \
     htop \
     # Install zsh and oh-my-zsh and make zsh the default shell
     zsh ;\
@@ -26,6 +27,7 @@ RUN apt-get update && apt-get -y install \
 
 # Utilities:
 #   git
+#   curl
 #   htop
 #   zsh
 #   oh-my-zsh
