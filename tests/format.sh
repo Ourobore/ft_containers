@@ -5,6 +5,7 @@ BOLD="\e[1m"
 FAINT="\e[2m"
 ITALIC="\e[3m"
 UNDERLINE="\e[4m"
+BLINK="\e[5m"
 
 BLACK="\e[30m"
 RED="\e[31m"
@@ -40,16 +41,29 @@ BACK_LIGHT_MAGENTA="\e[105m"
 BACK_LIGHT_CYAN="\e[106m"
 BACK_WHITE="\e[107m"
 
+SUCCESS="\U2705"
+FAIL="\U274C"
+
 # Transform function return status code to string:
 #   $1 -> status code
 transform_status()
 {
     if [ $1 -eq 0 ]; then
-        echo "${GREEN}OK!${RESET}"
+        echo "${LIGHT_GREEN}${BOLD}${BACK_GREEN}OK!${RESET}"
     else
-        echo "${RED}KO!${RESET}"
+        echo "${LIGHT_RED}${BOLD}${BACK_RED}KO!${RESET}"
     fi
 
+}
+
+# Print 'Succes' emoji if $1 ==0, else print 'Fail' emoji
+print_emoji()
+{
+    if [ $1 -eq 0 ]; then
+        echo "${SUCCESS}"
+    else
+        echo "${FAIL}"
+    fi
 }
 
 # Print test status:
@@ -59,9 +73,9 @@ transform_status()
 #   $3 -> test result
 print_test_result()
 {
-    local std_compiled=$(transform_status $2)
-    local ft_compiled=$(transform_status $3)
+    local std_compiled=$(print_emoji $2)
+    local ft_compiled=$(print_emoji $3)
     local result=$(transform_status $4)
 
-    echo -e "$1:\t\t STD Compiled: [$std_compiled]\tFT Compiled: [$ft_compiled]\tResult: [$result]"
+    echo -e "$1:\t Compilation: STD[$std_compiled](Y) | FT[$ft_compiled](Y)\tResult: [$result]"
 }

@@ -8,7 +8,7 @@ USER_INCLUDES="-I../ -I../utils -I../iterator"
 # compile ft/std test_file.cpp exec_name
 compile()
 {
-    $CC $CCFLAGS -DNAMESPACE=$1 $TESTS_INCLUDES $USER_INCLUDES $2 -o $3
+    $CC $CCFLAGS -DNAMESPACE=$1 $TESTS_INCLUDES $USER_INCLUDES $2 -o $3 &> logs/$3
     return $?
 }
 
