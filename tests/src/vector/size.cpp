@@ -27,6 +27,5 @@ int main()
 
         std::cout << "Size: " << v.size() << std::endl;
         // ft::printContainer(v);
-        ft::printSeparator();
     }
 }

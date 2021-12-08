@@ -10,7 +10,7 @@ int main()
         ft::printContainer(v);
         ft::printSeparator();
     }
-
+    // #########################################################
     {
         ft::printSeparator();
         std::cout << "Filled vector (fill constructor)" << std::endl;
@@ -23,6 +23,7 @@ int main()
 
         ft::printSeparator();
     }
+    // #########################################################
 
     NAMESPACE::vector<TYPE>           vec(42);
     NAMESPACE::vector<TYPE>::iterator it;
@@ -32,6 +33,7 @@ int main()
         *it = val;
     ft::printContainer(vec);
 
+    // #########################################################
     {
         ft::printSeparator();
         std::cout << "Range vector (range constructor)" << std::endl;
@@ -43,13 +45,12 @@ int main()
         ft::printContainer(vv);
         ft::printSeparator();
     }
-
+    // #########################################################
     {
         ft::printSeparator();
         std::cout << "Copied vector (copy constructor)" << std::endl;
 
         NAMESPACE::vector<TYPE> v(vec);
         ft::printContainer(v);
-        ft::printSeparator();
     }
 }
