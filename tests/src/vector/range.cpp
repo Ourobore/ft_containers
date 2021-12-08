@@ -1,7 +1,12 @@
 #include "Tests.hpp"
 
-int main()
+void non_const_iterators()
 {
+    std::cout << std::endl
+              << std::endl
+              << std::endl;
+    std::cout << "<<<<<<<<<< Range Iterators >>>>>>>>>>";
+
     ft::printSeparator();
     std::cout << "===== v =====";
     NAMESPACE::vector<TYPE> v;
@@ -40,4 +45,14 @@ int main()
 
     v.assign(v_copy.begin() + 65, v_copy.begin() + 999);
     ft::printContainer(v);
+}
+
+void const_iterators()
+{
+}
+
+int main()
+{
+    non_const_iterators();
+    const_iterators();
 }
