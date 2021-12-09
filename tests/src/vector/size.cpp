@@ -3,7 +3,6 @@
 int main()
 {
     {
-        ft::printSeparator();
         std::cout << "=== +1 size (push_back) ===" << std::endl;
         NAMESPACE::vector<TYPE> v;
 
@@ -26,6 +25,6 @@ int main()
         }
 
         std::cout << "Size: " << v.size() << std::endl;
-        // ft::printContainer(v);
+        ft::printContainer(v, true, false);
     }
 }

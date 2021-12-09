@@ -20,7 +20,10 @@ int main()
 
     // #########################################################
 
+    std::cout << std::endl;
     ft::printSeparator();
+    std::cout << std::endl;
+
     std::cout << "===== v_copy =====";
     NAMESPACE::vector<TYPE> v_copy(v);
     ft::printContainer(v_copy);
@@ -34,7 +37,10 @@ int main()
 
     // #########################################################
 
+    std::cout << std::endl;
     ft::printSeparator();
+    std::cout << std::endl;
+
     std::cout << "===== v_assign =====";
     NAMESPACE::vector<TYPE> v_assign;
     v.assign(v.begin(), v.end());
