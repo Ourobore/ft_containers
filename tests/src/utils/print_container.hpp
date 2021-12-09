@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 11:30:59 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/07 15:12:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/09 14:41:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,30 @@ namespace ft
 {
 
 template <class Container>
-void printContainer(Container c)
+void printContainer(Container c, bool capacity = true, bool content = true)
 {
+    ft::printSeparator('=', 1, 45);
+
+    std::cout << "Size: [" << c.size() << "]";
+    if (capacity)
+        std::cout << "   Capacity: [" << c.capacity() << "]";
     std::cout << std::endl;
 
-    ft::printSeparator('=', 1, 45);
-    std::cout << "Size: [" << c.size() << "]   Capacity: [" << c.capacity() << "]" << std::endl;
-
-    std::cout << "[ ";
-    for (typename Container::size_type i = 0; i < c.size(); ++i)
+    if (content)
     {
-        std::cout << c[i];
-        if (i < c.size() - 1)
-            std::cout << ", ";
+        std::cout << "[ ";
+        for (typename Container::size_type i = 0; i < c.size(); ++i)
+        {
+            std::cout << c[i];
+            if (i < c.size() - 1)
+                std::cout << ", ";
+        }
+        std::cout << " ]" << std::endl;
     }
-    std::cout << " ]" << std::endl;
+    else
+        std::cout << "(Content printing omitted)" << std::endl;
 
     ft::printSeparator('=', 1, 45);
-
-    std::cout << std::endl;
 }
 
 } // namespace ft

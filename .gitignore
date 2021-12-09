@@ -3,6 +3,7 @@
 *ft_containers
 containers_test/
 mli_tests/
+tests/logs
 .vscode-ctags
 .DS_Store
 .nfs*

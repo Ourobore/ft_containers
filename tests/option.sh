@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+# Options variables: 0 -> ON, 1 -> OFF
 HELP=1
 NO_CLEAN=1
 
@@ -24,5 +25,6 @@ parse_options()
 
 print_help()
 {
-    echo "//To do: print help"
+    echo "// To do: print help"
+    exit 0
 }
