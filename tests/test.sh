@@ -1,6 +1,9 @@
 #!/usr/bin/bash
+source option.sh
 source format.sh
 source compile.sh
+
+CONTAINERS=()
 
 # TO-DO: help command and error output
 
@@ -17,8 +20,7 @@ check_containers()
             fi
         done
         if [ $tested -ne 0 ]; then
-            printf "%s\n" "$container cannot be tested."
-            #print_help
+            printf "%s\n" "$container cannot be tested. Tested containers are: vector, stack, map and set"
             exit 1
         fi
     done
@@ -26,23 +28,30 @@ check_containers()
 
 main()
 {
-    # Remove executable and log files
+    # Setting up tested containers and options
+    parse_options $@
+    if [ ${#CONTAINERS[@]} -eq 0 ]; then
+        CONTAINERS=(vector stack map set)
+    fi
+
+    # Printing help if requested
+    if [ $HELP -eq 0 ]; then
+        print_help
+    fi
+
+    # Removing logs and executables if requested
     if [ $# -eq 1 ] && [ $1 = "clean" ]; then
         rm -rf a.out logs/*
         echo "Cleaned!"
         exit 0
     fi
     
-    if [ $# -eq 0 ]; then
-        print_help
-    elif [ $# -eq 1 ] && [ $1 = "clean" ]; then
-        clean
-    else
-        check_containers $@
-        for container in $@; do
-            test_container $container
-        done
-    fi
+
+    # Launching tests
+    check_containers ${CONTAINERS[@]}
+    for container in ${CONTAINERS[@]}; do
+        test_container $container
+    done
 }
 
 main $@

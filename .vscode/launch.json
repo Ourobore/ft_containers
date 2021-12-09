@@ -5,7 +5,7 @@
             "name": "build",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/ft_containers",
+            "program": "${workspaceFolder}/tests/test.sh",
             "args": [],
             "cwd": "${workspaceFolder}",
             //"preLaunchTask": "clang build",

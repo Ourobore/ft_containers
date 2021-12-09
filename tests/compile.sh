@@ -20,7 +20,7 @@ run_test()
     # Creating distinguishable test names
     local std_test_name="$1.$(echo $2 | cut -d "." -f 1).std"
     local ft_test_name="$1.$(echo $2 | cut -d "." -f 1).ft"
-    local output_diff="diff.$(echo $2 | cut -d "." -f 1).std"
+    local output_diff="diff.$1.$(echo $2 | cut -d "." -f 1)"
 
     # Compiling tests
     compile std src/$1/$2 $std_test_name
@@ -41,7 +41,9 @@ run_test()
     # Setting up result (diff) values
     diff logs/$std_test_name logs/$ft_test_name &> logs/$output_diff
     local diff_result=$?
-    if [ $diff_result -eq 0 ]; then
+
+    # Cleaning logs if option not set
+    if [ $diff_result -eq 0 ] && [ $NO_CLEAN -eq 1 ]; then
         rm -rf logs/$std_test_name logs/$ft_test_name logs/$output_diff
     fi
 

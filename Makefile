@@ -1,24 +1,14 @@
-MAKE_FLAGS = --no-print-directory
-
 # Compiling
-all		: 
-		@cd tests && $(MAKE) $(MAKE_FLAGS)
-
+all		: tests
 
 # Testing
 tests	:
-		@cd tests && $(MAKE) $(MAKE_FLAGS) run
-
+		  @cd tests && ./test.sh
 
 # Cleaning commands
-clean	:
-		@cd tests && $(MAKE) $(MAKE_FLAGS) clean
+clean	: 
+		  @cd tests && ./test.sh clean
 
-fclean	: 
-		@cd tests && $(MAKE) $(MAKE_FLAGS) fclean
+re		: clean all
 
-re		: 
-		@cd tests && $(MAKE) $(MAKE_FLAGS) re
-
-
-.PHONY		: all clean re tests
+.PHONY	: all clean re tests

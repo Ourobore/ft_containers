@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/07 09:54:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/09 10:42:10 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,8 +228,7 @@ typename vector< T, Allocator >::size_type vector< T, Allocator >::size() const
 }
 
 template < class T, class Allocator >
-typename vector< T, Allocator >::size_type
-vector< T, Allocator >::max_size() const
+typename vector< T, Allocator >::size_type vector< T, Allocator >::max_size() const
 {
     return (_alloc.max_size());
 }
