@@ -77,5 +77,5 @@ print_test_result()
     local ft_compiled=$(print_emoji $3)
     local result=$(transform_status $4)
 
-    echo -e "$1:\t Compilation: STD[$std_compiled](Y) | FT[$ft_compiled](Y)\tResult: [$result]"
+    echo -e "$1:\t\tCompilation: STD[$std_compiled](Y) | FT[$ft_compiled](Y)\tResult: [$result]"
 }
