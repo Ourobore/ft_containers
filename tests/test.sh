@@ -28,6 +28,8 @@ check_containers()
 
 main()
 {
+    print_header
+
     # Setting up tested containers and options
     parse_options $@
     if [ ${#CONTAINERS[@]} -eq 0 ]; then
