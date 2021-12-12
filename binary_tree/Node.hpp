@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 14:36:45 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/12 15:13:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,82 +15,99 @@
 
 #include <iostream>
 
-template < class T, class Allocator = std::allocator<T> >
+namespace ft
+{
+
+template < class T >
 class Node
 {
   public:
-    typedef T         value_type;
-    typedef Allocator allocator_type;
-
-    typedef typename allocator_type::reference       reference;
-    typedef typename allocator_type::const_reference const_reference;
-    typedef typename allocator_type::pointer         pointer;
-    typedef typename allocator_type::const_pointer   const_pointer;
+    typedef T        value_type;
+    typedef T&       reference;
+    typedef const T& const_reference;
+    typedef T*       pointer;
+    typedef const T* const_pointer;
 
     typedef std::size_t size_type;
 
   private:
-    value_type     _data;
-    pointer        _left;
-    pointer        _right;
-    allocator_type _alloc;
+    value_type _data;
+    Node*      _left;
+    Node*      _right;
 
   public:
     // Constructors and Destructor
-    Node(const allocator_type& allocator = allocator_type());
+    Node();
+    Node(const_reference value);
     ~Node();
 
     // Element access
     reference data();
-    pointer   left();
-    pointer   right();
+    Node*     left();
+    Node*     right();
 
-    // Allocator
-    allocator_type get_allocator() const;
-    size_type      max_size() const;
+    // Modifiers
+    void set_data(const_reference value);
+    void set_left(Node* left);
+    void set_right(Node* right);
 };
+
 // Constructors and Destructor
-template <class T, class Allocator>
-Node<T, Allocator>::Node(const allocator_type& allocator)
-    : _data(NULL), _left(NULL), _right(NULL), _alloc(allocator)
+template <class T>
+Node<T>::Node()
+    : _data(value_type()), _left(NULL), _right(NULL)
 {
 }
 
-template <class T, class Allocator>
-Node<T, Allocator>::~Node()
+template <class T>
+Node<T>::Node(const_reference value)
+    : _data(value), _left(NULL), _right(NULL)
+{
+}
+
+template <class T>
+Node<T>::~Node()
 {
 }
 
 // Element access
-template <class T, class Allocator>
-typename Node<T, Allocator>::reference Node<T, Allocator>::data()
+template <class T>
+typename Node<T>::reference Node<T>::data()
 {
     return (_data);
 }
 
-template <class T, class Allocator>
-typename Node<T, Allocator>::pointer Node<T, Allocator>::left()
+template <class T>
+Node<T>* Node<T>::left()
 {
     return (_left);
 }
 
-template <class T, class Allocator>
-typename Node<T, Allocator>::pointer Node<T, Allocator>::right()
+template <class T>
+Node<T>* Node<T>::right()
 {
     return (_right);
 }
 
-// Allocator
-template <class T, class Allocator>
-typename Node<T, Allocator>::allocator_type Node<T, Allocator>::get_allocator() const
+// Modifiers
+template <class T>
+void Node<T>::set_data(const_reference value)
 {
-    return (_alloc);
+    _data = value;
 }
 
-template <class T, class Allocator>
-typename Node<T, Allocator>::size_type Node<T, Allocator>::max_size() const
+template <class T>
+void Node<T>::set_left(Node* left)
 {
-    return (_alloc.max_size());
+    _left = left;
 }
+
+template <class T>
+void Node<T>::set_right(Node* right)
+{
+    _right = right;
+}
+
+} // namespace ft
 
 #endif
