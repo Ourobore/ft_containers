@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/09 10:42:10 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/12 13:56:27 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <memory>
 
+#include "iterator/IteratorTraits.hpp"
 #include "iterator/RandomAccessIterator.hpp"
 #include "iterator/ReverseIterator.hpp"
 
@@ -37,13 +38,14 @@ class vector
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
-    typedef std::ptrdiff_t                           difference_type;
-    typedef std::size_t                              size_type;
 
     typedef RandomAccessIterator< value_type, false > iterator;
     typedef RandomAccessIterator< value_type, true >  const_iterator;
     typedef ReverseIterator< iterator >               reverse_iterator;
     typedef ReverseIterator< const_iterator >         const_reverse_iterator;
+
+    typedef typename iterator_traits<iterator>::difference_type difference_type;
+    typedef std::size_t                                         size_type;
 
   protected:
     pointer        _c;
