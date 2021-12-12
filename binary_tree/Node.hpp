@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 15:13:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/12 17:39:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ template < class T >
 class Node
 {
   public:
-    typedef T        value_type;
+    typedef T value_type;
+
     typedef T&       reference;
     typedef const T& const_reference;
     typedef T*       pointer;
