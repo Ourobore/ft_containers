@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 13:55:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/12 14:07:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,29 @@ class map
     typedef std::size_t                                         size_type;
 
   private:
+    allocator_type _alloc;
+
   public:
+    // Capacity
+    size_type max_size() const;
+
+    // Allocator
+    allocator_type get_allocator() const;
 };
+
+// Capacity
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::max_size() const
+{
+    return (_alloc.max_size());
+}
+
+// Allocator
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Allocator>::get_allocator() const
+{
+    return (_alloc);
+}
 
 } // namespace ft
 
