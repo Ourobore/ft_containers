@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 17:41:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/13 14:44:29 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ class BinarySearchTree
     Node<T>*       _root;
     allocator_type _alloc;
 
+    void destroy(Node<T>*& node);
+
   public:
     // Constructor
     BinarySearchTree(const allocator_type& allocator = allocator_type());
@@ -45,7 +47,7 @@ class BinarySearchTree
 
     // Insert
     void insert(value_type value);
-    void recursive_insert(Node<T>* new_node, Node<T>* node_root);
+    void recursive_insert(Node<T>*& new_node, Node<T>*& node_root);
 };
 
 // Constructor
@@ -56,38 +58,69 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const allocator_type& allocator
 }
 
 template <class T, class Allocator>
-BinarySearchTree<T, Allocator>::~BinarySearchTree()
+void BinarySearchTree<T, Allocator>::destroy(Node<T>*& node)
 {
+    if (node)
+    {
+        typename allocator_type::template rebind< Node<T> >::other node_allocator;
+
+        if (!node->left() && !node->right())
+        {
+            node_allocator.destroy(&node);
+            node_allocator.deallocate(node, 1);
+            node = NULL;
+        }
+        else
+        {
+            destroy(node->left());
+            destroy(node->right());
+        }
+    }
 }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::recursive_insert(Node<T>* new_node, Node<T>* node_root)
+BinarySearchTree<T, Allocator>::~BinarySearchTree()
 {
-    if (!node_root)
-        node_root = new_node;
-    else if (new_node->data() < node_root->data())
+    // Cleaning every node except root
+    destroy(_root);
+
+    // Destroying and deallocating BST root
+    typename allocator_type::template rebind< Node<T> >::other node_allocator;
+    node_allocator.destroy(&_root);
+    node_allocator.deallocate(_root, 1);
+}
+
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::recursive_insert(Node<T>*& new_node, Node<T>*& node)
+{
+    if (!node)
+        node = new_node;
+    else if (new_node->data() < node->data())
     {
-        if (!node_root->left())
-            node_root->set_left(new_node);
+        if (!node->left())
+            node->set_left(new_node);
         else
-            recursive_insert(new_node, node_root->left());
+            recursive_insert(new_node, node->left());
     }
-    else if (new_node->data() > node_root->data())
+    else if (new_node->data() > node->data())
     {
-        if (!node_root->right())
-            node_root->set_right(new_node);
+        if (!node->right())
+            node->set_right(new_node);
         else
-            recursive_insert(new_node, node_root->right());
+            recursive_insert(new_node, node->right());
     }
 }
 
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::insert(value_type value)
 {
+    typename allocator_type::template rebind< Node<T> >::other node_allocator;
+
     Node<T>* new_node;
-    new_node = _alloc.allocate(1);
-    _root = new_node;
-    // recursive_insert(&new_node, this->_root);
+    new_node = node_allocator.allocate(1);
+    node_allocator.construct(new_node, value);
+
+    recursive_insert(new_node, _root);
 }
 
 } // namespace ft

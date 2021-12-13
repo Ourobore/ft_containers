@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 17:39:01 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/13 14:35:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ template < class T >
 class Node
 {
   public:
-    typedef T value_type;
-
+    typedef T        value_type;
     typedef T&       reference;
     typedef const T& const_reference;
     typedef T*       pointer;
@@ -40,12 +39,13 @@ class Node
     // Constructors and Destructor
     Node();
     Node(const_reference value);
+    Node(const Node<T>& rhs);
     ~Node();
 
     // Element access
     reference data();
-    Node*     left();
-    Node*     right();
+    Node*&    left();
+    Node*&    right();
 
     // Modifiers
     void set_data(const_reference value);
@@ -67,8 +67,15 @@ Node<T>::Node(const_reference value)
 }
 
 template <class T>
+Node<T>::Node(const Node<T>& rhs)
+    : _data(rhs.data), _left(rhs.left()), _right(rhs.right())
+{
+}
+
+template <class T>
 Node<T>::~Node()
 {
+    _data = value_type();
 }
 
 // Element access
@@ -79,13 +86,13 @@ typename Node<T>::reference Node<T>::data()
 }
 
 template <class T>
-Node<T>* Node<T>::left()
+Node<T>*& Node<T>::left()
 {
     return (_left);
 }
 
 template <class T>
-Node<T>* Node<T>::right()
+Node<T>*& Node<T>::right()
 {
     return (_right);
 }
