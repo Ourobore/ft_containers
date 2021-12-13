@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/13 16:43:52 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/13 16:58:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ class BinarySearchTree
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
+
+    typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
 
     typedef std::size_t size_type;
 
@@ -65,33 +67,22 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const allocator_type& allocator
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::destroy(Node<T>*& node)
 {
-    if (node)
-    {
-        if (!node->left() && !node->right())
-        {
-            typename allocator_type::template rebind< Node<T> >::other node_allocator;
-            node_allocator.destroy(node);
-            node_allocator.deallocate(node, 1);
-            node = NULL;
-        }
-        else
-        {
-            destroy(node->left());
-            destroy(node->right());
-        }
-    }
+    if (!node)
+        return;
+
+    destroy(node->left());
+    destroy(node->right());
+
+    node_allocator allocator;
+    allocator.destroy(node);
+    allocator.deallocate(node, 1);
+    node = NULL;
 }
 
 template <class T, class Allocator>
 BinarySearchTree<T, Allocator>::~BinarySearchTree()
 {
-    // Cleaning every node except root
     destroy(_root);
-
-    // Destroying and deallocating BST root
-    typename allocator_type::template rebind< Node<T> >::other node_allocator;
-    node_allocator.destroy(_root);
-    node_allocator.deallocate(_root, 1);
 }
 
 template <class T, class Allocator>
@@ -118,10 +109,10 @@ void BinarySearchTree<T, Allocator>::recursive_insert(Node<T>*& new_node, Node<T
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::insert(value_type value)
 {
-    typename allocator_type::template rebind< Node<T> >::other node_allocator;
+    node_allocator allocator;
 
-    Node<T>* new_node = node_allocator.allocate(1);
-    node_allocator.construct(new_node, value);
+    Node<T>* new_node = allocator.allocate(1);
+    allocator.construct(new_node, value);
 
     recursive_insert(new_node, _root);
 }
