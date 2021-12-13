@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/13 14:44:29 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/13 16:43:52 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ class BinarySearchTree
     // Insert
     void insert(value_type value);
     void recursive_insert(Node<T>*& new_node, Node<T>*& node_root);
+
+    // Print BinarySearchTree
+    static void print_postorder(Node<T>* node);
+    static void print_inorder(Node<T>* node);
+    static void print_preorder(Node<T>* node);
 };
 
 // Constructor
@@ -62,11 +67,10 @@ void BinarySearchTree<T, Allocator>::destroy(Node<T>*& node)
 {
     if (node)
     {
-        typename allocator_type::template rebind< Node<T> >::other node_allocator;
-
         if (!node->left() && !node->right())
         {
-            node_allocator.destroy(&node);
+            typename allocator_type::template rebind< Node<T> >::other node_allocator;
+            node_allocator.destroy(node);
             node_allocator.deallocate(node, 1);
             node = NULL;
         }
@@ -86,7 +90,7 @@ BinarySearchTree<T, Allocator>::~BinarySearchTree()
 
     // Destroying and deallocating BST root
     typename allocator_type::template rebind< Node<T> >::other node_allocator;
-    node_allocator.destroy(&_root);
+    node_allocator.destroy(_root);
     node_allocator.deallocate(_root, 1);
 }
 
@@ -116,11 +120,44 @@ void BinarySearchTree<T, Allocator>::insert(value_type value)
 {
     typename allocator_type::template rebind< Node<T> >::other node_allocator;
 
-    Node<T>* new_node;
-    new_node = node_allocator.allocate(1);
+    Node<T>* new_node = node_allocator.allocate(1);
     node_allocator.construct(new_node, value);
 
     recursive_insert(new_node, _root);
+}
+
+// Printing BinarySearchTree
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::print_postorder(Node<T>* node)
+{
+    if (node == NULL)
+        return;
+
+    print_postorder(node->left());
+    print_postorder(node->right());
+    std::cout << node->data() << " ";
+}
+
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::print_inorder(Node<T>* node)
+{
+    if (node == NULL)
+        return;
+
+    print_inorder(node->left());
+    std::cout << node->data() << " ";
+    print_inorder(node->right());
+}
+
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::print_preorder(Node<T>* node)
+{
+    if (node == NULL)
+        return;
+
+    std::cout << node->data() << " ";
+    print_preorder(node->left());
+    print_preorder(node->right());
 }
 
 } // namespace ft
