@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/14 10:42:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/14 11:48:56 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ class BinarySearchTree
     Node<T>*       _root;
     allocator_type _alloc;
 
-    static void     recursive_destroy(Node<T>*& node);
-    static Node<T>* recursive_search(value_type value, Node<T>*& node);
-    static void     recursive_insert(Node<T>*& new_node, Node<T>*& node_root);
+    static void      recursive_destroy(Node<T>*& node);
+    static Node<T>*& recursive_search(value_type value, Node<T>*& node);
+    static void      recursive_insert(Node<T>*& new_node, Node<T>*& node);
+    static Node<T>*  recursive_erase(value_type value, Node<T>*& node);
 
   public:
     // Constructor
@@ -50,10 +51,16 @@ class BinarySearchTree
     ~BinarySearchTree();
 
     // Search
-    Node<T>* search(value_type value);
+    Node<T>*& search(value_type value);
 
     // Insert
     void insert(value_type value);
+
+    // Erase
+    Node<T>* erase(value_type value);
+
+    // Algorithm
+    static Node<T>* min_elem(Node<T>* node);
 
     // Print BinarySearchTree
     static void print_postorder(Node<T>* node);
@@ -91,7 +98,7 @@ BinarySearchTree<T, Allocator>::~BinarySearchTree()
 
 // Search
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::recursive_search(value_type value, Node<T>*& node)
+Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(value_type value, Node<T>*& node)
 {
     if (!node || node->data() == value)
         return (node);
@@ -103,7 +110,7 @@ Node<T>* BinarySearchTree<T, Allocator>::recursive_search(value_type value, Node
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
+Node<T>*& BinarySearchTree<T, Allocator>::search(value_type value)
 {
     return (BinarySearchTree::recursive_search(value, _root));
 }
@@ -141,7 +148,85 @@ void BinarySearchTree<T, Allocator>::insert(value_type value)
     recursive_insert(new_node, _root);
 }
 
-// Printing BinarySearchTree
+// Erase
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(value_type value, Node<T>*& node)
+{
+    if (node == NULL)
+        return (node);
+
+    // Searching recursively in which subtree is the erased node
+    if (value < node->data())
+        node->left() = BinarySearchTree::recursive_erase(value, node->left());
+    else if (value > node->data())
+        node->right() = BinarySearchTree::recursive_erase(value, node->right());
+
+    // If this is the right node
+    else
+    {
+        node_allocator allocator;
+
+        // Node has no child
+        if (!node->left() && !node->right())
+        {
+            allocator.destroy(node);
+            allocator.deallocate(node, 1);
+            node = NULL;
+            return (node);
+        }
+
+        // Node with only one child or no child:
+        // Set child as new subtree root
+        else if (!node->left())
+        {
+            Node<T>*& new_sub_root = node->right();
+            allocator.destroy(node);
+            allocator.deallocate(node, 1);
+            node = NULL;
+            return new_sub_root;
+        }
+        else if (!node->right())
+        {
+            Node<T>*& new_sub_root = node->left();
+            allocator.destroy(node);
+            allocator.deallocate(node, 1);
+            node = NULL;
+            return new_sub_root;
+        }
+
+        // Node with two children: Get the inorder successor(smallest in right subtree)
+        Node<T>* old_min = BinarySearchTree::min_elem(node->right());
+
+        // Copy the inorder successor's content to this node
+        node->data() = old_min->data();
+
+        // Erase the inorder successor
+        node->right() = BinarySearchTree::recursive_erase(old_min->data(), node->right());
+    }
+    return (node);
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::erase(value_type value)
+{
+    return (BinarySearchTree::recursive_erase(value, _root));
+}
+
+// Algorithm
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::min_elem(Node<T>* node)
+{
+    if (!node)
+        return (node);
+
+    Node<T>* pointer = node;
+    while (pointer->left() != NULL)
+        pointer = pointer->left();
+
+    return (pointer);
+}
+
+// Print BinarySearchTree
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::print_postorder(Node<T>* node)
 {
