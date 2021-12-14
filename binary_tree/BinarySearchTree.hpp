@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/13 16:58:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/14 10:42:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,20 @@ class BinarySearchTree
     Node<T>*       _root;
     allocator_type _alloc;
 
-    void destroy(Node<T>*& node);
+    static void     recursive_destroy(Node<T>*& node);
+    static Node<T>* recursive_search(value_type value, Node<T>*& node);
+    static void     recursive_insert(Node<T>*& new_node, Node<T>*& node_root);
 
   public:
     // Constructor
     BinarySearchTree(const allocator_type& allocator = allocator_type());
     ~BinarySearchTree();
 
+    // Search
+    Node<T>* search(value_type value);
+
     // Insert
     void insert(value_type value);
-    void recursive_insert(Node<T>*& new_node, Node<T>*& node_root);
 
     // Print BinarySearchTree
     static void print_postorder(Node<T>* node);
@@ -65,13 +69,13 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const allocator_type& allocator
 }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::destroy(Node<T>*& node)
+void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>*& node)
 {
     if (!node)
         return;
 
-    destroy(node->left());
-    destroy(node->right());
+    BinarySearchTree::recursive_destroy(node->left());
+    BinarySearchTree::recursive_destroy(node->right());
 
     node_allocator allocator;
     allocator.destroy(node);
@@ -82,9 +86,29 @@ void BinarySearchTree<T, Allocator>::destroy(Node<T>*& node)
 template <class T, class Allocator>
 BinarySearchTree<T, Allocator>::~BinarySearchTree()
 {
-    destroy(_root);
+    BinarySearchTree::recursive_destroy(_root);
 }
 
+// Search
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::recursive_search(value_type value, Node<T>*& node)
+{
+    if (!node || node->data() == value)
+        return (node);
+
+    if (value > node->data())
+        return (BinarySearchTree::recursive_search(value, node->right()));
+    else
+        return (BinarySearchTree::recursive_search(value, node->left()));
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
+{
+    return (BinarySearchTree::recursive_search(value, _root));
+}
+
+// Insert
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::recursive_insert(Node<T>*& new_node, Node<T>*& node)
 {
