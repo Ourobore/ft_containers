@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/14 11:48:56 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/15 15:28:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,15 @@ class BinarySearchTree
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
-
     typedef std::size_t size_type;
 
-  public:
+  private:
     Node<T>*       _root;
     allocator_type _alloc;
 
+    typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
+
+    // Recursive implementations
     static void      recursive_destroy(Node<T>*& node);
     static Node<T>*& recursive_search(value_type value, Node<T>*& node);
     static void      recursive_insert(Node<T>*& new_node, Node<T>*& node);
@@ -48,10 +49,11 @@ class BinarySearchTree
   public:
     // Constructor
     BinarySearchTree(const allocator_type& allocator = allocator_type());
+    BinarySearchTree(const BinarySearchTree& rhs);
     ~BinarySearchTree();
 
     // Search
-    Node<T>*& search(value_type value);
+    Node<T>* search(value_type value);
 
     // Insert
     void insert(value_type value);
@@ -60,18 +62,32 @@ class BinarySearchTree
     Node<T>* erase(value_type value);
 
     // Algorithm
-    static Node<T>* min_elem(Node<T>* node);
+    static Node<T>* min_elem(Node<T>* tree_root);
+
+    // Accessors
+    Node<T>*       root();
+    allocator_type get_allocator() const;
+
+    Node<T>* inorder_successor(Node<T>*& node);   // Left -> Root  -> Right
+    Node<T>* preorder_successor(Node<T>*& node);  // Root -> Left  -> Right
+    Node<T>* postorder_successor(Node<T>*& node); // Left -> Right -> Root
 
     // Print BinarySearchTree
-    static void print_postorder(Node<T>* node);
-    static void print_inorder(Node<T>* node);
-    static void print_preorder(Node<T>* node);
+    void print_inorder();
+    // static void print_postorder(Node<T>* node);
+    // static void print_preorder(Node<T>* node);
 };
 
-// Constructor
+// Constructor and Destructor
 template <class T, class Allocator>
 BinarySearchTree<T, Allocator>::BinarySearchTree(const allocator_type& allocator)
     : _root(NULL), _alloc(allocator)
+{
+}
+
+template <class T, class Allocator>
+BinarySearchTree<T, Allocator>::BinarySearchTree(const BinarySearchTree& rhs)
+    : _alloc(rhs.get_allocator())
 {
 }
 
@@ -110,7 +126,7 @@ Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(value_type value, Nod
 }
 
 template <class T, class Allocator>
-Node<T>*& BinarySearchTree<T, Allocator>::search(value_type value)
+Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
 {
     return (BinarySearchTree::recursive_search(value, _root));
 }
@@ -214,51 +230,86 @@ Node<T>* BinarySearchTree<T, Allocator>::erase(value_type value)
 
 // Algorithm
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::min_elem(Node<T>* node)
+Node<T>* BinarySearchTree<T, Allocator>::min_elem(Node<T>* tree_root)
 {
-    if (!node)
-        return (node);
+    if (!tree_root)
+        return (tree_root);
 
-    Node<T>* pointer = node;
-    while (pointer->left() != NULL)
+    Node<T>* pointer = tree_root;
+    while (pointer->left())
         pointer = pointer->left();
 
     return (pointer);
 }
 
+// Accessors
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::root()
+{
+    return (_root);
+}
+
+template <class T, class Allocator>
+typename BinarySearchTree<T, Allocator>::allocator_type BinarySearchTree<T, Allocator>::get_allocator() const
+{
+    return (_alloc);
+}
+
+// Successors
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>*& node)
+{
+    Node<T>* successor = NULL;
+
+    Node<T>* node_pointer = _root;
+    while (node_pointer)
+    {
+        if (node->data() < node_pointer->data())
+        {
+            successor = node_pointer;
+            node_pointer = node_pointer->left();
+        }
+        else
+            node_pointer = node_pointer->right();
+    }
+    return (successor);
+}
+
+// template <class T, class Allocator>
+// Node<T>* BinarySearchTree<T, Allocator>::preorder_successor(Node<T>*& node, Node<T>*& T_node)
+// {
+// }
+
+// template <class T, class Allocator>
+// Node<T>* BinarySearchTree<T, Allocator>::postorder_successor(Node<T>*& node, Node<T>*& T_node)
+// {
+// }
+
 // Print BinarySearchTree
-template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::print_postorder(Node<T>* node)
-{
-    if (node == NULL)
-        return;
-
-    print_postorder(node->left());
-    print_postorder(node->right());
-    std::cout << node->data() << " ";
-}
+// template <class T, class Allocator>
+// void BinarySearchTree<T, Allocator>::print_postorder(Node<T>* node)
+// {
+// }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::print_inorder(Node<T>* node)
+void BinarySearchTree<T, Allocator>::print_inorder()
 {
-    if (node == NULL)
-        return;
+    Node<T>*  node = BinarySearchTree::min_elem(_root);
+    size_type i = 0;
 
-    print_inorder(node->left());
-    std::cout << node->data() << " ";
-    print_inorder(node->right());
+    while (node && i < 10)
+    {
+        std::cout << "[" << node->data() << "] ";
+        node = inorder_successor(node);
+        ++i;
+    }
+    std::cout << std::endl;
 }
 
-template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::print_preorder(Node<T>* node)
-{
-    if (node == NULL)
-        return;
-
-    std::cout << node->data() << " ";
-    print_preorder(node->left());
-    print_preorder(node->right());
-}
+// template <class T, class Allocator>
+// void BinarySearchTree<T, Allocator>::print_preorder(Node<T>* node)
+// {
+// }
 
 } // namespace ft
 
