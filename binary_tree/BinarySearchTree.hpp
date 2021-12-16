@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/15 15:28:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/16 12:22:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class BinarySearchTree
 
     // Search
     Node<T>* search(value_type value);
+    Node<T>* parent(Node<T>*& node);
 
     // Insert
     void insert(value_type value);
@@ -63,19 +64,22 @@ class BinarySearchTree
 
     // Algorithm
     static Node<T>* min_elem(Node<T>* tree_root);
+    static Node<T>* max_elem(Node<T>* tree_root);
+    Node<T>*        inorder_successor(Node<T>*& node);   // Left -> Root  -> Right
+    Node<T>*        preorder_successor(Node<T>*& node);  // Root -> Left  -> Right
+    Node<T>*        postorder_successor(Node<T>*& node); // Left -> Right -> Root
+    Node<T>*        inorder_predecessor(Node<T>*& node);
+    Node<T>*        preorder_predecessor(Node<T>*& node);
+    Node<T>*        postorder_predecessor(Node<T>*& node);
 
     // Accessors
     Node<T>*       root();
     allocator_type get_allocator() const;
 
-    Node<T>* inorder_successor(Node<T>*& node);   // Left -> Root  -> Right
-    Node<T>* preorder_successor(Node<T>*& node);  // Root -> Left  -> Right
-    Node<T>* postorder_successor(Node<T>*& node); // Left -> Right -> Root
-
     // Print BinarySearchTree
     void print_inorder();
-    // static void print_postorder(Node<T>* node);
-    // static void print_preorder(Node<T>* node);
+    void print_postorder();
+    void print_preorder();
 };
 
 // Constructor and Destructor
@@ -129,6 +133,26 @@ template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
 {
     return (BinarySearchTree::recursive_search(value, _root));
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::parent(Node<T>*& node)
+{
+    Node<T>* parent = _root;
+
+    if (!node)
+        return (NULL);
+
+    while (parent)
+    {
+        if (parent->left() == node || parent->right() == node)
+            return (parent);
+        if (node->data() < parent->data())
+            parent = parent->left();
+        else
+            parent = parent->right();
+    }
+    return (parent);
 }
 
 // Insert
@@ -235,27 +259,26 @@ Node<T>* BinarySearchTree<T, Allocator>::min_elem(Node<T>* tree_root)
     if (!tree_root)
         return (tree_root);
 
-    Node<T>* pointer = tree_root;
-    while (pointer->left())
-        pointer = pointer->left();
+    Node<T>* node_pointer = tree_root;
+    while (node_pointer->left())
+        node_pointer = node_pointer->left();
 
-    return (pointer);
-}
-
-// Accessors
-template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::root()
-{
-    return (_root);
+    return (node_pointer);
 }
 
 template <class T, class Allocator>
-typename BinarySearchTree<T, Allocator>::allocator_type BinarySearchTree<T, Allocator>::get_allocator() const
+Node<T>* BinarySearchTree<T, Allocator>::max_elem(Node<T>* tree_root)
 {
-    return (_alloc);
+    if (!tree_root)
+        return (tree_root);
+
+    Node<T>* node_pointer = tree_root;
+    while (node_pointer->right())
+        node_pointer = node_pointer->right();
+
+    return (node_pointer);
 }
 
-// Successors
 template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>*& node)
 {
@@ -275,41 +298,132 @@ Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>*& node)
     return (successor);
 }
 
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::preorder_successor(Node<T>*& node)
+{
+    if (node->left())
+        return (node->left());
+
+    if (node->right())
+        return (node->right());
+
+    Node<T>* node_pointer = node;
+    Node<T>* ancestor = parent(node_pointer);
+    while (ancestor && ancestor->right() == node_pointer)
+    {
+        node_pointer = parent(node_pointer);
+        ancestor = parent(ancestor);
+    }
+
+    if (!ancestor)
+        return (ancestor);
+
+    return ancestor->right();
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::postorder_successor(Node<T>*& node)
+{
+    if (node == _root)
+        return NULL;
+
+    Node<T>* ancestor = parent(node);
+    if (!ancestor->right() || ancestor->right() == node)
+        return ancestor;
+
+    Node<T>* node_pointer = ancestor->right();
+    while (node_pointer->left())
+        node_pointer = node_pointer->left();
+
+    return (node_pointer);
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::inorder_predecessor(Node<T>*& node)
+{
+    Node<T>* predecessor = NULL;
+    Node<T>* node_pointer = _root;
+
+    if (!_root)
+        return (NULL);
+
+    while (node_pointer && node_pointer != node)
+    {
+        if (node->data() < node_pointer->data())
+            node_pointer = node_pointer->left();
+        else
+        {
+            predecessor = node_pointer;
+            node_pointer = node_pointer->right();
+        }
+    }
+    if (node->data() == node_pointer->data() && node->left())
+        predecessor = BinarySearchTree::max_elem(node_pointer->left());
+    return (predecessor);
+}
+
 // template <class T, class Allocator>
-// Node<T>* BinarySearchTree<T, Allocator>::preorder_successor(Node<T>*& node, Node<T>*& T_node)
+// Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>*& node)
 // {
 // }
 
 // template <class T, class Allocator>
-// Node<T>* BinarySearchTree<T, Allocator>::postorder_successor(Node<T>*& node, Node<T>*& T_node)
+// Node<T>* BinarySearchTree<T, Allocator>::postorder_predecessor(Node<T>*& node)
 // {
 // }
+
+// Accessors
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::root()
+{
+    return (_root);
+}
+
+template <class T, class Allocator>
+typename BinarySearchTree<T, Allocator>::allocator_type BinarySearchTree<T, Allocator>::get_allocator() const
+{
+    return (_alloc);
+}
 
 // Print BinarySearchTree
-// template <class T, class Allocator>
-// void BinarySearchTree<T, Allocator>::print_postorder(Node<T>* node)
-// {
-// }
-
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::print_inorder()
 {
-    Node<T>*  node = BinarySearchTree::min_elem(_root);
-    size_type i = 0;
+    Node<T>* node = BinarySearchTree::min_elem(_root);
 
-    while (node && i < 10)
+    while (node)
     {
         std::cout << "[" << node->data() << "] ";
         node = inorder_successor(node);
-        ++i;
     }
     std::cout << std::endl;
 }
 
-// template <class T, class Allocator>
-// void BinarySearchTree<T, Allocator>::print_preorder(Node<T>* node)
-// {
-// }
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::print_preorder()
+{
+    Node<T>* node = _root;
+
+    while (node)
+    {
+        std::cout << "[" << node->data() << "] ";
+        node = preorder_successor(node);
+    }
+    std::cout << std::endl;
+}
+
+template <class T, class Allocator>
+void BinarySearchTree<T, Allocator>::print_postorder()
+{
+    Node<T>* node = BinarySearchTree::min_elem(_root);
+
+    while (node)
+    {
+        std::cout << "[" << node->data() << "] ";
+        node = postorder_successor(node);
+    }
+    std::cout << std::endl;
+}
 
 } // namespace ft
 
