@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 14:07:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/14 13:28:45 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "iterator/IteratorTraits.hpp"
 #include "iterator/ReverseIterator.hpp"
 
+#include "binary_tree/BinarySearchTree.hpp"
+
 namespace ft
 {
 
@@ -30,7 +32,7 @@ class map
     typedef T                                      mapped_type;
     typedef std::pair<const key_type, mapped_type> value_type;
     typedef Compare                                key_compare;
-    // typedef Compare value_compare;
+    // typedef Compare                                value_compare;
 
     typedef Allocator                                allocator_type;
     typedef typename allocator_type::reference       reference;
@@ -47,10 +49,14 @@ class map
     typedef std::size_t                                         size_type;
 
   private:
-    allocator_type _alloc;
+    BinarySearchTree<value_type>* _tree;
+    size_type                     _size;
+    allocator_type                _alloc;
 
   public:
     // Capacity
+    bool      empty() const;
+    size_type size() const;
     size_type max_size() const;
 
     // Allocator
@@ -58,6 +64,18 @@ class map
 };
 
 // Capacity
+template < class Key, class T, class Compare, class Allocator >
+bool map<Key, T, Compare, Allocator>::empty() const
+{
+    return (_size == 0);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::size() const
+{
+    return (_size);
+}
+
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::max_size() const
 {
