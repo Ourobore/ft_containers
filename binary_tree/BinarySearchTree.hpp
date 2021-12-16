@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/16 12:22:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/16 13:04:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,13 +329,9 @@ Node<T>* BinarySearchTree<T, Allocator>::postorder_successor(Node<T>*& node)
 
     Node<T>* ancestor = parent(node);
     if (!ancestor->right() || ancestor->right() == node)
-        return ancestor;
+        return (ancestor);
 
-    Node<T>* node_pointer = ancestor->right();
-    while (node_pointer->left())
-        node_pointer = node_pointer->left();
-
-    return (node_pointer);
+    return BinarySearchTree::min_elem(ancestor->right());
 }
 
 template <class T, class Allocator>
@@ -362,15 +358,39 @@ Node<T>* BinarySearchTree<T, Allocator>::inorder_predecessor(Node<T>*& node)
     return (predecessor);
 }
 
-// template <class T, class Allocator>
-// Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>*& node)
-// {
-// }
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>*& node)
+{
+    if (node == _root)
+        return NULL;
 
-// template <class T, class Allocator>
-// Node<T>* BinarySearchTree<T, Allocator>::postorder_predecessor(Node<T>*& node)
-// {
-// }
+    Node<T>* ancestor = parent(node);
+    if (!ancestor->left() || ancestor->left() == node)
+        return (ancestor);
+
+    return BinarySearchTree::max_elem(ancestor->left());
+}
+
+template <class T, class Allocator>
+Node<T>* BinarySearchTree<T, Allocator>::postorder_predecessor(Node<T>*& node)
+{
+    if (node->right())
+        return (node->right());
+
+    Node<T>* node_pointer = node;
+    Node<T>* ancestor = parent(node_pointer);
+
+    while (ancestor && ancestor->left() == node_pointer)
+    {
+        node_pointer = parent(node_pointer);
+        ancestor = parent(ancestor);
+    }
+
+    if (!ancestor)
+        return ancestor;
+
+    return ancestor->left();
+}
 
 // Accessors
 template <class T, class Allocator>
