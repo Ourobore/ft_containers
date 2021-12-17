@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/13 14:35:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:24:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ class Node
     // Constructors and Destructor
     Node();
     Node(const_reference value);
-    Node(const Node<T>& rhs);
+    template <class N>
+    Node(const Node<N>& rhs);
     ~Node();
 
     // Element access
@@ -67,15 +68,16 @@ Node<T>::Node(const_reference value)
 }
 
 template <class T>
-Node<T>::Node(const Node<T>& rhs)
-    : _data(rhs.data), _left(rhs.left()), _right(rhs.right())
+template <class N>
+Node<T>::Node(const Node<N>& rhs)
+    : _data(rhs.data()), _left(rhs.left()), _right(rhs.right())
 {
 }
 
 template <class T>
 Node<T>::~Node()
 {
-    _data = value_type();
+    //_data = value_type();
 }
 
 // Element access

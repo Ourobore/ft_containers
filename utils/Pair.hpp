@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 15:30:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/16 16:01:44 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:14:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ pair<T1, T2>& pair<T1, T2>::operator=(const pair<T1, T2>& p)
 {
     first = p.first;
     second = p.second;
+    return (*this);
 }
 
 // Relational
