@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 13:51:17 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 14:19:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,10 @@ Node<T>* Node<T>::inorder_successor()
         Node<T>* ancestor = this->_parent;
         while (ancestor && !ancestor->left())
             ancestor = ancestor->_parent;
-        return (ancestor);
+        if (_data < ancestor->data())
+            return (ancestor);
+        else
+            return (NULL);
     }
 }
 
@@ -169,7 +172,10 @@ Node<T>* Node<T>::inorder_predecessor()
         Node<T>* ancestor = this->_parent;
         while (ancestor && !ancestor->right())
             ancestor = ancestor->_parent;
-        return (ancestor);
+        if (_data > ancestor->data())
+            return (ancestor);
+        else
+            return (NULL);
     }
 }
 
