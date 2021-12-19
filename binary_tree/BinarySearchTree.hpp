@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/17 14:38:30 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 13:08:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ class BinarySearchTree
     // Recursive implementations
     static void      recursive_destroy(Node<T>*& node);
     static Node<T>*& recursive_search(value_type value, Node<T>*& node);
-    static void      recursive_insert(Node<T>*& new_node, Node<T>*& node);
     static Node<T>*  recursive_erase(value_type value, Node<T>*& node);
 
   public:
@@ -54,7 +53,6 @@ class BinarySearchTree
 
     // Search
     Node<T>* search(value_type value);
-    Node<T>* parent(Node<T>*& node);
 
     // Insert
     void insert(value_type value);
@@ -135,48 +133,7 @@ Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
     return (BinarySearchTree::recursive_search(value, _root));
 }
 
-template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::parent(Node<T>*& node)
-{
-    Node<T>* parent = _root;
-
-    if (!node)
-        return (NULL);
-
-    while (parent)
-    {
-        if (parent->left() == node || parent->right() == node)
-            return (parent);
-        if (node->data() < parent->data())
-            parent = parent->left();
-        else
-            parent = parent->right();
-    }
-    return (parent);
-}
-
 // Insert
-template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::recursive_insert(Node<T>*& new_node, Node<T>*& node)
-{
-    if (!node)
-        node = new_node;
-    else if (new_node->data() < node->data())
-    {
-        if (!node->left())
-            node->set_left(new_node);
-        else
-            recursive_insert(new_node, node->left());
-    }
-    else if (new_node->data() > node->data())
-    {
-        if (!node->right())
-            node->set_right(new_node);
-        else
-            recursive_insert(new_node, node->right());
-    }
-}
-
 template <class T, class Allocator>
 void BinarySearchTree<T, Allocator>::insert(value_type value)
 {
@@ -185,7 +142,42 @@ void BinarySearchTree<T, Allocator>::insert(value_type value)
     Node<T>* new_node = allocator.allocate(1);
     allocator.construct(new_node, value);
 
-    recursive_insert(new_node, _root);
+    Node<T>*& node_pointer = _root;
+    Node<T>*  parent = NULL;
+    bool      inserted = false;
+
+    while (!inserted)
+    {
+        if (!node_pointer)
+        {
+            node_pointer = new_node;
+            inserted = true;
+        }
+        else
+        {
+            parent = node_pointer;
+            if (new_node->data() < node_pointer->data())
+            {
+                if (!node_pointer->left())
+                {
+                    node_pointer->set_left(new_node);
+                    inserted = true;
+                }
+                else
+                    node_pointer = node_pointer->left();
+            }
+            else if (new_node->data() > node_pointer->data())
+            {
+                if (!node_pointer->right())
+                {
+                    node_pointer->set_right(new_node);
+                    inserted = true;
+                }
+                else
+                    node_pointer = node_pointer->right();
+            }
+        }
+    }
 }
 
 // Erase

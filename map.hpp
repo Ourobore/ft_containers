@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/17 15:06:17 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 12:05:35 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ class map
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef TreeIterator< Node<value_type> >      iterator;
-    typedef TreeIterator<const Node<value_type> > const_iterator;
-    typedef ReverseIterator<iterator>             reverse_iterator;
-    typedef ReverseIterator<const_iterator>       const_reverse_iterator;
+    typedef TreeIterator<value_type>        iterator;
+    typedef TreeIterator<const value_type>  const_iterator;
+    typedef ReverseIterator<iterator>       reverse_iterator;
+    typedef ReverseIterator<const_iterator> const_reverse_iterator;
 
     typedef typename iterator_traits<iterator>::difference_type difference_type;
     typedef std::size_t                                         size_type;
@@ -115,7 +115,8 @@ map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_ty
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::begin()
 {
-    return (iterator(_tree->min_elem(_tree->root())));
+    Node<value_type>* tmp = _tree->min_elem(_tree->root());
+    return (iterator(tmp));
 }
 
 // Capacity

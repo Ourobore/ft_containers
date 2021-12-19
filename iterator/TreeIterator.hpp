@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/17 15:15:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 13:52:28 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define TREEITERATOR_HPP
 
 #include "BidirectionalIterator.hpp"
+#include "binary_tree/Node.hpp"
 //#include "binary_tree/BinarySearchTree.hpp"
 
 namespace ft
@@ -23,13 +24,19 @@ template <class T>
 class TreeIterator : public BidirectionalIterator<T>
 {
   public:
+    typedef Node<typename BidirectionalIterator<T>::value_type> value_type;
+
+  protected:
+    value_type* _it;
+
+  public:
     // Constructors
     TreeIterator();
-    TreeIterator(typename BidirectionalIterator<T>::pointer p);
+    TreeIterator(value_type* p);
 
     // Dereference
-    typename BidirectionalIterator<T>::reference operator*();
-    typename BidirectionalIterator<T>::pointer   operator->();
+    T& operator*();
+    T* operator->();
 
     // Increment and Decrement
     TreeIterator& operator++();
@@ -37,6 +44,7 @@ class TreeIterator : public BidirectionalIterator<T>
     TreeIterator& operator--();
     TreeIterator  operator--(int);
 };
+
 // Constructor
 template <typename T>
 TreeIterator<T>::TreeIterator()
@@ -44,30 +52,29 @@ TreeIterator<T>::TreeIterator()
 }
 
 template <typename T>
-TreeIterator<T>::TreeIterator(typename BidirectionalIterator<T>::pointer p)
-    : BidirectionalIterator<T>(p)
+TreeIterator<T>::TreeIterator(value_type* p)
+    : BidirectionalIterator<T>(), _it(p)
 {
 }
 
 // Dereference
 template <typename T>
-typename BidirectionalIterator<T>::reference TreeIterator<T>::operator*()
+T& TreeIterator<T>::operator*()
 {
-    return (BidirectionalIterator<T>::_it->data());
+    return (_it->data());
 }
 
 template <typename T>
-typename BidirectionalIterator<T>::pointer TreeIterator<T>::operator->()
+T* TreeIterator<T>::operator->()
 {
-    typename BidirectionalIterator<T>::pointer it = BidirectionalIterator<T>::_it->data();
-    return (&it);
+    return (&(_it->data()));
 }
 
 // Increment and Decrement
 template <typename T>
 TreeIterator<T>& TreeIterator<T>::operator++()
 {
-    BidirectionalIterator<T>::_it = BidirectionalIterator<T>::_it.inorder_successor();
+    _it = _it->inorder_successor();
     return (*this);
 }
 
@@ -75,14 +82,14 @@ template <typename T>
 TreeIterator<T> TreeIterator<T>::operator++(int)
 {
     TreeIterator<T> tmp(*this);
-    BidirectionalIterator<T>::_it = BidirectionalIterator<T>::_it.inorder_successor();
+    _it = _it->inorder_successor();
     return (tmp);
 }
 
 template <typename T>
 TreeIterator<T>& TreeIterator<T>::operator--()
 {
-    BidirectionalIterator<T>::_it = BidirectionalIterator<T>::_it.inorder_predecessor();
+    _it = _it->inorder_predecessor();
     return (*this);
 }
 
@@ -90,7 +97,7 @@ template <typename T>
 TreeIterator<T> TreeIterator<T>::operator--(int)
 {
     TreeIterator<T> tmp(*this);
-    BidirectionalIterator<T>::_it = BidirectionalIterator<T>::_it.inorder_predecessor();
+    _it = _it->inorder_predecessor();
     return (tmp);
 }
 
