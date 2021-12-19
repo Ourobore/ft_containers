@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 13:08:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:48:39 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ class BinarySearchTree
 
     typedef std::size_t size_type;
 
-  private:
+  public:
     Node<T>*       _root;
     allocator_type _alloc;
 
     typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
 
     // Recursive implementations
-    static void      recursive_destroy(Node<T>*& node);
-    static Node<T>*& recursive_search(value_type value, Node<T>*& node);
-    static Node<T>*  recursive_erase(value_type value, Node<T>*& node);
+    static void      recursive_destroy(Node<T>* node);
+    static Node<T>*& recursive_search(const value_type& value, Node<T>*& node);
+    static Node<T>*  recursive_erase(const value_type& value, Node<T>*& node);
 
   public:
     // Constructor
@@ -52,13 +52,13 @@ class BinarySearchTree
     ~BinarySearchTree();
 
     // Search
-    Node<T>* search(value_type value);
+    Node<T>* search(const value_type& value);
 
     // Insert
-    void insert(value_type value);
+    void insert(const value_type& value);
 
     // Erase
-    Node<T>* erase(value_type value);
+    Node<T>* erase(const value_type& value);
 
     // Algorithm
     static Node<T>* min_elem(Node<T>* tree_root);
@@ -94,7 +94,7 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const BinarySearchTree& rhs)
 }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>*& node)
+void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>* node)
 {
     if (!node)
         return;
@@ -116,7 +116,7 @@ BinarySearchTree<T, Allocator>::~BinarySearchTree()
 
 // Search
 template <class T, class Allocator>
-Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(value_type value, Node<T>*& node)
+Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(const value_type& value, Node<T>*& node)
 {
     if (!node || node->data() == value)
         return (node);
@@ -128,23 +128,27 @@ Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(value_type value, Nod
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::search(value_type value)
+Node<T>* BinarySearchTree<T, Allocator>::search(const value_type& value)
 {
     return (BinarySearchTree::recursive_search(value, _root));
 }
 
 // Insert
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::insert(value_type value)
+void BinarySearchTree<T, Allocator>::insert(const value_type& value)
 {
     node_allocator allocator;
 
     Node<T>* new_node = allocator.allocate(1);
     allocator.construct(new_node, value);
+    if (!_root)
+    {
+        _root = new_node;
+        return;
+    }
 
-    Node<T>*& node_pointer = _root;
-    Node<T>*  parent = NULL;
-    bool      inserted = false;
+    Node<T>* node_pointer = _root;
+    bool     inserted = false;
 
     while (!inserted)
     {
@@ -155,7 +159,6 @@ void BinarySearchTree<T, Allocator>::insert(value_type value)
         }
         else
         {
-            parent = node_pointer;
             if (new_node->data() < node_pointer->data())
             {
                 if (!node_pointer->left())
@@ -182,7 +185,7 @@ void BinarySearchTree<T, Allocator>::insert(value_type value)
 
 // Erase
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(value_type value, Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(const value_type& value, Node<T>*& node)
 {
     if (node == NULL)
         return (node);
@@ -239,7 +242,7 @@ Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(value_type value, Node<
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::erase(value_type value)
+Node<T>* BinarySearchTree<T, Allocator>::erase(const value_type& value)
 {
     return (BinarySearchTree::recursive_erase(value, _root));
 }
@@ -248,46 +251,19 @@ Node<T>* BinarySearchTree<T, Allocator>::erase(value_type value)
 template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::min_elem(Node<T>* tree_root)
 {
-    if (!tree_root)
-        return (tree_root);
-
-    Node<T>* node_pointer = tree_root;
-    while (node_pointer->left())
-        node_pointer = node_pointer->left();
-
-    return (node_pointer);
+    return (Node<T>::min_child(tree_root));
 }
 
 template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::max_elem(Node<T>* tree_root)
 {
-    if (!tree_root)
-        return (tree_root);
-
-    Node<T>* node_pointer = tree_root;
-    while (node_pointer->right())
-        node_pointer = node_pointer->right();
-
-    return (node_pointer);
+    return (Node<T>::max_child(tree_root));
 }
 
 template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>*& node)
 {
-    Node<T>* successor = NULL;
-
-    Node<T>* node_pointer = _root;
-    while (node_pointer)
-    {
-        if (node->data() < node_pointer->data())
-        {
-            successor = node_pointer;
-            node_pointer = node_pointer->left();
-        }
-        else
-            node_pointer = node_pointer->right();
-    }
-    return (successor);
+    return (node->inorder_successor());
 }
 
 template <class T, class Allocator>
@@ -329,25 +305,7 @@ Node<T>* BinarySearchTree<T, Allocator>::postorder_successor(Node<T>*& node)
 template <class T, class Allocator>
 Node<T>* BinarySearchTree<T, Allocator>::inorder_predecessor(Node<T>*& node)
 {
-    Node<T>* predecessor = NULL;
-    Node<T>* node_pointer = _root;
-
-    if (!_root)
-        return (NULL);
-
-    while (node_pointer && node_pointer != node)
-    {
-        if (node->data() < node_pointer->data())
-            node_pointer = node_pointer->left();
-        else
-        {
-            predecessor = node_pointer;
-            node_pointer = node_pointer->right();
-        }
-    }
-    if (node->data() == node_pointer->data() && node->left())
-        predecessor = BinarySearchTree::max_elem(node_pointer->left());
-    return (predecessor);
+    return (node->inorder_predecessor());
 }
 
 template <class T, class Allocator>

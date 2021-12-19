@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 12:05:35 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:21:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ class map
         }
     };
 
-  private:
+  public:
     typedef BinarySearchTree<value_type>                                 tree_type;
     typedef typename allocator_type::template rebind< tree_type >::other tree_allocator;
 
-    BinarySearchTree<value_type>* _tree;
-    size_type                     _size;
-    key_compare                   _comp;
-    allocator_type                _alloc;
+    BinarySearchTree<value_type> _tree;
+    size_type                    _size;
+    key_compare                  _comp;
+    allocator_type               _alloc;
 
   public:
     // Constructor
@@ -86,6 +86,7 @@ class map
 
     // Iterators
     iterator begin();
+    iterator end();
 
     // Capacity
     bool      empty() const;
@@ -104,19 +105,22 @@ class map
 // Constructor
 template < class Key, class T, class Compare, class Allocator >
 map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_type& alloc)
-    : _size(0), _comp(comp), _alloc(alloc)
+    : _tree(), _size(0), _comp(comp), _alloc(alloc)
 {
-    tree_allocator allocator;
-    _tree = allocator.allocate(1);
-    allocator.construct(_tree, tree_type());
 }
 
 // Iterators
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::begin()
 {
-    Node<value_type>* tmp = _tree->min_elem(_tree->root());
-    return (iterator(tmp));
+    return (iterator(_tree.min_elem(_tree.root())));
+}
+
+// Iterators
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::end()
+{
+    return (iterator(NULL));
 }
 
 // Capacity
@@ -161,7 +165,8 @@ typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Al
 template < class Key, class T, class Compare, class Allocator >
 pair<typename map<Key, T, Compare, Allocator>::iterator, bool> map<Key, T, Compare, Allocator>::insert(const value_type& val)
 {
-    _tree->insert(val);
+    _tree.insert(val);
+    _size++;
     return (make_pair(iterator(), true));
 }
 } // namespace ft

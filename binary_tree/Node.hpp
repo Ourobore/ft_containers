@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 14:19:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:35:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ class Node
 
     // Element access
     reference data();
-    Node*&    parent();
-    Node*&    left();
-    Node*&    right();
+    Node*     parent() const;
+    Node*     left() const;
+    Node*     right() const;
 
     // Algorithms
     static Node<T>* min_child(Node<T>* subtree_root);
@@ -101,19 +101,19 @@ typename Node<T>::reference Node<T>::data()
 }
 
 template <class T>
-Node<T>*& Node<T>::parent()
+Node<T>* Node<T>::parent() const
 {
     return (_parent);
 }
 
 template <class T>
-Node<T>*& Node<T>::left()
+Node<T>* Node<T>::left() const
 {
     return (_left);
 }
 
 template <class T>
-Node<T>*& Node<T>::right()
+Node<T>* Node<T>::right() const
 {
     return (_right);
 }
@@ -152,14 +152,50 @@ Node<T>* Node<T>::inorder_successor()
         return (min_child(_right));
     else
     {
-        Node<T>* ancestor = this->_parent;
-        while (ancestor && !ancestor->left())
-            ancestor = ancestor->_parent;
-        if (_data < ancestor->data())
+        Node<T>* ancestor = _parent;
+        Node<T>* node_pointer = this;
+        while (ancestor && ancestor->right() == node_pointer)
+        {
+            ancestor = ancestor->parent();
+            node_pointer = node_pointer->parent();
+        }
+        if (ancestor)
             return (ancestor);
         else
             return (NULL);
     }
+}
+
+template <class T>
+Node<T>* Node<T>::preorder_successor()
+{
+    if (_left)
+        return (_left);
+    else if (_right)
+        return (_right);
+    else if (_parent && _parent->right() && _parent->right() != this)
+        return (_parent->right());
+    else
+    {
+        Node<T>* ancestor = _parent;
+        while (ancestor && !ancestor->right())
+            ancestor = ancestor->_parent;
+        if (ancestor && ancestor->right() && ancestor->right() != this)
+            return (ancestor->right());
+        else
+            return (NULL);
+    }
+}
+
+template <class T>
+Node<T>* Node<T>::postorder_successor()
+{
+    if (!_parent)
+        return (NULL);
+    else if (!_parent->right() || _parent->right() == this)
+        return (_parent);
+    else
+        return (Node<T>::min_child(_parent->right()));
 }
 
 template <class T>
@@ -169,11 +205,43 @@ Node<T>* Node<T>::inorder_predecessor()
         return (max_child(_left));
     else
     {
-        Node<T>* ancestor = this->_parent;
-        while (ancestor && !ancestor->right())
-            ancestor = ancestor->_parent;
+        Node<T>* ancestor = _parent;
+        Node<T>* node_pointer = this;
+        while (ancestor && ancestor->left() == node_pointer)
+        {
+            ancestor = ancestor->parent();
+            node_pointer = node_pointer->parent();
+        }
         if (_data > ancestor->data())
             return (ancestor);
+        else
+            return (NULL);
+    }
+}
+
+template <class T>
+Node<T>* Node<T>::preorder_predecessor()
+{
+    if (!_parent)
+        return (NULL);
+    else if (!_parent->left() || _parent->left() == this)
+        return (_parent);
+    else
+        return (Node<T>::max_child(_parent->left()));
+}
+
+template <class T>
+Node<T>* Node<T>::postorder_predecessor()
+{
+    if (_right)
+        return (_right);
+    else
+    {
+        Node<T>* ancestor = _parent;
+        while (ancestor && !ancestor->left())
+            ancestor = ancestor->_parent;
+        if (ancestor && _data > ancestor->data())
+            return (ancestor->left());
         else
             return (NULL);
     }
