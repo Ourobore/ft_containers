@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 16:21:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 17:37:43 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ class map
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef TreeIterator<value_type>        iterator;
-    typedef TreeIterator<const value_type>  const_iterator;
-    typedef ReverseIterator<iterator>       reverse_iterator;
-    typedef ReverseIterator<const_iterator> const_reverse_iterator;
+    typedef TreeIterator<value_type, false>      iterator;
+    typedef TreeIterator<const value_type, true> const_iterator;
+    typedef ReverseIterator<iterator>            reverse_iterator;
+    typedef ReverseIterator<const_iterator>      const_reverse_iterator;
 
     typedef typename iterator_traits<iterator>::difference_type difference_type;
     typedef std::size_t                                         size_type;
@@ -85,8 +85,10 @@ class map
     explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
 
     // Iterators
-    iterator begin();
-    iterator end();
+    iterator       begin();
+    const_iterator begin() const;
+    iterator       end();
+    const_iterator end() const;
 
     // Capacity
     bool      empty() const;
@@ -102,7 +104,9 @@ class map
     value_compare value_comp() const;
 
     // Operations
-    iterator find(const key_type& k);
+    iterator       find(const key_type& k);
+    const_iterator find(const key_type& k) const;
+    size_type      count(const key_type& k) const;
 
     // Allocator
     allocator_type get_allocator() const;
@@ -125,7 +129,15 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
         return (iterator(NULL, NULL));
 }
 
-// Iterators
+// template < class Key, class T, class Compare, class Allocator >
+// typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::begin() const
+// {
+//     if (_tree.root())
+//         return (const_iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
+//     else
+//         return (const_iterator(NULL, NULL));
+// }
+
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::end()
 {
@@ -134,6 +146,15 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
     else
         return (iterator(NULL, NULL));
 }
+
+// template < class Key, class T, class Compare, class Allocator >
+// typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::end() const
+// {
+//     if (_tree.root())
+//         return (const_iterator(NULL, _tree.max_elem(_tree.root())));
+//     else
+//         return (const_iterator(NULL, NULL));
+// }
 
 // Capacity
 template < class Key, class T, class Compare, class Allocator >
@@ -202,6 +223,28 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
     }
     return (it);
 }
+
+// template < class Key, class T, class Compare, class Allocator >
+// typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::find(const key_type& k) const
+// {
+//     map<Key, T, Compare, Allocator>::const_iterator it;
+
+//     for (it = this->begin(); it != this->end(); ++it)
+//     {
+//         if (it->first == k)
+//             return (it);
+//     }
+//     return (it);
+// }
+
+// template < class Key, class T, class Compare, class Allocator >
+// typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::count(const key_type& k) const
+// {
+//     if (find(k) == this->end())
+//         return (0);
+//     else
+//         return (1);
+// }
 
 // Allocator
 template < class Key, class T, class Compare, class Allocator >
