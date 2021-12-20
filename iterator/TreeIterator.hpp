@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 17:21:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 15:11:42 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,19 @@ class TreeIterator : public BidirectionalIterator<T>
   protected:
     value_type* _it;
 
+  private:
+    value_type* _back;
+
+    void update_back();
+
   public:
     // Constructors
     TreeIterator();
-    TreeIterator(value_type* p);
+    TreeIterator(value_type* p, value_type* back);
+
+    // Equivalence
+    bool operator==(const TreeIterator<T>& rhs) const;
+    bool operator!=(const TreeIterator<T>& rhs) const;
 
     // Dereference
     T& operator*();
@@ -52,9 +61,22 @@ TreeIterator<T>::TreeIterator()
 }
 
 template <typename T>
-TreeIterator<T>::TreeIterator(value_type* p)
-    : BidirectionalIterator<T>(), _it(p)
+TreeIterator<T>::TreeIterator(value_type* p, value_type* back)
+    : BidirectionalIterator<T>(), _it(p), _back(back)
 {
+}
+
+// Equivalence
+template <typename T>
+bool TreeIterator<T>::operator==(const TreeIterator<T>& rhs) const
+{
+    return (_it == rhs._it);
+}
+
+template <typename T>
+bool TreeIterator<T>::operator!=(const TreeIterator<T>& rhs) const
+{
+    return !(*this == rhs);
 }
 
 // Dereference
@@ -74,7 +96,11 @@ T* TreeIterator<T>::operator->()
 template <typename T>
 TreeIterator<T>& TreeIterator<T>::operator++()
 {
-    _it = _it->inorder_successor();
+    update_back();
+    if (_it)
+        _it = _it->inorder_successor();
+    else
+        _it = _back;
     return (*this);
 }
 
@@ -82,14 +108,23 @@ template <typename T>
 TreeIterator<T> TreeIterator<T>::operator++(int)
 {
     TreeIterator<T> tmp(*this);
-    _it = _it->inorder_successor();
+
+    update_back();
+    if (_it)
+        _it = _it->inorder_successor();
+    else
+        _it = _back;
     return (tmp);
 }
 
 template <typename T>
 TreeIterator<T>& TreeIterator<T>::operator--()
 {
-    _it = _it->inorder_predecessor();
+    update_back();
+    if (_it)
+        _it = _it->inorder_predecessor();
+    else
+        _it = _back;
     return (*this);
 }
 
@@ -97,8 +132,23 @@ template <typename T>
 TreeIterator<T> TreeIterator<T>::operator--(int)
 {
     TreeIterator<T> tmp(*this);
-    _it = _it->inorder_predecessor();
+
+    update_back();
+    if (_it)
+        _it = _it->inorder_predecessor();
+    else
+        _it = _back;
     return (tmp);
+}
+
+template <typename T>
+void TreeIterator<T>::update_back()
+{
+    value_type* node_pointer = _back;
+    while (node_pointer && node_pointer->parent())
+        node_pointer = node_pointer->parent();
+
+    _back = value_type::max_child(node_pointer);
 }
 
 } // namespace ft

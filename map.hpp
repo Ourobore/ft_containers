@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 17:21:07 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 14:32:11 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,14 @@ map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_ty
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::begin()
 {
-    return (iterator(_tree.min_elem(_tree.root())));
+    return (iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
 }
 
 // Iterators
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::end()
 {
-    return (iterator(NULL));
+    return (iterator(NULL, _tree.max_elem(_tree.root())));
 }
 
 // Capacity

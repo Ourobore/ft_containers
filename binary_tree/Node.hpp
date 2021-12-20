@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 17:35:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 12:16:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,14 +173,16 @@ Node<T>* Node<T>::preorder_successor()
         return (_left);
     else if (_right)
         return (_right);
-    else if (_parent && _parent->right() && _parent->right() != this)
-        return (_parent->right());
     else
     {
         Node<T>* ancestor = _parent;
-        while (ancestor && !ancestor->right())
-            ancestor = ancestor->_parent;
-        if (ancestor && ancestor->right() && ancestor->right() != this)
+        while (ancestor)
+        {
+            if (this->data() < ancestor->data() && ancestor->right())
+                break;
+            ancestor = ancestor->parent();
+        }
+        if (ancestor)
             return (ancestor->right());
         else
             return (NULL);
@@ -192,10 +194,23 @@ Node<T>* Node<T>::postorder_successor()
 {
     if (!_parent)
         return (NULL);
-    else if (!_parent->right() || _parent->right() == this)
+    if (this == _parent->right())
+        return (_parent);
+    if (!_parent->right())
         return (_parent);
     else
-        return (Node<T>::min_child(_parent->right()));
+    {
+        Node<T>* node_pointer = _parent->right();
+        while (node_pointer && node_pointer->left())
+            node_pointer = node_pointer->left();
+        return (node_pointer);
+    }
+    // if (!_parent)
+    //     return (NULL);
+    // else if (!_parent->right() || _parent->right() == this)
+    //     return (_parent);
+    // else
+    //     return (Node<T>::min_child(_parent->right()));
 }
 
 template <class T>
@@ -212,7 +227,7 @@ Node<T>* Node<T>::inorder_predecessor()
             ancestor = ancestor->parent();
             node_pointer = node_pointer->parent();
         }
-        if (_data > ancestor->data())
+        if (ancestor && _data > ancestor->data())
             return (ancestor);
         else
             return (NULL);
@@ -227,7 +242,19 @@ Node<T>* Node<T>::preorder_predecessor()
     else if (!_parent->left() || _parent->left() == this)
         return (_parent);
     else
-        return (Node<T>::max_child(_parent->left()));
+    {
+        Node<T>* node_pointer = _parent->left();
+        while (node_pointer)
+        {
+            if (node_pointer->right())
+                return (Node<T>::max_child(node_pointer->right()));
+            else if (node_pointer->left())
+                node_pointer = node_pointer->left();
+            else
+                return (node_pointer);
+        }
+        return (NULL);
+    }
 }
 
 template <class T>
