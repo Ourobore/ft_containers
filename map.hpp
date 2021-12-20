@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 14:32:11 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 16:21:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,19 @@ class map
     size_type size() const;
     size_type max_size() const;
 
+    // Modifiers
+    pair<iterator, bool> insert(const value_type& val);
+    void                 clear();
+
     // Observers
     key_compare   key_comp() const;
     value_compare value_comp() const;
 
+    // Operations
+    iterator find(const key_type& k);
+
     // Allocator
-    allocator_type       get_allocator() const;
-    pair<iterator, bool> insert(const value_type& val);
+    allocator_type get_allocator() const;
 };
 
 // Constructor
@@ -113,14 +119,20 @@ map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_ty
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::begin()
 {
-    return (iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
+    if (_tree.root())
+        return (iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
+    else
+        return (iterator(NULL, NULL));
 }
 
 // Iterators
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::end()
 {
-    return (iterator(NULL, _tree.max_elem(_tree.root())));
+    if (_tree.root())
+        return (iterator(NULL, _tree.max_elem(_tree.root())));
+    else
+        return (iterator(NULL, NULL));
 }
 
 // Capacity
@@ -142,6 +154,28 @@ typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocat
     return (_alloc.max_size());
 }
 
+// Modifiers
+template < class Key, class T, class Compare, class Allocator >
+pair<typename map<Key, T, Compare, Allocator>::iterator, bool> map<Key, T, Compare, Allocator>::insert(const value_type& val)
+{
+    map<Key, T, Compare, Allocator>::iterator it;
+
+    if ((it = this->find(val.first)) == this->end())
+    {
+        _tree.insert(val);
+        it = this->find(val.first);
+        _size++;
+    }
+    return (make_pair(it, true));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+void map<Key, T, Compare, Allocator>::clear()
+{
+    BinarySearchTree<value_type>::recursive_destroy(_tree.root());
+    _size = 0;
+}
+
 // Observers
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::key_compare map<Key, T, Compare, Allocator>::key_comp() const
@@ -155,6 +189,20 @@ typename map<Key, T, Compare, Allocator>::value_compare map<Key, T, Compare, All
     return (value_compare(_comp));
 }
 
+// Operations
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::find(const key_type& k)
+{
+    map<Key, T, Compare, Allocator>::iterator it;
+
+    for (it = this->begin(); it != this->end(); ++it)
+    {
+        if (it->first == k)
+            return (it);
+    }
+    return (it);
+}
+
 // Allocator
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Allocator>::get_allocator() const
@@ -162,13 +210,6 @@ typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Al
     return (_alloc);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-pair<typename map<Key, T, Compare, Allocator>::iterator, bool> map<Key, T, Compare, Allocator>::insert(const value_type& val)
-{
-    _tree.insert(val);
-    _size++;
-    return (make_pair(iterator(), true));
-}
 } // namespace ft
 
 #endif

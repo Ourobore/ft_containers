@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 12:16:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 16:26:12 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ class Node
 
     // Element access
     reference data();
-    Node*     parent() const;
-    Node*     left() const;
-    Node*     right() const;
+    Node*&    parent();
+    Node*&    left();
+    Node*&    right();
 
     // Algorithms
     static Node<T>* min_child(Node<T>* subtree_root);
@@ -101,19 +101,19 @@ typename Node<T>::reference Node<T>::data()
 }
 
 template <class T>
-Node<T>* Node<T>::parent() const
+Node<T>*& Node<T>::parent()
 {
     return (_parent);
 }
 
 template <class T>
-Node<T>* Node<T>::left() const
+Node<T>*& Node<T>::left()
 {
     return (_left);
 }
 
 template <class T>
-Node<T>* Node<T>::right() const
+Node<T>*& Node<T>::right()
 {
     return (_right);
 }

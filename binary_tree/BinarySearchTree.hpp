@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/19 16:48:39 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/20 16:27:45 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class BinarySearchTree
     typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
 
     // Recursive implementations
-    static void      recursive_destroy(Node<T>* node);
+    static void      recursive_destroy(Node<T>*& node);
     static Node<T>*& recursive_search(const value_type& value, Node<T>*& node);
     static Node<T>*  recursive_erase(const value_type& value, Node<T>*& node);
 
@@ -71,7 +71,7 @@ class BinarySearchTree
     Node<T>*        postorder_predecessor(Node<T>*& node);
 
     // Accessors
-    Node<T>*       root();
+    Node<T>*&      root();
     allocator_type get_allocator() const;
 
     // Print BinarySearchTree
@@ -94,7 +94,7 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const BinarySearchTree& rhs)
 }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>* node)
+void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>*& node)
 {
     if (!node)
         return;
@@ -344,7 +344,7 @@ Node<T>* BinarySearchTree<T, Allocator>::postorder_predecessor(Node<T>*& node)
 
 // Accessors
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::root()
+Node<T>*& BinarySearchTree<T, Allocator>::root()
 {
     return (_root);
 }
