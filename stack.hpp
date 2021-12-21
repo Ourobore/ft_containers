@@ -6,9 +6,12 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 09:33:23 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/07 10:56:52 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 17:45:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef STACK_HPP
+#define STACK_HPP
 
 #include <iostream>
 
@@ -143,3 +146,5 @@ bool operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
 }
 
 } // namespace ft
+
+#endif

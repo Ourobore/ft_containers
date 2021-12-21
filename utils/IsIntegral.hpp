@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:54:02 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/12 12:50:46 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 17:44:39 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ struct is_integral<long>
     const static bool value = true;
 };
 
-template <>
-struct is_integral<long long>
-{
-    const static bool value = true;
-};
+// template <>
+// struct is_integral<long long>
+// {
+//     const static bool value = true;
+// };
 
 template <>
 struct is_integral<signed char>
@@ -89,11 +89,11 @@ struct is_integral<unsigned long>
     const static bool value = true;
 };
 
-template <>
-struct is_integral<unsigned long long>
-{
-    const static bool value = true;
-};
+// template <>
+// struct is_integral<unsigned long long>
+// {
+//     const static bool value = true;
+// };
 
 } // namespace ft
 
