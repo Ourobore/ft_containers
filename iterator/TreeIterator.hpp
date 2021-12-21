@@ -6,37 +6,45 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 17:08:30 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 11:15:28 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREEITERATOR_HPP
 #define TREEITERATOR_HPP
 
-#include "BidirectionalIterator.hpp"
 #include "binary_tree/Node.hpp"
-//#include "binary_tree/BinarySearchTree.hpp"
+#include "utils/EnableIf.hpp"
+#include "utils/IteratorType.hpp"
 
 namespace ft
 {
 
 template <class T, bool IsConst>
-class TreeIterator : public BidirectionalIterator<T, IsConst>
+class TreeIterator
 {
   public:
-    typedef Node<typename BidirectionalIterator<T, IsConst>::value_type> value_type;
+    typedef typename iterator_type<IsConst, T, const T >::type value_type;
+    typedef value_type&                                        reference;
+    typedef const value_type&                                  const_reference;
+    typedef value_type*                                        pointer;
+    typedef std::ptrdiff_t                                     difference_type;
+    typedef std::bidirectional_iterator_tag                    iterator_category;
 
   protected:
-    value_type* _it;
+    Node<value_type>* _it;
+    Node<value_type>* _back;
 
-  private:
-    value_type* _back;
-    void        update_back();
+    void update_back();
 
   public:
     // Constructors
     TreeIterator();
-    TreeIterator(value_type* p, value_type* back);
+    TreeIterator(Node<value_type>* p, Node<value_type>* back);
+    template <bool is_const>
+    TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0);
+    TreeIterator& operator=(const TreeIterator& rhs);
+    virtual ~TreeIterator();
 
     // Equivalence
     template < bool is_const >
@@ -45,8 +53,8 @@ class TreeIterator : public BidirectionalIterator<T, IsConst>
     bool operator!=(const TreeIterator<T, is_const>& rhs) const;
 
     // Dereference
-    T& operator*();
-    T* operator->();
+    reference operator*();
+    pointer   operator->();
 
     // Increment and Decrement
     TreeIterator& operator++();
@@ -54,7 +62,8 @@ class TreeIterator : public BidirectionalIterator<T, IsConst>
     TreeIterator& operator--();
     TreeIterator  operator--(int);
 
-    value_type* getPointer() const;
+    pointer getPointer() const;
+    pointer getBack() const;
 };
 
 // Constructor
@@ -64,9 +73,34 @@ TreeIterator<T, IsConst>::TreeIterator()
 }
 
 template <typename T, bool IsConst>
-TreeIterator<T, IsConst>::TreeIterator(value_type* p, value_type* back)
-    : BidirectionalIterator<T, IsConst>(), _it(p), _back(back)
+TreeIterator<T, IsConst>::TreeIterator(Node<value_type>* p, Node<value_type>* back)
+    : _it(p), _back(back)
 {
+}
+
+template < class T, bool IsConst >
+template <bool is_const>
+TreeIterator<T, IsConst>::TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type*)
+    : _it(rhs.getPointer()), _back(rhs.getBack())
+{
+}
+
+template < class T, bool IsConst >
+TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator& rhs)
+{
+    if (this != &rhs)
+    {
+        _it = rhs._it;
+        _back = rhs._back;
+    }
+    return (*this);
+}
+
+template < class T, bool IsConst >
+TreeIterator<T, IsConst>::~TreeIterator()
+{
+    _it = NULL;
+    _back = NULL;
 }
 
 // Equivalence
@@ -86,13 +120,13 @@ bool TreeIterator<T, IsConst>::operator!=(const TreeIterator<T, is_const>& rhs) 
 
 // Dereference
 template <typename T, bool IsConst>
-T& TreeIterator<T, IsConst>::operator*()
+typename TreeIterator<T, IsConst>::reference TreeIterator<T, IsConst>::operator*()
 {
     return (_it->data());
 }
 
 template <typename T, bool IsConst>
-T* TreeIterator<T, IsConst>::operator->()
+typename TreeIterator<T, IsConst>::pointer TreeIterator<T, IsConst>::operator->()
 {
     return (&(_it->data()));
 }
@@ -149,11 +183,11 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator--(int)
 template <typename T, bool IsConst>
 void TreeIterator<T, IsConst>::update_back()
 {
-    value_type* node_pointer = _back;
+    Node<value_type>* node_pointer = _back;
     while (node_pointer && node_pointer->parent())
         node_pointer = node_pointer->parent();
 
-    _back = value_type::max_child(node_pointer);
+    _back = Node<value_type>::max_child(node_pointer);
 }
 
 // Access
@@ -161,6 +195,12 @@ template < class T, bool IsConst >
 typename TreeIterator<T, IsConst>::value_type* TreeIterator<T, IsConst>::getPointer() const
 {
     return (_it);
+}
+
+template < class T, bool IsConst >
+typename TreeIterator<T, IsConst>::value_type* TreeIterator<T, IsConst>::getBack() const
+{
+    return (_back);
 }
 
 } // namespace ft
