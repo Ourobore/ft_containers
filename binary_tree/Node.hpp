@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 16:26:12 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 14:24:30 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class Node
     Node(const_reference value);
     template <class N>
     Node(const Node<N>& rhs);
+    Node<T>& operator=(const Node<T>& rhs);
     ~Node();
 
     // Element access
@@ -49,6 +50,8 @@ class Node
     Node*&    parent();
     Node*&    left();
     Node*&    right();
+
+    reference operator*();
 
     // Algorithms
     static Node<T>* min_child(Node<T>* subtree_root);
@@ -88,6 +91,19 @@ Node<T>::Node(const Node<N>& rhs)
 }
 
 template <class T>
+Node<T>& Node<T>::operator=(const Node<T>& rhs)
+{
+    if (this != &rhs)
+    {
+        _data = rhs.data();
+        _parent = rhs.parent();
+        _left = rhs.left();
+        _right = rhs.right();
+    }
+    return (*this);
+}
+
+template <class T>
 Node<T>::~Node()
 {
     //_data = value_type();
@@ -116,6 +132,12 @@ template <class T>
 Node<T>*& Node<T>::right()
 {
     return (_right);
+}
+
+template <class T>
+typename Node<T>::reference Node<T>::operator*()
+{
+    return (*this);
 }
 
 // Algorithms

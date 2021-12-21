@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 17:38:04 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 14:50:30 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ class BinarySearchTree
 
     typedef std::size_t size_type;
 
-  public:
+  private:
     Node<T>*       _root;
     allocator_type _alloc;
 
     typedef typename allocator_type::template rebind< Node<T> >::other node_allocator;
 
     // Recursive implementations
-    static void      recursive_destroy(Node<T>*& node);
+    static void      recursive_destroy(Node<T>* node);
     static Node<T>*& recursive_search(const value_type& value, Node<T>*& node);
     static Node<T>*  recursive_erase(const value_type& value, Node<T>*& node);
 
@@ -92,7 +92,7 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const BinarySearchTree& rhs)
 }
 
 template <class T, class Allocator>
-void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>*& node)
+void BinarySearchTree<T, Allocator>::recursive_destroy(Node<T>* node)
 {
     if (!node)
         return;
@@ -110,6 +110,7 @@ template <class T, class Allocator>
 BinarySearchTree<T, Allocator>::~BinarySearchTree()
 {
     BinarySearchTree::recursive_destroy(_root);
+    _root = NULL;
     // Implement not recursive destroy?
 }
 

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/20 17:37:43 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 14:52:17 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ class map
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef TreeIterator<value_type, false>      iterator;
-    typedef TreeIterator<const value_type, true> const_iterator;
-    typedef ReverseIterator<iterator>            reverse_iterator;
-    typedef ReverseIterator<const_iterator>      const_reverse_iterator;
+    typedef TreeIterator<value_type, false> iterator;
+    typedef TreeIterator<value_type, true>  const_iterator;
+    typedef ReverseIterator<iterator>       reverse_iterator;
+    typedef ReverseIterator<const_iterator> const_reverse_iterator;
 
     typedef typename iterator_traits<iterator>::difference_type difference_type;
     typedef std::size_t                                         size_type;
@@ -83,6 +83,7 @@ class map
   public:
     // Constructor
     explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+    ~map();
 
     // Iterators
     iterator       begin();
@@ -117,6 +118,12 @@ template < class Key, class T, class Compare, class Allocator >
 map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_type& alloc)
     : _tree(), _size(0), _comp(comp), _alloc(alloc)
 {
+}
+
+template < class Key, class T, class Compare, class Allocator >
+map<Key, T, Compare, Allocator>::~map()
+{
+    this->clear();
 }
 
 // Iterators
@@ -193,7 +200,8 @@ pair<typename map<Key, T, Compare, Allocator>::iterator, bool> map<Key, T, Compa
 template < class Key, class T, class Compare, class Allocator >
 void map<Key, T, Compare, Allocator>::clear()
 {
-    BinarySearchTree<value_type>::recursive_destroy(_tree.root());
+    tree_allocator allocator;
+    allocator.destroy(&_tree);
     _size = 0;
 }
 
