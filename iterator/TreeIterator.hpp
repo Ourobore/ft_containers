@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 11:15:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 15:03:43 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,17 @@ class TreeIterator
     typedef std::bidirectional_iterator_tag                    iterator_category;
 
   protected:
-    Node<value_type>* _it;
-    Node<value_type>* _back;
+    typedef Node<value_type> node_type;
+
+    node_type* _it;
+    node_type* _back;
 
     void update_back();
 
   public:
     // Constructors
     TreeIterator();
-    TreeIterator(Node<value_type>* p, Node<value_type>* back);
+    TreeIterator(node_type* p, node_type* back);
     template <bool is_const>
     TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0);
     TreeIterator& operator=(const TreeIterator& rhs);
@@ -73,7 +75,7 @@ TreeIterator<T, IsConst>::TreeIterator()
 }
 
 template <typename T, bool IsConst>
-TreeIterator<T, IsConst>::TreeIterator(Node<value_type>* p, Node<value_type>* back)
+TreeIterator<T, IsConst>::TreeIterator(node_type* p, node_type* back)
     : _it(p), _back(back)
 {
 }
@@ -183,11 +185,11 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator--(int)
 template <typename T, bool IsConst>
 void TreeIterator<T, IsConst>::update_back()
 {
-    Node<value_type>* node_pointer = _back;
+    node_type* node_pointer = _back;
     while (node_pointer && node_pointer->parent())
         node_pointer = node_pointer->parent();
 
-    _back = Node<value_type>::max_child(node_pointer);
+    _back = node_type::max_child(node_pointer);
 }
 
 // Access

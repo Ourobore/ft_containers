@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 14:50:30 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 15:04:47 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ class BinarySearchTree
 
     // Recursive implementations
     static void      recursive_destroy(Node<T>* node);
-    static Node<T>*& recursive_search(const value_type& value, Node<T>*& node);
-    static Node<T>*  recursive_erase(const value_type& value, Node<T>*& node);
+    static Node<T>*& recursive_search(const value_type& value, Node<T>* node);
+    static Node<T>*  recursive_erase(const value_type& value, Node<T>* node);
 
   public:
     // Constructor
@@ -63,12 +63,12 @@ class BinarySearchTree
     // Algorithm
     static Node<T>* min_elem(Node<T>* tree_root);
     static Node<T>* max_elem(Node<T>* tree_root);
-    Node<T>*        inorder_successor(Node<T>*& node);   // Left -> Root  -> Right
-    Node<T>*        preorder_successor(Node<T>*& node);  // Root -> Left  -> Right
-    Node<T>*        postorder_successor(Node<T>*& node); // Left -> Right -> Root
-    Node<T>*        inorder_predecessor(Node<T>*& node);
-    Node<T>*        preorder_predecessor(Node<T>*& node);
-    Node<T>*        postorder_predecessor(Node<T>*& node);
+    Node<T>*        inorder_successor(Node<T>* node);   // Left -> Root  -> Right
+    Node<T>*        preorder_successor(Node<T>* node);  // Root -> Left  -> Right
+    Node<T>*        postorder_successor(Node<T>* node); // Left -> Right -> Root
+    Node<T>*        inorder_predecessor(Node<T>* node);
+    Node<T>*        preorder_predecessor(Node<T>* node);
+    Node<T>*        postorder_predecessor(Node<T>* node);
 
     // Accessors
     Node<T>*& root();
@@ -116,7 +116,7 @@ BinarySearchTree<T, Allocator>::~BinarySearchTree()
 
 // Search
 template <class T, class Allocator>
-Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(const value_type& value, Node<T>*& node)
+Node<T>*& BinarySearchTree<T, Allocator>::recursive_search(const value_type& value, Node<T>* node)
 {
     if (!node || node->data() == value)
         return (node);
@@ -185,7 +185,7 @@ void BinarySearchTree<T, Allocator>::insert(const value_type& value)
 
 // Erase
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(const value_type& value, Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::recursive_erase(const value_type& value, Node<T>* node)
 {
     if (node == NULL)
         return (node);
@@ -261,25 +261,25 @@ Node<T>* BinarySearchTree<T, Allocator>::max_elem(Node<T>* tree_root)
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::inorder_successor(Node<T>* node)
 {
     return (node->inorder_successor());
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::preorder_successor(Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::preorder_successor(Node<T>* node)
 {
     return (node->preorder_successor());
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::inorder_predecessor(Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::inorder_predecessor(Node<T>* node)
 {
     return (node->inorder_predecessor());
 }
 
 template <class T, class Allocator>
-Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>*& node)
+Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>* node)
 {
     return (node->preorder_predecessor());
 }
