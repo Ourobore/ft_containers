@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 14:52:17 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 15:57:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,14 +136,15 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
         return (iterator(NULL, NULL));
 }
 
-// template < class Key, class T, class Compare, class Allocator >
-// typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::begin() const
-// {
-//     if (_tree.root())
-//         return (const_iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
-//     else
-//         return (const_iterator(NULL, NULL));
-// }
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::begin() const
+{
+    std::cout << "here!" << std::endl;
+    // if (_tree.root())
+    //     return (const_iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
+    // else
+    //     return (const_iterator(NULL, NULL));
+}
 
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::end()

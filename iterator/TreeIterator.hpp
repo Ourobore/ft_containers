@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 15:03:43 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 17:21:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ class TreeIterator
     TreeIterator& operator--();
     TreeIterator  operator--(int);
 
-    pointer getPointer() const;
-    pointer getBack() const;
+    Node<value_type>* getPointer() const;
+    Node<value_type>* getBack() const;
 };
 
 // Constructor
@@ -83,8 +83,10 @@ TreeIterator<T, IsConst>::TreeIterator(node_type* p, node_type* back)
 template < class T, bool IsConst >
 template <bool is_const>
 TreeIterator<T, IsConst>::TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type*)
-    : _it(rhs.getPointer()), _back(rhs.getBack())
+//    : _it(rhs.getPointer()), _back(rhs.getBack())
 {
+    _it = rhs.getPointer();
+    _back = rhs.getBack();
 }
 
 template < class T, bool IsConst >
@@ -92,8 +94,8 @@ TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator
 {
     if (this != &rhs)
     {
-        _it = rhs._it;
-        _back = rhs._back;
+        _it = rhs.getPointer();
+        _back = rhs.getBack();
     }
     return (*this);
 }
@@ -194,13 +196,13 @@ void TreeIterator<T, IsConst>::update_back()
 
 // Access
 template < class T, bool IsConst >
-typename TreeIterator<T, IsConst>::value_type* TreeIterator<T, IsConst>::getPointer() const
+Node<typename TreeIterator<T, IsConst>::value_type>* TreeIterator<T, IsConst>::getPointer() const
 {
     return (_it);
 }
 
 template < class T, bool IsConst >
-typename TreeIterator<T, IsConst>::value_type* TreeIterator<T, IsConst>::getBack() const
+Node<typename TreeIterator<T, IsConst>::value_type>* TreeIterator<T, IsConst>::getBack() const
 {
     return (_back);
 }

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 14:24:30 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 16:46:39 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ class Node
     // Constructors and Destructor
     Node();
     Node(const_reference value);
+    template <class N>
+    Node(const Node<N>* rhs);
     template <class N>
     Node(const Node<N>& rhs);
     Node<T>& operator=(const Node<T>& rhs);
@@ -80,6 +82,13 @@ Node<T>::Node()
 template <class T>
 Node<T>::Node(const_reference value)
     : _data(value), _parent(NULL), _left(NULL), _right(NULL)
+{
+}
+
+template <class T>
+template <class N>
+Node<T>::Node(const Node<N>* rhs)
+    : _data(rhs->data()), _parent(rhs->parent()), _left(rhs->left()), _right(rhs->right())
 {
 }
 

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/06 09:34:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/21 15:53:02 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include "iterator/IteratorTraits.hpp"
+
 namespace ft
 {
 
@@ -22,12 +24,12 @@ template < class Iterator >
 class ReverseIterator
 {
   public:
-    typedef Iterator                             iterator_type;
-    typedef typename Iterator::value_type        value_type;
-    typedef typename Iterator::reference         reference;
-    typedef typename Iterator::pointer           pointer;
-    typedef typename Iterator::difference_type   difference_type;
-    typedef typename Iterator::iterator_category iterator_category;
+    typedef Iterator                                              iterator_type;
+    typedef typename iterator_traits<Iterator>::value_type        value_type;
+    typedef typename iterator_traits<Iterator>::reference         reference;
+    typedef typename iterator_traits<Iterator>::pointer           pointer;
+    typedef typename iterator_traits<Iterator>::difference_type   difference_type;
+    typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
 
   protected:
     Iterator _base;
