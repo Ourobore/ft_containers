@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 13:39:12 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:06:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ class TreeIterator
 
   protected:
     typedef Node<typename remove_const<value_type>::type > node_type;
+    typedef node_type*                                     node_pointer;
 
-    node_type* _it;
-    node_type* _back;
+    node_pointer _it;
+    node_pointer _back;
 
     void update_back();
 
@@ -51,10 +52,10 @@ class TreeIterator
     virtual ~TreeIterator();
 
     // Equivalence
-    template < bool is_const >
-    bool operator==(const TreeIterator<T, is_const>& rhs) const;
-    template < bool is_const >
-    bool operator!=(const TreeIterator<T, is_const>& rhs) const;
+    template < class R, bool Is_Const, class U, bool is_const >
+    friend bool operator==(const TreeIterator< R, Is_Const>& lhs, const TreeIterator<U, is_const>& rhs);
+    template < class R, bool Is_Const, class U, bool is_const >
+    friend bool operator!=(const TreeIterator<R, Is_Const>& lhs, const TreeIterator<U, is_const>& rhs);
 
     // Dereference
     reference operator*();
@@ -66,8 +67,8 @@ class TreeIterator
     TreeIterator& operator--();
     TreeIterator  operator--(int);
 
-    Node<value_type>* getPointer() const;
-    Node<value_type>* getBack() const;
+    node_pointer getPointer() const;
+    node_pointer getBack() const;
 };
 
 // Constructor
@@ -93,11 +94,11 @@ template < class T, bool IsConst >
 template <bool is_const>
 TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator<T, is_const>& rhs)
 {
-    // if (this != &rhs)
-    // {
-    _it = rhs.getPointer();
-    _back = rhs.getBack();
-    // }
+    if (this != &rhs)
+    {
+        _it = rhs.getPointer();
+        _back = rhs.getBack();
+    }
     return (*this);
 }
 
@@ -109,18 +110,16 @@ TreeIterator<T, IsConst>::~TreeIterator()
 }
 
 // Equivalence
-template <typename T, bool IsConst>
-template < bool is_const >
-bool TreeIterator<T, IsConst>::operator==(const TreeIterator<T, is_const>& rhs) const
+template <class R, bool Is_Const, class U, bool is_const>
+bool operator==(const TreeIterator<R, Is_Const>& lhs, const TreeIterator<U, is_const>& rhs)
 {
-    return (_it == rhs._it);
+    return (lhs.getPointer() == rhs.getPointer());
 }
 
-template <typename T, bool IsConst>
-template < bool is_const >
-bool TreeIterator<T, IsConst>::operator!=(const TreeIterator<T, is_const>& rhs) const
+template <class R, bool Is_Const, class U, bool is_const>
+bool operator!=(const TreeIterator<R, Is_Const>& lhs, const TreeIterator<U, is_const>& rhs)
 {
-    return !(*this == rhs);
+    return !(lhs == rhs);
 }
 
 // Dereference
@@ -197,13 +196,13 @@ void TreeIterator<T, IsConst>::update_back()
 
 // Access
 template < class T, bool IsConst >
-Node<typename TreeIterator<T, IsConst>::value_type>* TreeIterator<T, IsConst>::getPointer() const
+typename TreeIterator<T, IsConst>::node_pointer TreeIterator<T, IsConst>::getPointer() const
 {
     return (_it);
 }
 
 template < class T, bool IsConst >
-Node<typename TreeIterator<T, IsConst>::value_type>* TreeIterator<T, IsConst>::getBack() const
+typename TreeIterator<T, IsConst>::node_pointer TreeIterator<T, IsConst>::getBack() const
 {
     return (_back);
 }
