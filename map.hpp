@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:27:23 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:41:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ class map
     allocator_type               _alloc;
 
   public:
-    // Constructor
+    // Constructors and Destructor
     explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
     template <class InputIterator>
     map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
@@ -116,11 +116,23 @@ class map
     allocator_type get_allocator() const;
 };
 
-// Constructor
+// Constructors and Destructor
 template < class Key, class T, class Compare, class Allocator >
 map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_type& alloc)
     : _tree(), _size(0), _comp(comp), _alloc(alloc)
 {
+}
+
+template < class Key, class T, class Compare, class Allocator >
+template <class InputIterator>
+map<Key, T, Compare, Allocator>::map(InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc)
+    : _tree(), _size(0), _comp(comp), _alloc(alloc)
+{
+    for (InputIterator it = first; it != last; ++it)
+    {
+        _tree.insert(make_pair(it->first, it->second));
+        ++_size;
+    }
 }
 
 template < class Key, class T, class Compare, class Allocator >
