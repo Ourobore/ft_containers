@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 13:33:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class RandomAccessIterator
     RandomAccessIterator();
     RandomAccessIterator(pointer p);
     template <bool is_const>
-    RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0);
+    RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs);
     RandomAccessIterator& operator=(const RandomAccessIterator& rhs);
     virtual ~RandomAccessIterator();
 
@@ -100,7 +100,7 @@ RandomAccessIterator<T, IsConst>::RandomAccessIterator(pointer p)
 
 template < class T, bool IsConst >
 template <bool is_const>
-RandomAccessIterator<T, IsConst>::RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type*)
+RandomAccessIterator<T, IsConst>::RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs)
     : _it(rhs.getPointer())
 {
 }

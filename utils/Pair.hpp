@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 15:30:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 13:07:51 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 13:37:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class pair
 
     // Constructors
     pair();
-    pair(const pair& p);
     template <class U, class V>
     pair(const pair<U, V>& p);
     pair(const first_type& a, const second_type& b);
@@ -60,12 +59,6 @@ class pair
 template <class T1, class T2>
 pair<T1, T2>::pair()
     : first(T1()), second(T2())
-{
-}
-
-template <class T1, class T2>
-pair<T1, T2>::pair(const pair& p)
-    : first(p.first), second(p.second)
 {
 }
 
