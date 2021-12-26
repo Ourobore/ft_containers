@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:21:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ class BinarySearchTree
     Node<T>*        postorder_predecessor(Node<T>* node);
 
     // Accessors
-    Node<T>*& root();
-    // Node<T>*&      root() const;
+    Node<T>*       root() const;
     allocator_type get_allocator() const;
 
     void print_inorder();
@@ -286,16 +285,10 @@ Node<T>* BinarySearchTree<T, Allocator>::preorder_predecessor(Node<T>* node)
 
 // Accessors
 template <class T, class Allocator>
-Node<T>*& BinarySearchTree<T, Allocator>::root()
+Node<T>* BinarySearchTree<T, Allocator>::root() const
 {
     return (_root);
 }
-
-// template <class T, class Allocator>
-// Node<T>*& BinarySearchTree<T, Allocator>::root() const
-// {
-//     return (_root);
-// }
 
 template <class T, class Allocator>
 typename BinarySearchTree<T, Allocator>::allocator_type BinarySearchTree<T, Allocator>::get_allocator() const

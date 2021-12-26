@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 13:24:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:13:29 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,27 +233,27 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
     return (it);
 }
 
-// template < class Key, class T, class Compare, class Allocator >
-// typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::find(const key_type& k) const
-// {
-//     map<Key, T, Compare, Allocator>::const_iterator it;
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::find(const key_type& k) const
+{
+    map<Key, T, Compare, Allocator>::const_iterator it;
 
-//     for (it = this->begin(); it != this->end(); ++it)
-//     {
-//         if (it->first == k)
-//             return (it);
-//     }
-//     return (it);
-// }
+    for (it = this->begin(); it != this->end(); ++it)
+    {
+        if (it->first == k)
+            return (it);
+    }
+    return (it);
+}
 
-// template < class Key, class T, class Compare, class Allocator >
-// typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::count(const key_type& k) const
-// {
-//     if (find(k) == this->end())
-//         return (0);
-//     else
-//         return (1);
-// }
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::count(const key_type& k) const
+{
+    if (find(k) == this->end())
+        return (0);
+    else
+        return (1);
+}
 
 // Allocator
 template < class Key, class T, class Compare, class Allocator >
