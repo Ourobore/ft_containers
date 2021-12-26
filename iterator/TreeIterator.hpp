@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 13:29:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "binary_tree/Node.hpp"
 #include "utils/EnableIf.hpp"
 #include "utils/IteratorType.hpp"
+#include "utils/Remove_const.hpp"
 
 namespace ft
 {
@@ -32,7 +33,7 @@ class TreeIterator
     typedef std::bidirectional_iterator_tag                    iterator_category;
 
   protected:
-    typedef Node<value_type> node_type;
+    typedef Node<typename remove_const<value_type>::type > node_type;
 
     node_type* _it;
     node_type* _back;
@@ -43,9 +44,12 @@ class TreeIterator
     // Constructors
     TreeIterator();
     TreeIterator(node_type* p, node_type* back);
-    template <bool is_const>
-    TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type* = 0);
+    TreeIterator(const TreeIterator& rhs);
+    template <class U>
+    TreeIterator(const TreeIterator<U, false>& rhs, typename enable_if<!false, U>::type* = 0);
     TreeIterator& operator=(const TreeIterator& rhs);
+    template <class U>
+    TreeIterator& operator=(const TreeIterator<U, false>& rhs);
     virtual ~TreeIterator();
 
     // Equivalence
@@ -81,12 +85,20 @@ TreeIterator<T, IsConst>::TreeIterator(node_type* p, node_type* back)
 }
 
 template < class T, bool IsConst >
-template <bool is_const>
-TreeIterator<T, IsConst>::TreeIterator(const TreeIterator<T, is_const>& rhs, typename enable_if<!is_const, T>::type*)
-//    : _it(rhs.getPointer()), _back(rhs.getBack())
+TreeIterator<T, IsConst>::TreeIterator(const TreeIterator& rhs)
+    : _it(rhs.getPointer()), _back(rhs.getBack())
 {
-    _it = rhs.getPointer();
-    _back = rhs.getBack();
+    // _it = rhs.getPointer();
+    // _back = rhs.getBack();
+}
+
+template < class T, bool IsConst >
+template <class U>
+TreeIterator<T, IsConst>::TreeIterator(const TreeIterator<U, false>& rhs, typename enable_if<!false, U>::type*)
+    : _it(rhs.getPointer()), _back(rhs.getBack())
+{
+    // _it = rhs.getPointer();
+    // _back = rhs.getBack();
 }
 
 template < class T, bool IsConst >
@@ -97,6 +109,18 @@ TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator
         _it = rhs.getPointer();
         _back = rhs.getBack();
     }
+    return (*this);
+}
+
+template < class T, bool IsConst >
+template <class U>
+TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator<U, false>& rhs)
+{
+    // if (this != &rhs)
+    // {
+    _it = rhs.getPointer();
+    _back = rhs.getBack();
+    // }
     return (*this);
 }
 
