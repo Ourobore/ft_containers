@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 16:53:26 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 16:59:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
 {
     map::iterator it;
 
-    for (it = this->begin(); it != this->end(); ++it)
+    for (it = begin(); it != end(); ++it)
     {
         if (it->first == k)
             return (it);
@@ -292,7 +292,7 @@ typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Al
 {
     map::const_iterator it;
 
-    for (it = this->begin(); it != this->end(); ++it)
+    for (it = begin(); it != end(); ++it)
     {
         if (it->first == k)
             return (it);
@@ -303,7 +303,7 @@ typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Al
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocator>::count(const key_type& k) const
 {
-    if (find(k) == this->end())
+    if (find(k) == end())
         return (0);
     else
         return (1);
@@ -345,6 +345,18 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
 }
 
 template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::upper_bound(const key_type& k) const
+{
+    map::const_iterator it = begin();
+
+    while (it != end() && key_comp()(it->first, k))
+        ++it;
+    if (it != end())
+        ++it;
+    return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
 pair<typename map<Key, T, Compare, Allocator>::iterator, typename map<Key, T, Compare, Allocator>::iterator> map<Key, T, Compare, Allocator>::equal_range(const key_type& k)
 {
     return (make_pair(lower_bound(k), upper_bound(k)));
@@ -356,17 +368,6 @@ pair<typename map<Key, T, Compare, Allocator>::const_iterator, typename map<Key,
     return (make_pair(lower_bound(k), upper_bound(k)));
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::upper_bound(const key_type& k) const
-{
-    map::const_iterator it = begin();
-
-    while (it != end() && key_comp()(it->first, k))
-        ++it;
-    if (it != end())
-        ++it;
-    return (it);
-}
 // Allocator
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Allocator>::get_allocator() const
