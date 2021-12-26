@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:13:29 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:27:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ class map
   public:
     // Constructor
     explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+    template <class InputIterator>
+    map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+    map(const map& x);
     ~map();
 
     // Iterators
@@ -117,6 +120,12 @@ class map
 template < class Key, class T, class Compare, class Allocator >
 map<Key, T, Compare, Allocator>::map(const key_compare& comp, const allocator_type& alloc)
     : _tree(), _size(0), _comp(comp), _alloc(alloc)
+{
+}
+
+template < class Key, class T, class Compare, class Allocator >
+map<Key, T, Compare, Allocator>::map(const map& x)
+    : _tree(x._tree), _size(x._size), _comp(x._comp), _alloc(x._alloc)
 {
 }
 

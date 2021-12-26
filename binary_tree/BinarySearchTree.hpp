@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:21:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:35:51 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,14 @@ BinarySearchTree<T, Allocator>::BinarySearchTree(const allocator_type& allocator
 
 template <class T, class Allocator>
 BinarySearchTree<T, Allocator>::BinarySearchTree(const BinarySearchTree& rhs)
-    : _alloc(rhs.get_allocator())
+    : _root(NULL), _alloc(rhs.get_allocator())
 {
+    Node<T>* node_pointer = rhs.root();
+    while (node_pointer)
+    {
+        insert(node_pointer->data());
+        node_pointer = BinarySearchTree::preorder_successor(node_pointer);
+    }
 }
 
 template <class T, class Allocator>
