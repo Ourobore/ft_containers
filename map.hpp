@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 16:06:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 16:53:26 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,15 @@ class map
     value_compare value_comp() const;
 
     // Operations
-    iterator       find(const key_type& k);
-    const_iterator find(const key_type& k) const;
-    size_type      count(const key_type& k) const;
-    iterator       lower_bound(const key_type& k);
-    const_iterator lower_bound(const key_type& k) const;
-    iterator       upper_bound(const key_type& k);
-    const_iterator upper_bound(const key_type& k) const;
+    iterator                             find(const key_type& k);
+    const_iterator                       find(const key_type& k) const;
+    size_type                            count(const key_type& k) const;
+    iterator                             lower_bound(const key_type& k);
+    const_iterator                       lower_bound(const key_type& k) const;
+    iterator                             upper_bound(const key_type& k);
+    const_iterator                       upper_bound(const key_type& k) const;
+    pair<iterator, iterator>             equal_range(const key_type& k);
+    pair<const_iterator, const_iterator> equal_range(const key_type& k) const;
 
     // Allocator
     allocator_type get_allocator() const;
@@ -333,9 +335,6 @@ typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Al
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::upper_bound(const key_type& k)
 {
-    // Could use a node_pointer, but with iterator we already have return value. Let's see computation time
-    // typename BinarySearchTree<T>::node_type* node_pointer;
-
     map::iterator it = begin();
 
     while (it != end() && key_comp()(it->first, k))
@@ -343,6 +342,18 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
     if (it != end())
         ++it;
     return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+pair<typename map<Key, T, Compare, Allocator>::iterator, typename map<Key, T, Compare, Allocator>::iterator> map<Key, T, Compare, Allocator>::equal_range(const key_type& k)
+{
+    return (make_pair(lower_bound(k), upper_bound(k)));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+pair<typename map<Key, T, Compare, Allocator>::const_iterator, typename map<Key, T, Compare, Allocator>::const_iterator> map<Key, T, Compare, Allocator>::equal_range(const key_type& k) const
+{
+    return (make_pair(lower_bound(k), upper_bound(k)));
 }
 
 template < class Key, class T, class Compare, class Allocator >
