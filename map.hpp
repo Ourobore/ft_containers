@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:41:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 15:14:55 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ class map
     map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
     map(const map& x);
     ~map();
+    map& operator=(const map& rhs);
 
     // Iterators
     iterator       begin();
@@ -98,6 +99,9 @@ class map
     bool      empty() const;
     size_type size() const;
     size_type max_size() const;
+
+    // Element Access
+    mapped_type& operator[](const key_type& k);
 
     // Modifiers
     pair<iterator, bool> insert(const value_type& val);
@@ -145,6 +149,19 @@ template < class Key, class T, class Compare, class Allocator >
 map<Key, T, Compare, Allocator>::~map()
 {
     this->clear();
+}
+
+template < class Key, class T, class Compare, class Allocator >
+map<Key, T, Compare, Allocator>& map<Key, T, Compare, Allocator>::operator=(const map& rhs)
+{
+    this->clear();
+
+    map::const_iterator cit;
+    for (cit = rhs.begin(); cit != rhs.end(); ++cit)
+    {
+        _tree.insert(make_pair(cit->first, cit->second));
+        ++_size;
+    }
 }
 
 // Iterators
@@ -204,19 +221,29 @@ typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocat
     return (_alloc.max_size());
 }
 
+// Element Access
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::mapped_type& map<Key, T, Compare, Allocator>::operator[](const key_type& k)
+{
+    return ((*((this->insert(make_pair(k, mapped_type()))).first)).second);
+}
+
 // Modifiers
 template < class Key, class T, class Compare, class Allocator >
 pair<typename map<Key, T, Compare, Allocator>::iterator, bool> map<Key, T, Compare, Allocator>::insert(const value_type& val)
 {
-    map<Key, T, Compare, Allocator>::iterator it;
+    map::iterator it;
+    bool          inserted = false;
 
+    // If value is not found, must insert the value
     if ((it = this->find(val.first)) == this->end())
     {
         _tree.insert(val);
         it = this->find(val.first);
+        inserted = true;
         _size++;
     }
-    return (make_pair(it, true));
+    return (make_pair(it, inserted));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -244,7 +271,7 @@ typename map<Key, T, Compare, Allocator>::value_compare map<Key, T, Compare, All
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::find(const key_type& k)
 {
-    map<Key, T, Compare, Allocator>::iterator it;
+    map::iterator it;
 
     for (it = this->begin(); it != this->end(); ++it)
     {
@@ -257,7 +284,7 @@ typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocato
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::find(const key_type& k) const
 {
-    map<Key, T, Compare, Allocator>::const_iterator it;
+    map::const_iterator it;
 
     for (it = this->begin(); it != this->end(); ++it)
     {

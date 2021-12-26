@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:06:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 14:48:08 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ class TreeIterator
     friend bool operator!=(const TreeIterator<R, Is_Const>& lhs, const TreeIterator<U, is_const>& rhs);
 
     // Dereference
-    reference operator*();
-    pointer   operator->();
+    reference operator*() const;
+    pointer   operator->() const;
 
     // Increment and Decrement
     TreeIterator& operator++();
@@ -124,13 +124,13 @@ bool operator!=(const TreeIterator<R, Is_Const>& lhs, const TreeIterator<U, is_c
 
 // Dereference
 template <typename T, bool IsConst>
-typename TreeIterator<T, IsConst>::reference TreeIterator<T, IsConst>::operator*()
+typename TreeIterator<T, IsConst>::reference TreeIterator<T, IsConst>::operator*() const
 {
     return (_it->data());
 }
 
 template <typename T, bool IsConst>
-typename TreeIterator<T, IsConst>::pointer TreeIterator<T, IsConst>::operator->()
+typename TreeIterator<T, IsConst>::pointer TreeIterator<T, IsConst>::operator->() const
 {
     return (&(_it->data()));
 }
