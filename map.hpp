@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 15:14:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/26 16:06:55 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,10 @@ class map
     iterator       find(const key_type& k);
     const_iterator find(const key_type& k) const;
     size_type      count(const key_type& k) const;
+    iterator       lower_bound(const key_type& k);
+    const_iterator lower_bound(const key_type& k) const;
+    iterator       upper_bound(const key_type& k);
+    const_iterator upper_bound(const key_type& k) const;
 
     // Allocator
     allocator_type get_allocator() const;
@@ -303,6 +307,55 @@ typename map<Key, T, Compare, Allocator>::size_type map<Key, T, Compare, Allocat
         return (1);
 }
 
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::lower_bound(const key_type& k)
+{
+    // Could use a node_pointer, but with iterator we already have return value. Let's see computation time
+    // typename BinarySearchTree<T>::node_type* node_pointer;
+
+    map::iterator it = begin();
+
+    while (it != end() && key_comp()(it->first, k))
+        ++it;
+    return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::lower_bound(const key_type& k) const
+{
+    map::const_iterator it = begin();
+
+    while (it != end() && key_comp()(it->first, k))
+        ++it;
+    return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::iterator map<Key, T, Compare, Allocator>::upper_bound(const key_type& k)
+{
+    // Could use a node_pointer, but with iterator we already have return value. Let's see computation time
+    // typename BinarySearchTree<T>::node_type* node_pointer;
+
+    map::iterator it = begin();
+
+    while (it != end() && key_comp()(it->first, k))
+        ++it;
+    if (it != end())
+        ++it;
+    return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map<Key, T, Compare, Allocator>::const_iterator map<Key, T, Compare, Allocator>::upper_bound(const key_type& k) const
+{
+    map::const_iterator it = begin();
+
+    while (it != end() && key_comp()(it->first, k))
+        ++it;
+    if (it != end())
+        ++it;
+    return (it);
+}
 // Allocator
 template < class Key, class T, class Compare, class Allocator >
 typename map<Key, T, Compare, Allocator>::allocator_type map<Key, T, Compare, Allocator>::get_allocator() const
