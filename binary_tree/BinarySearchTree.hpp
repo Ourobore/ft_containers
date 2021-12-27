@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 15:42:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/27 17:06:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,21 @@ class BinarySearchTree
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
-    typedef Node<value_type>                         node_type;
 
     typedef std::size_t size_type;
 
-  private:
-    node_type*     _root;
-    allocator_type _alloc;
+  protected:
+    typedef Node<value_type> node_type;
+    typedef node_type*       node_pointer;
 
     typedef typename allocator_type::template rebind< node_type >::other node_allocator;
 
+    node_type*     _root;
+    allocator_type _alloc;
+
     // Recursive implementations
-    static void        recursive_destroy(node_type* node);
-    static node_type*& recursive_search(const value_type& value, node_type* node);
-    static node_type*  recursive_erase(const value_type& value, node_type* node);
+    static void       recursive_destroy(node_type* node);
+    static node_type* recursive_search(const value_type& value, node_type* node);
 
   public:
     // Constructor
@@ -59,7 +60,7 @@ class BinarySearchTree
     void insert(const value_type& value);
 
     // Erase
-    node_type* erase(const value_type& value);
+    bool erase(const value_type& value);
 
     // Algorithm
     static node_type* min_elem(node_type* tree_root);
@@ -122,7 +123,7 @@ BinarySearchTree<T, Allocator>::~BinarySearchTree()
 
 // Search
 template <class T, class Allocator>
-typename BinarySearchTree<T, Allocator>::node_type*& BinarySearchTree<T, Allocator>::recursive_search(const value_type& value, node_type* node)
+typename BinarySearchTree<T, Allocator>::node_type* BinarySearchTree<T, Allocator>::recursive_search(const value_type& value, node_type* node)
 {
     if (!node || node->data() == value)
         return (node);
@@ -191,66 +192,60 @@ void BinarySearchTree<T, Allocator>::insert(const value_type& value)
 
 // Erase
 template <class T, class Allocator>
-typename BinarySearchTree<T, Allocator>::node_type* BinarySearchTree<T, Allocator>::recursive_erase(const value_type& value, node_type* node)
+bool BinarySearchTree<T, Allocator>::erase(const value_type& value)
 {
-    if (node == NULL)
-        return (node);
+    node_type* node = search(value);
 
-    // Searching recursively in which subtree is the erased node
-    if (value < node->data())
-        node->left() = BinarySearchTree::recursive_erase(value, node->left());
-    else if (value > node->data())
-        node->right() = BinarySearchTree::recursive_erase(value, node->right());
+    // If Node not found
+    if (!node)
+        return (false);
 
-    // If this is the right node
+    // If Node has no child
+    else if (!node->left() && !node->right())
+    {
+        if (node->parent()->left() == node)
+            node->parent()->left() = NULL;
+        else
+            node->parent()->right() = NULL;
+    }
+
+    // If Node has only one child
+    else if ((!node->left() && node->right()) || (node->left() && !node->right()))
+    {
+        node_type* child = node->left() ? node->left() : node->right();
+        if (!node->parent())
+        {
+            child->parent() = NULL;
+            _root = child;
+        }
+        else
+        {
+            if (node->parent()->left() == node)
+                node->parent()->left() = child;
+            else
+                node->parent()->right() = child;
+            child->parent() = node->parent();
+        }
+    }
+
+    // If Node has 2 childs
     else
     {
-        node_allocator allocator;
+        node_type* successor = BinarySearchTree<T>::inorder_successor(node->right());
+        erase(BinarySearchTree<T>::inorder_successor(node->right())->data());
 
-        // Node has no child
-        if (!node->left() && !node->right())
-        {
-            allocator.destroy(node);
-            allocator.deallocate(node, 1);
-            node = NULL;
-            return (node);
-        }
+        successor->left() = node->left();
+        successor->right() = node->right();
 
-        // Node with only one child or no child:
-        // Set child as new subtree root
-        else if (!node->left())
-        {
-            node_type*& new_sub_root = node->right();
-            allocator.destroy(node);
-            allocator.deallocate(node, 1);
-            node = NULL;
-            return new_sub_root;
-        }
-        else if (!node->right())
-        {
-            node_type*& new_sub_root = node->left();
-            allocator.destroy(node);
-            allocator.deallocate(node, 1);
-            node = NULL;
-            return new_sub_root;
-        }
+        node->left()->parent() = successor;
+        node->right()->parent() = successor;
 
-        // Node with two children: Get the inorder successor(smallest in right subtree)
-        node_type* old_min = BinarySearchTree::min_elem(node->right());
-
-        // Copy the inorder successor's content to this node
-        node->data() = old_min->data();
-
-        // Erase the inorder successor
-        node->right() = BinarySearchTree::recursive_erase(old_min->data(), node->right());
+        if (!node->parent())
+            _root = successor;
     }
-    return (node);
-}
 
-template <class T, class Allocator>
-typename BinarySearchTree<T, Allocator>::node_type* BinarySearchTree<T, Allocator>::erase(const value_type& value)
-{
-    return (BinarySearchTree::recursive_erase(value, _root));
+    delete (node);
+    return (true);
 }
 
 // Algorithm
