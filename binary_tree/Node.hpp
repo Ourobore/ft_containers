@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Node.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:24 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/28 09:56:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ class Node
     // Constructors and Destructor
     Node();
     Node(const_reference value);
-    template <class N>
-    Node(const Node<N>* rhs);
-    template <class N>
-    Node(const Node<N>& rhs);
-    Node<T>& operator=(const Node<T>& rhs);
+    template < class N >
+    Node(const Node< N >* rhs);
+    template < class N >
+    Node(const Node< N >& rhs);
+    Node< T >& operator=(const Node< T >& rhs);
     ~Node();
 
     // Element access
@@ -56,14 +56,14 @@ class Node
     reference operator*();
 
     // Algorithms
-    static Node<T>* min_child(Node<T>* subtree_root);
-    static Node<T>* max_child(Node<T>* subtree_root);
-    Node<T>*        inorder_successor();
-    Node<T>*        preorder_successor();
-    Node<T>*        postorder_successor();
-    Node<T>*        inorder_predecessor();
-    Node<T>*        preorder_predecessor();
-    Node<T>*        postorder_predecessor();
+    static Node< T >* min_child(Node< T >* subtree_root);
+    static Node< T >* max_child(Node< T >* subtree_root);
+    Node< T >*        inorder_successor();
+    Node< T >*        preorder_successor();
+    Node< T >*        postorder_successor();
+    Node< T >*        inorder_predecessor();
+    Node< T >*        preorder_predecessor();
+    Node< T >*        postorder_predecessor();
 
     // Modifiers
     void set_data(const_reference value);
@@ -73,34 +73,34 @@ class Node
 };
 
 // Constructors and Destructor
-template <class T>
-Node<T>::Node()
+template < class T >
+Node< T >::Node()
     : _data(value_type()), _parent(NULL), _left(NULL), _right(NULL)
 {
 }
 
-template <class T>
-Node<T>::Node(const_reference value)
+template < class T >
+Node< T >::Node(const_reference value)
     : _data(value), _parent(NULL), _left(NULL), _right(NULL)
 {
 }
 
-template <class T>
-template <class N>
-Node<T>::Node(const Node<N>* rhs)
+template < class T >
+template < class N >
+Node< T >::Node(const Node< N >* rhs)
     : _data(rhs->data()), _parent(rhs->parent()), _left(rhs->left()), _right(rhs->right())
 {
 }
 
-template <class T>
-template <class N>
-Node<T>::Node(const Node<N>& rhs)
+template < class T >
+template < class N >
+Node< T >::Node(const Node< N >& rhs)
     : _data(rhs.data()), _parent(rhs.parent()), _left(rhs.left()), _right(rhs.right())
 {
 }
 
-template <class T>
-Node<T>& Node<T>::operator=(const Node<T>& rhs)
+template < class T >
+Node< T >& Node< T >::operator=(const Node< T >& rhs)
 {
     if (this != &rhs)
     {
@@ -112,79 +112,79 @@ Node<T>& Node<T>::operator=(const Node<T>& rhs)
     return (*this);
 }
 
-template <class T>
-Node<T>::~Node()
+template < class T >
+Node< T >::~Node()
 {
     //_data = value_type();
 }
 
 // Element access
-template <class T>
-typename Node<T>::reference Node<T>::data()
+template < class T >
+typename Node< T >::reference Node< T >::data()
 {
     return (_data);
 }
 
-template <class T>
-Node<T>*& Node<T>::parent()
+template < class T >
+Node< T >*& Node< T >::parent()
 {
     return (_parent);
 }
 
-template <class T>
-Node<T>*& Node<T>::left()
+template < class T >
+Node< T >*& Node< T >::left()
 {
     return (_left);
 }
 
-template <class T>
-Node<T>*& Node<T>::right()
+template < class T >
+Node< T >*& Node< T >::right()
 {
     return (_right);
 }
 
-template <class T>
-typename Node<T>::reference Node<T>::operator*()
+template < class T >
+typename Node< T >::reference Node< T >::operator*()
 {
     return (*this);
 }
 
 // Algorithms
-template <class T>
-Node<T>* Node<T>::min_child(Node<T>* subtree_root)
+template < class T >
+Node< T >* Node< T >::min_child(Node< T >* subtree_root)
 {
     if (!subtree_root)
         return (subtree_root);
 
-    Node<T>* node_pointer = subtree_root;
+    Node< T >* node_pointer = subtree_root;
     while (node_pointer->left())
         node_pointer = node_pointer->left();
 
     return (node_pointer);
 }
 
-template <class T>
-Node<T>* Node<T>::max_child(Node<T>* subtree_root)
+template < class T >
+Node< T >* Node< T >::max_child(Node< T >* subtree_root)
 {
     if (!subtree_root)
         return (subtree_root);
 
-    Node<T>* node_pointer = subtree_root;
+    Node< T >* node_pointer = subtree_root;
     while (node_pointer->right())
         node_pointer = node_pointer->right();
 
     return (node_pointer);
 }
 
-template <class T>
-Node<T>* Node<T>::inorder_successor()
+template < class T >
+Node< T >* Node< T >::inorder_successor()
 {
     if (_right)
         return (min_child(_right));
     else
     {
-        Node<T>* ancestor = _parent;
-        Node<T>* node_pointer = this;
+        Node< T >* ancestor = _parent;
+        Node< T >* node_pointer = this;
         while (ancestor && ancestor->right() == node_pointer)
         {
             ancestor = ancestor->parent();
@@ -197,8 +197,8 @@ Node<T>* Node<T>::inorder_successor()
     }
 }
 
-template <class T>
-Node<T>* Node<T>::preorder_successor()
+template < class T >
+Node< T >* Node< T >::preorder_successor()
 {
     if (_left)
         return (_left);
@@ -206,7 +206,7 @@ Node<T>* Node<T>::preorder_successor()
         return (_right);
     else
     {
-        Node<T>* ancestor = _parent;
+        Node< T >* ancestor = _parent;
         while (ancestor)
         {
             if (this->data() < ancestor->data() && ancestor->right())
@@ -220,8 +220,8 @@ Node<T>* Node<T>::preorder_successor()
     }
 }
 
-template <class T>
-Node<T>* Node<T>::postorder_successor()
+template < class T >
+Node< T >* Node< T >::postorder_successor()
 {
     if (!_parent)
         return (NULL);
@@ -231,7 +231,7 @@ Node<T>* Node<T>::postorder_successor()
         return (_parent);
     else
     {
-        Node<T>* node_pointer = _parent->right();
+        Node< T >* node_pointer = _parent->right();
         while (node_pointer && node_pointer->left())
             node_pointer = node_pointer->left();
         return (node_pointer);
@@ -244,15 +244,15 @@ Node<T>* Node<T>::postorder_successor()
     //     return (Node<T>::min_child(_parent->right()));
 }
 
-template <class T>
-Node<T>* Node<T>::inorder_predecessor()
+template < class T >
+Node< T >* Node< T >::inorder_predecessor()
 {
     if (_left)
         return (max_child(_left));
     else
     {
-        Node<T>* ancestor = _parent;
-        Node<T>* node_pointer = this;
+        Node< T >* ancestor = _parent;
+        Node< T >* node_pointer = this;
         while (ancestor && ancestor->left() == node_pointer)
         {
             ancestor = ancestor->parent();
@@ -265,8 +265,8 @@ Node<T>* Node<T>::inorder_predecessor()
     }
 }
 
-template <class T>
-Node<T>* Node<T>::preorder_predecessor()
+template < class T >
+Node< T >* Node< T >::preorder_predecessor()
 {
     if (!_parent)
         return (NULL);
@@ -274,11 +274,11 @@ Node<T>* Node<T>::preorder_predecessor()
         return (_parent);
     else
     {
-        Node<T>* node_pointer = _parent->left();
+        Node< T >* node_pointer = _parent->left();
         while (node_pointer)
         {
             if (node_pointer->right())
-                return (Node<T>::max_child(node_pointer->right()));
+                return (Node< T >::max_child(node_pointer->right()));
             else if (node_pointer->left())
                 node_pointer = node_pointer->left();
             else
@@ -288,14 +288,14 @@ Node<T>* Node<T>::preorder_predecessor()
     }
 }
 
-template <class T>
-Node<T>* Node<T>::postorder_predecessor()
+template < class T >
+Node< T >* Node< T >::postorder_predecessor()
 {
     if (_right)
         return (_right);
     else
     {
-        Node<T>* ancestor = _parent;
+        Node< T >* ancestor = _parent;
         while (ancestor && !ancestor->left())
             ancestor = ancestor->_parent;
         if (ancestor && _data > ancestor->data())
@@ -306,27 +306,27 @@ Node<T>* Node<T>::postorder_predecessor()
 }
 
 // Modifiers
-template <class T>
-void Node<T>::set_data(const_reference value)
+template < class T >
+void Node< T >::set_data(const_reference value)
 {
     _data = value;
 }
 
-template <class T>
-void Node<T>::set_parent(Node* parent)
+template < class T >
+void Node< T >::set_parent(Node* parent)
 {
     _parent = parent;
 }
 
-template <class T>
-void Node<T>::set_left(Node* left)
+template < class T >
+void Node< T >::set_left(Node* left)
 {
     _left = left;
     _left->set_parent(this);
 }
 
-template <class T>
-void Node<T>::set_right(Node* right)
+template < class T >
+void Node< T >::set_right(Node* right)
 {
     _right = right;
     _right->set_parent(this);
