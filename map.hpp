@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 14:55:23 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 15:26:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ class map
     void                   erase(iterator position);
     size_type              erase(const key_type& k);
     void                   erase(iterator first, iterator last);
+    void                   swap(map& x);
     void                   clear();
 
     // Observers
@@ -330,6 +331,18 @@ void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
 }
 
 template < class Key, class T, class Compare, class Allocator >
+void map< Key, T, Compare, Allocator >::swap(map& x)
+{
+    typename tree_type::node_type* tmp_tree = _tree.root();
+    _tree.set_root(x._tree.root());
+    x._tree.set_root(tmp_tree);
+
+    size_type tmp_size = size();
+    _size = x.size();
+    x._size = tmp_size;
+}
+
+template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::clear()
 {
     tree_allocator allocator;
@@ -450,6 +463,12 @@ template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::allocator_type map< Key, T, Compare, Allocator >::get_allocator() const
 {
     return (_alloc);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y)
+{
+    x.swap(y);
 }
 
 } // namespace ft

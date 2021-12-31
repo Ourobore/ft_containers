@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 14:16:57 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 15:16:39 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,21 @@ template < class T, class Allocator = std::allocator< T > >
 class BinarySearchTree
 {
   public:
-    typedef T         value_type;
-    typedef Allocator allocator_type;
+    typedef T                  value_type;
+    typedef Allocator          allocator_type;
+    typedef Node< value_type > node_type;
+    typedef node_type*         node_pointer;
 
     typedef typename allocator_type::reference       reference;
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
+    typedef typename allocator_type::template rebind< node_type >::other node_allocator;
+
     typedef std::size_t size_type;
 
   protected:
-    typedef Node< value_type > node_type;
-    typedef node_type*         node_pointer;
-
-    typedef typename allocator_type::template rebind< node_type >::other node_allocator;
-
     node_type*     _root;
     allocator_type _alloc;
 
@@ -75,6 +74,7 @@ class BinarySearchTree
 
     // Accessors
     node_type*     root() const;
+    void           set_root(node_type* root);
     allocator_type get_allocator() const;
 
     void print_inorder();
@@ -365,6 +365,12 @@ template < class T, class Allocator >
 typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Allocator >::root() const
 {
     return (_root);
+}
+
+template < class T, class Allocator >
+void BinarySearchTree< T, Allocator >::set_root(node_type* root)
+{
+    _root = root;
 }
 
 template < class T, class Allocator >
