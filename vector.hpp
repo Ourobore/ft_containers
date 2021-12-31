@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 15:32:47 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 15:50:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -532,10 +532,7 @@ bool operator==(const vector< T, Allocator >& lhs, const vector< T, Allocator >&
 template < class T, class Allocator >
 bool operator!=(const vector< T, Allocator >& lhs, const vector< T, Allocator >& rhs)
 {
-    if (!(lhs == rhs))
-        return (true);
-    else
-        return (false);
+    return (!(lhs == rhs));
 }
 
 template < class T, class Allocator >
@@ -550,30 +547,19 @@ bool operator<(const vector< T, Allocator >& lhs, const vector< T, Allocator >& 
 template < class T, class Allocator >
 bool operator<=(const vector< T, Allocator >& lhs, const vector< T, Allocator >& rhs)
 {
-    if (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
-                                rhs.end()) ||
-        lhs == rhs)
-        return (true);
-    else
-        return (false);
+    return (!(rhs < lhs));
 }
 
 template < class T, class Allocator >
 bool operator>(const vector< T, Allocator >& lhs, const vector< T, Allocator >& rhs)
 {
-    if (!(lhs < rhs) && !(lhs == rhs))
-        return (true);
-    else
-        return (false);
+    return (rhs < lhs);
 }
 
 template < class T, class Allocator >
 bool operator>=(const vector< T, Allocator >& lhs, const vector< T, Allocator >& rhs)
 {
-    if (lhs > rhs || lhs == rhs)
-        return (true);
-    else
-        return (false);
+    return (!(lhs < rhs));
 }
 
 template < class T, class Allocator >

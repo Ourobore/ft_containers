@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 15:26:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 15:50:33 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -469,6 +469,50 @@ template <class Key, class T, class Compare, class Alloc>
 void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y)
 {
     x.swap(y);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator==(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    if (lhs.size() != rhs.size())
+        return (false);
+    if (!(lhs < rhs) && !(rhs < lhs))
+        return (true);
+    else
+        return (false);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator!=(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    return (!(lhs == rhs));
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator<(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    if (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+        return (true);
+    else
+        return (false);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator<=(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    return (!(rhs < lhs));
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator>(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    return (rhs < lhs);
+}
+
+template <class Key, class T, class Compare, class Allocator>
+bool operator>=(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
+{
+    return (!(lhs < rhs));
 }
 
 } // namespace ft
