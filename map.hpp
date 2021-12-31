@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 15:50:33 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 16:00:12 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 #include "binary_tree/BinarySearchTree.hpp"
 
+#include "utils/LexicographicalCompare.hpp"
 #include "utils/Pair.hpp"
 
 namespace ft
@@ -148,7 +149,7 @@ map< Key, T, Compare, Allocator >::map(InputIterator first, InputIterator last, 
 {
     for (InputIterator it = first; it != last; ++it)
     {
-        _tree.insert(make_pair(it->first, it->second));
+        _tree.insert(ft::make_pair(it->first, it->second));
         ++_size;
     }
 }
@@ -176,6 +177,8 @@ map< Key, T, Compare, Allocator >& map< Key, T, Compare, Allocator >::operator=(
         _tree.insert(make_pair(cit->first, cit->second));
         ++_size;
     }
+
+    return (*this);
 }
 
 // Iterators
@@ -263,7 +266,7 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::mapped_type& map< Key, T, Compare, Allocator >::operator[](const key_type& k)
 {
-    return ((*((this->insert(make_pair(k, mapped_type()))).first)).second);
+    return ((*((this->insert(ft::make_pair(k, mapped_type()))).first)).second);
 }
 
 // Modifiers
@@ -281,7 +284,7 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
         inserted = true;
         _size++;
     }
-    return (make_pair(it, inserted));
+    return (ft::make_pair(it, inserted));
 }
 
 template < class Key, class T, class Compare, class Allocator >
