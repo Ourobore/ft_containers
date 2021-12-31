@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BinarySearchTree.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/28 10:08:06 by marvin           ###   ########.fr       */
+/*   Updated: 2021/12/31 14:16:57 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ bool BinarySearchTree< T, Allocator >::erase(const value_type& value)
     node_allocator allocator;
     allocator.destroy(node);
     allocator.deallocate(node, 1);
-    // delete (node);
+
     return (true);
 }
 
@@ -289,24 +289,36 @@ bool BinarySearchTree< T, Allocator >::erase(node_type* node)
     // If Node has 2 childs
     else
     {
-        node_type* successor = BinarySearchTree< T >::inorder_successor(node->right());
-        erase(BinarySearchTree< T >::inorder_successor(node->right())->data());
+        node_type* successor = BinarySearchTree< T >::inorder_successor(node);
+        node_type  moved_successor(*successor);
+        // node_type* successor_parent = successor->parent();
+        // node_type* successor_left = successor->left();
+        // node_type* successor_right = successor->right();
 
-        successor->left() = node->left();
-        successor->right() = node->right();
+        // if (successor->parent()->left() == successor)
+        //     successor->parent()->left() = NULL;
+        // else
+        //     successor->parent()->right() = NULL;
+        erase(successor);
 
-        node->left()->parent() = successor;
-        node->right()->parent() = successor;
+        moved_successor.left() = node->left();
+        moved_successor.right() = node->right();
+
+        if (node->left())
+            node->left()->parent() = &moved_successor;
+        if (node->right())
+            node->right()->parent() = &moved_successor;
 
         if (!node->parent())
-            _root = successor;
+            _root = &moved_successor;
         else
-            successor->parent() = node->parent();
+            moved_successor.parent() = node->parent();
     }
 
     node_allocator allocator;
     allocator.destroy(node);
     allocator.deallocate(node, 1);
+    node = NULL;
     // delete (node);
     return (true);
 }

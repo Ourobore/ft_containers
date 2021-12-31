@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:20:33 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/12/31 14:50:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ Iterator ReverseIterator<Iterator>::base() const
 template < class Iterator >
 typename ReverseIterator<Iterator>::reference ReverseIterator<Iterator>::operator*() const
 {
-    return (*(_base - 1));
+    return (*(--Iterator(_base)));
 }
 
 template < class Iterator >

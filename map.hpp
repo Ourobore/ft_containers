@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/28 10:14:16 by marvin           ###   ########.fr       */
+/*   Updated: 2021/12/31 14:55:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,14 @@ class map
     map& operator=(const map& rhs);
 
     // Iterators
-    iterator       begin();
-    const_iterator begin() const;
-    iterator       end();
-    const_iterator end() const;
+    iterator               begin();
+    const_iterator         begin() const;
+    iterator               end();
+    const_iterator         end() const;
+    reverse_iterator       rbegin();
+    const_reverse_iterator rbegin() const;
+    reverse_iterator       rend();
+    const_reverse_iterator rend() const;
 
     // Capacity
     bool      empty() const;
@@ -211,6 +215,30 @@ typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare,
         return (const_iterator(NULL, NULL));
 }
 
+template < class Key, class T, class Compare, class Allocator >
+typename map< Key, T, Compare, Allocator >::reverse_iterator map< Key, T, Compare, Allocator >::rbegin()
+{
+    return (reverse_iterator(end()));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map< Key, T, Compare, Allocator >::const_reverse_iterator map< Key, T, Compare, Allocator >::rbegin() const
+{
+    return (const_reverse_iterator(end()));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map< Key, T, Compare, Allocator >::reverse_iterator map< Key, T, Compare, Allocator >::rend()
+{
+    return (reverse_iterator(begin()));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map< Key, T, Compare, Allocator >::const_reverse_iterator map< Key, T, Compare, Allocator >::rend() const
+{
+    return (const_reverse_iterator(begin()));
+}
+
 // Capacity
 template < class Key, class T, class Compare, class Allocator >
 bool map< Key, T, Compare, Allocator >::empty() const
@@ -275,16 +303,30 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
 {
-    map::iterator it = first;
+    map::iterator it = last;
+    --it;
 
-    while (it != last)
+    while (it != first)
     {
         map::iterator next = it;
-        ++next;
+        --next;
 
-        //erase(it);
+        erase(it);
         it = next;
     }
+    erase(it);
+
+    // map::iterator it = first;
+
+    // while (it != last)
+    // {
+    //     map::iterator next = it;
+    //     ++next;
+
+    //     erase(it);
+    //     it = next;
+    // }
+    // erase(it);
 }
 
 template < class Key, class T, class Compare, class Allocator >
