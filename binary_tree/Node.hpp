@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:59:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 17:17:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,9 @@ template < class T >
 Node< T >::~Node()
 {
     // _data = value_type();
+    //     _parent = NULL;
+    //     _left = NULL;
+    //     _right = NULL;
 }
 
 // Element access

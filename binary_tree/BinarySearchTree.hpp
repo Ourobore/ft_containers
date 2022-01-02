@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:45:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:08:04 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ class BinarySearchTree
     allocator_type _alloc;
 
     // Recursive implementations
-    static void       recursive_destroy(node_type* node);
-    static node_type* recursive_search(const value_type& value, node_type* node);
+    static void recursive_destroy(node_type* node);
 
   public:
     // Constructor
@@ -60,7 +59,6 @@ class BinarySearchTree
 
     // Erase
     bool erase(const value_type& value);
-    bool erase(node_type* node);
 
     // Algorithm
     static node_type* min_elem(node_type* tree_root);
@@ -123,21 +121,21 @@ BinarySearchTree< T, Allocator >::~BinarySearchTree()
 
 // Search
 template < class T, class Allocator >
-typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Allocator >::recursive_search(const value_type& value, node_type* node)
-{
-    if (!node || node->data() == value)
-        return (node);
-
-    if (value > node->data())
-        return (BinarySearchTree::recursive_search(value, node->right()));
-    else
-        return (BinarySearchTree::recursive_search(value, node->left()));
-}
-
-template < class T, class Allocator >
 typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Allocator >::search(const value_type& value)
 {
-    return (BinarySearchTree::recursive_search(value, _root));
+    node_type* search = _root;
+
+    while (search)
+    {
+        if (search->data() == value)
+            return (search);
+
+        if (value < search->data())
+            search = search->left();
+        else
+            search = search->right();
+    }
+    return (NULL);
 }
 
 // Insert
@@ -195,13 +193,6 @@ template < class T, class Allocator >
 bool BinarySearchTree< T, Allocator >::erase(const value_type& value)
 {
     node_type* node = search(value);
-
-    return (erase(node));
-}
-
-template < class T, class Allocator >
-bool BinarySearchTree< T, Allocator >::erase(node_type* node)
-{
     if (!node)
         return (false);
 
@@ -243,7 +234,7 @@ bool BinarySearchTree< T, Allocator >::erase(node_type* node)
     {
         node_type* successor = BinarySearchTree< T >::inorder_successor(node);
         node_type  moved_successor(*successor);
-        erase(successor);
+        erase(successor->data());
 
         moved_successor.left() = node->left();
         moved_successor.right() = node->right();

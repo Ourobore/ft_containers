@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 15:30:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/27 11:21:31 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 13:19:19 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,6 @@ class pair
 
     // Assignment
     pair& operator=(const pair& p);
-
-    // Relational
-    template <class U, class V>
-    friend bool operator==(const pair<U, V>& lhs, const pair<U, V>& rhs);
-
-    template <class U, class V>
-    friend bool operator!=(const pair<U, V>& lhs, const pair<U, V>& rhs);
-
-    template <class U, class V>
-    friend bool operator<(const pair<U, V>& lhs, const pair<U, V>& rhs);
-
-    template <class U, class V>
-    friend bool operator<=(const pair<U, V>& lhs, const pair<U, V>& rhs);
-
-    template <class U, class V>
-    friend bool operator>(const pair<U, V>& lhs, const pair<U, V>& rhs);
-
-    template <class U, class V>
-    friend bool operator>=(const pair<U, V>& lhs, const pair<U, V>& rhs);
 };
 
 // Constructors
@@ -84,7 +65,7 @@ pair<T1, T2>& pair<T1, T2>::operator=(const pair& p)
     return (*this);
 }
 
-// Relational
+// Relational (Non member)
 template <class U, class V>
 bool operator==(const pair<U, V>& lhs, const pair<U, V>& rhs)
 {

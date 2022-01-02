@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:58:09 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:11:14 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +171,9 @@ map< Key, T, Compare, Allocator >& map< Key, T, Compare, Allocator >::operator=(
     this->clear();
 
     map::const_iterator cit;
-    for (cit = rhs.begin(); cit != rhs.end(); ++cit)
-    {
-        _tree.insert(ft::make_pair(cit->first, cit->second));
-        ++_size;
-    }
+    for (cit = rhs.begin(); cit != rhs.end(); ++cit, ++_size)
+        _tree.insert(*cit);
+
     return (*this);
 }
 
@@ -262,23 +260,14 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
     bool          inserted = false;
 
     // If value is not found, must insert the value
-    if ((it = this->find(val.first)) == this->end())
+    if ((it = find(val.first)) == end())
     {
         _tree.insert(val);
-        it = this->find(val.first);
+        it = find(val.first);
         inserted = true;
         _size++;
     }
     return (ft::make_pair(it, inserted));
-}
-
-template < class Key, class T, class Compare, class Allocator >
-template <class InputIterator>
-void map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
-{
-    InputIterator it;
-    for (it = first; it != last; ++it)
-        insert(ft::make_pair(it->first, it->second));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -300,9 +289,18 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 }
 
 template < class Key, class T, class Compare, class Allocator >
+template <class InputIterator>
+void map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
+{
+    InputIterator it;
+    for (it = first; it != last; ++it)
+        insert(*it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator position)
 {
-    _tree.erase(ft::make_pair(position->first, position->second));
+    _tree.erase(*position);
     --_size;
 }
 
@@ -311,7 +309,7 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 {
     map::iterator it = find(k);
 
-    if (it != end() && _tree.erase(ft::make_pair(it->first, it->second)))
+    if (it != end() && _tree.erase(*it))
     {
         --_size;
         return (size_type(1));
@@ -427,7 +425,7 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 
     while (it != end() && key_comp()(it->first, k))
         ++it;
-    if (it != end())
+    if (it != end() && !(k < it->first))
         ++it;
     return (it);
 }
@@ -439,7 +437,7 @@ typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare,
 
     while (it != end() && key_comp()(it->first, k))
         ++it;
-    if (it != end())
+    if (it != end() && !(k < it->first))
         ++it;
     return (it);
 }

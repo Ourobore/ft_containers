@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:25:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 16:01:19 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator++(int)
 {
     TreeIterator<T, IsConst> tmp(*this);
 
-    update_back();
+    // update_back();
     if (_it)
         _it = _it->inorder_successor();
     else
@@ -164,7 +164,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator++(int)
 template <typename T, bool IsConst>
 TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator--()
 {
-    update_back();
+    // update_back();
     if (_it)
         _it = _it->inorder_predecessor();
     else
@@ -177,7 +177,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator--(int)
 {
     TreeIterator<T, IsConst> tmp(*this);
 
-    update_back();
+    // update_back();
     if (_it)
         _it = _it->inorder_predecessor();
     else
