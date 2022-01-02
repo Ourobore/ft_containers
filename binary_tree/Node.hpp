@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:22:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:59:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ Node< T >& Node< T >::operator=(const Node< T >& rhs)
 template < class T >
 Node< T >::~Node()
 {
-    //_data = value_type();
+    // _data = value_type();
 }
 
 // Element access

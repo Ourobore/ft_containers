@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:11:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:45:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ BinarySearchTree< T, Allocator >::~BinarySearchTree()
 {
     BinarySearchTree::recursive_destroy(_root);
     _root = NULL;
-    // Implement not recursive destroy?
 }
 
 // Search
@@ -197,59 +196,7 @@ bool BinarySearchTree< T, Allocator >::erase(const value_type& value)
 {
     node_type* node = search(value);
 
-    // If Node not found
-    if (!node)
-        return (false);
-
-    // If Node has no child
-    else if (!node->left() && !node->right())
-    {
-        if (node->parent()->left() == node)
-            node->parent()->left() = NULL;
-        else
-            node->parent()->right() = NULL;
-    }
-
-    // If Node has only one child
-    else if ((!node->left() && node->right()) || (node->left() && !node->right()))
-    {
-        node_type* child = node->left() ? node->left() : node->right();
-        if (!node->parent())
-        {
-            child->parent() = NULL;
-            _root = child;
-        }
-        else
-        {
-            if (node->parent()->left() == node)
-                node->parent()->left() = child;
-            else
-                node->parent()->right() = child;
-            child->parent() = node->parent();
-        }
-    }
-
-    // If Node has 2 childs
-    else
-    {
-        node_type* successor = BinarySearchTree< T >::inorder_successor(node->right());
-        erase(BinarySearchTree< T >::inorder_successor(node->right())->data());
-
-        successor->left() = node->left();
-        successor->right() = node->right();
-
-        node->left()->parent() = successor;
-        node->right()->parent() = successor;
-
-        if (!node->parent())
-            _root = successor;
-    }
-
-    node_allocator allocator;
-    allocator.destroy(node);
-    allocator.deallocate(node, 1);
-
-    return (true);
+    return (erase(node));
 }
 
 template < class T, class Allocator >
@@ -296,14 +243,6 @@ bool BinarySearchTree< T, Allocator >::erase(node_type* node)
     {
         node_type* successor = BinarySearchTree< T >::inorder_successor(node);
         node_type  moved_successor(*successor);
-        // node_type* successor_parent = successor->parent();
-        // node_type* successor_left = successor->left();
-        // node_type* successor_right = successor->right();
-
-        // if (successor->parent()->left() == successor)
-        //     successor->parent()->left() = NULL;
-        // else
-        //     successor->parent()->right() = NULL;
         erase(successor);
 
         moved_successor.left() = node->left();
@@ -324,7 +263,7 @@ bool BinarySearchTree< T, Allocator >::erase(node_type* node)
     allocator.destroy(node);
     allocator.deallocate(node, 1);
     node = NULL;
-    // delete (node);
+
     return (true);
 }
 

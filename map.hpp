@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 11:09:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:58:09 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ template < class Key, class T, class Compare = std::less< Key >, class Allocator
 class map
 {
   public:
-    typedef Key                    key_type;
-    typedef T                      mapped_type;
-    typedef ft::pair<const Key, T> value_type;
-    typedef Compare                key_compare;
+    typedef Key                            key_type;
+    typedef T                              mapped_type;
+    typedef typename Allocator::value_type value_type;
+    typedef Compare                        key_compare;
 
     typedef Allocator                                allocator_type;
     typedef typename allocator_type::reference       reference;
@@ -150,11 +150,7 @@ template < class InputIterator >
 map< Key, T, Compare, Allocator >::map(InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc)
     : _tree(), _size(0), _comp(comp), _alloc(alloc)
 {
-    for (InputIterator it = first; it != last; ++it)
-    {
-        _tree.insert(ft::make_pair(it->first, it->second));
-        ++_size;
-    }
+    insert(first, last);
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -294,7 +290,7 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
     --before;
     --after;
 
-    if (!(*before< val&& * after > val))
+    if (!((*before) < val && (*after) > val))
     {
         insert(val);
         it = find(val.first);
@@ -306,12 +302,8 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator position)
 {
-    typename tree_type::node_type* node_pointer = position.getPointer();
-    _tree.erase(node_pointer);
+    _tree.erase(ft::make_pair(position->first, position->second));
     --_size;
-
-    // _tree.erase(ft::make_pair(position->first, position->second));
-    // --_size;
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -319,57 +311,21 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 {
     map::iterator it = find(k);
 
-    if (it != end() && _tree.erase(it.getPointer()))
+    if (it != end() && _tree.erase(ft::make_pair(it->first, it->second)))
+    {
+        --_size;
         return (size_type(1));
+    }
     else
         return (size_type(0));
-
-    // typename tree_type::node_pointer node_deleted;
-
-    // node_deleted = _tree.erase(k);
-    // if (!node_deleted)
-    //     return (size_type(0));
-    // else
-    // {
-    //     --_size;
-    //     return (size_type(1));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
 {
-    map::iterator it = last;
-    --it;
-
-    while (it != first)
-    {
-        map::iterator next = it;
-        --next;
-
+    map::iterator it;
+    for (it = first; it != last; ++it)
         erase(it);
-        it = next;
-    }
-    erase(it);
-
-    // map::iterator it = first;
-
-    // while (it != last)
-    // {
-    //     map::iterator next = it;
-    //     ++next;
-
-    //     erase(it);
-    //     it = next;
-    // }
-    // erase(it);
-    //####################################
-    // iterator it;
-
-    // for (it = first; it != last; ++it)
-    // {
-    //     _tree.erase(ft::make_pair(it->first, it->second));
-    //     --_size;
-    // }
 }
 
 template < class Key, class T, class Compare, class Allocator >
