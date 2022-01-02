@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 16:00:12 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:09:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ template < class Key, class T, class Compare = std::less< Key >, class Allocator
 class map
 {
   public:
-    typedef Key                            key_type;
-    typedef T                              mapped_type;
-    typedef typename Allocator::value_type value_type;
-    typedef Compare                        key_compare;
+    typedef Key                    key_type;
+    typedef T                      mapped_type;
+    typedef ft::pair<const Key, T> value_type;
+    typedef Compare                key_compare;
 
     typedef Allocator                                allocator_type;
     typedef typename allocator_type::reference       reference;
@@ -109,7 +109,10 @@ class map
     mapped_type& operator[](const key_type& k);
 
     // Modifiers
+    template <class InputIterator>
+    void                   insert(InputIterator first, InputIterator last);
     pair< iterator, bool > insert(const value_type& val);
+    iterator               insert(iterator position, const value_type& val);
     void                   erase(iterator position);
     size_type              erase(const key_type& k);
     void                   erase(iterator first, iterator last);
@@ -174,10 +177,9 @@ map< Key, T, Compare, Allocator >& map< Key, T, Compare, Allocator >::operator=(
     map::const_iterator cit;
     for (cit = rhs.begin(); cit != rhs.end(); ++cit)
     {
-        _tree.insert(make_pair(cit->first, cit->second));
+        _tree.insert(ft::make_pair(cit->first, cit->second));
         ++_size;
     }
-
     return (*this);
 }
 
@@ -185,38 +187,25 @@ map< Key, T, Compare, Allocator >& map< Key, T, Compare, Allocator >::operator=(
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::begin()
 {
-    iterator it(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root()));
-    if (_tree.root())
-        return (iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
-    else
-        return (iterator(NULL, NULL));
+    return (iterator(tree_type::min_elem(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::begin() const
 {
-    if (_tree.root())
-        return (const_iterator(_tree.min_elem(_tree.root()), _tree.max_elem(_tree.root())));
-    else
-        return (const_iterator(NULL, NULL));
+    return (const_iterator(tree_type::min_elem(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::end()
 {
-    if (_tree.root())
-        return (iterator(NULL, _tree.max_elem(_tree.root())));
-    else
-        return (iterator(NULL, NULL));
+    return (++iterator(tree_type::max_elem(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::end() const
 {
-    if (_tree.root())
-        return (const_iterator(NULL, _tree.max_elem(_tree.root())));
-    else
-        return (const_iterator(NULL, NULL));
+    return (++iterator(tree_type::max_elem(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -288,9 +277,41 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
 }
 
 template < class Key, class T, class Compare, class Allocator >
+template <class InputIterator>
+void map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator last)
+{
+    InputIterator it;
+    for (it = first; it != last; ++it)
+        insert(ft::make_pair(it->first, it->second));
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::insert(iterator position, const value_type& val)
+{
+    map::iterator it = position;
+    map::iterator before = it;
+    map::iterator after = it;
+    --before;
+    --after;
+
+    if (!(*before< val&& * after > val))
+    {
+        insert(val);
+        it = find(val.first);
+    }
+
+    return (it);
+}
+
+template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator position)
 {
-    _tree.erase(position.getPointer());
+    typename tree_type::node_type* node_pointer = position.getPointer();
+    _tree.erase(node_pointer);
+    --_size;
+
+    // _tree.erase(ft::make_pair(position->first, position->second));
+    // --_size;
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -302,6 +323,16 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
         return (size_type(1));
     else
         return (size_type(0));
+
+    // typename tree_type::node_pointer node_deleted;
+
+    // node_deleted = _tree.erase(k);
+    // if (!node_deleted)
+    //     return (size_type(0));
+    // else
+    // {
+    //     --_size;
+    //     return (size_type(1));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -331,6 +362,14 @@ void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
     //     it = next;
     // }
     // erase(it);
+    //####################################
+    // iterator it;
+
+    // for (it = first; it != last; ++it)
+    // {
+    //     _tree.erase(ft::make_pair(it->first, it->second));
+    //     --_size;
+    // }
 }
 
 template < class Key, class T, class Compare, class Allocator >

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 14:48:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:25:18 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class TreeIterator
   public:
     // Constructors
     TreeIterator();
-    TreeIterator(node_type* p, node_type* back);
+    TreeIterator(node_type* p);
     template <bool is_const>
     TreeIterator(const TreeIterator<T, is_const>& rhs);
     template <bool is_const>
@@ -78,9 +78,10 @@ TreeIterator<T, IsConst>::TreeIterator()
 }
 
 template <typename T, bool IsConst>
-TreeIterator<T, IsConst>::TreeIterator(node_type* p, node_type* back)
-    : _it(p), _back(back)
+TreeIterator<T, IsConst>::TreeIterator(node_type* p)
+    : _it(p), _back(NULL)
 {
+    update_back();
 }
 
 template < class T, bool IsConst >
@@ -187,11 +188,14 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator--(int)
 template <typename T, bool IsConst>
 void TreeIterator<T, IsConst>::update_back()
 {
-    node_type* node_pointer = _back;
-    while (node_pointer && node_pointer->parent())
-        node_pointer = node_pointer->parent();
+    if (_it)
+    {
+        node_type* node_pointer = _it;
+        while (node_pointer && node_pointer->parent())
+            node_pointer = node_pointer->parent();
 
-    _back = node_type::max_child(node_pointer);
+        _back = node_type::max_child(node_pointer);
+    }
 }
 
 // Access

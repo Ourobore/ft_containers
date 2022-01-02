@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/31 15:16:39 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/02 11:11:49 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,10 +261,15 @@ bool BinarySearchTree< T, Allocator >::erase(node_type* node)
     // If Node has no child
     else if (!node->left() && !node->right())
     {
-        if (node->parent()->left() == node)
-            node->parent()->left() = NULL;
+        if (node->parent())
+        {
+            if (node->parent()->left() == node)
+                node->parent()->left() = NULL;
+            else
+                node->parent()->right() = NULL;
+        }
         else
-            node->parent()->right() = NULL;
+            _root = NULL;
     }
 
     // If Node has only one child

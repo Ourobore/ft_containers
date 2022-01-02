@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Node.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/28 09:56:31 by marvin           ###   ########.fr       */
+/*   Updated: 2022/01/02 11:22:55 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ template < class T >
 Node< T >* Node< T >::min_child(Node< T >* subtree_root)
 {
     if (!subtree_root)
-        return (subtree_root);
+        return (NULL);
 
     Node< T >* node_pointer = subtree_root;
     while (node_pointer->left())
@@ -167,7 +167,7 @@ template < class T >
 Node< T >* Node< T >::max_child(Node< T >* subtree_root)
 {
     if (!subtree_root)
-        return (subtree_root);
+        return (NULL);
 
     Node< T >* node_pointer = subtree_root;
     while (node_pointer->right())
