@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/03 12:41:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/03 15:14:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class map
     };
 
   public:
-    typedef BinarySearchTree< value_type, Compare >                      tree_type;
+    typedef BinarySearchTree< key_type, mapped_type, key_compare >       tree_type;
     typedef typename allocator_type::template rebind< tree_type >::other tree_allocator;
 
     tree_type      _tree;
@@ -262,7 +262,7 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
     // If value is not found, must insert the value
     if ((it = find(val.first)) == end())
     {
-        it = _tree.insert(val);
+        it = iterator(_tree.insert(val));
         inserted = true;
         _size++;
     }
@@ -358,27 +358,29 @@ typename map< Key, T, Compare, Allocator >::value_compare map< Key, T, Compare, 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::find(const key_type& k)
 {
-    map::iterator it;
+    return (iterator(_tree.search(k)));
+    // map::iterator it;
 
-    for (it = begin(); it != end(); ++it)
-    {
-        if (it->first == k)
-            return (it);
-    }
-    return (it);
+    // for (it = begin(); it != end(); ++it)
+    // {
+    //     if (it->first == k)
+    //         return (it);
+    // }
+    // return (it);
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::find(const key_type& k) const
 {
-    map::const_iterator it;
+    return (const_iterator(_tree.search(k)));
+    // map::const_iterator it;
 
-    for (it = begin(); it != end(); ++it)
-    {
-        if (it->first == k)
-            return (it);
-    }
-    return (it);
+    // for (it = begin(); it != end(); ++it)
+    // {
+    //     if (it->first == k)
+    //         return (it);
+    // }
+    // return (it);
 }
 
 template < class Key, class T, class Compare, class Allocator >
