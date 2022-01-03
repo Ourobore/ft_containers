@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 15:11:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/03 12:16:45 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,7 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
     // If value is not found, must insert the value
     if ((it = find(val.first)) == end())
     {
-        _tree.insert(val);
-        it = find(val.first);
+        it = _tree.insert(val);
         inserted = true;
         _size++;
     }
@@ -273,18 +272,14 @@ pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::insert(iterator position, const value_type& val)
 {
-    map::iterator it = position;
-    map::iterator before = it;
-    map::iterator after = it;
-    --before;
-    --after;
+    map::iterator it;
 
-    if (!((*before) < val && (*after) > val))
+    // If value is not found, must insert the value
+    if ((it = find(val.first)) == end())
     {
-        insert(val);
-        it = find(val.first);
+        it = _tree.insert(position.getPointer(), val);
+        ++_size;
     }
-
     return (it);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/02 15:08:04 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/03 12:27:27 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ class BinarySearchTree
     node_type* search(const value_type& value);
 
     // Insert
-    void insert(const value_type& value);
+    node_type* insert(const value_type& value);
+    node_type* insert(node_type* hint, const value_type& value);
 
     // Erase
     bool erase(const value_type& value);
@@ -140,7 +141,7 @@ typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Alloc
 
 // Insert
 template < class T, class Allocator >
-void BinarySearchTree< T, Allocator >::insert(const value_type& value)
+typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Allocator >::insert(const value_type& value)
 {
     node_allocator allocator;
 
@@ -149,7 +150,7 @@ void BinarySearchTree< T, Allocator >::insert(const value_type& value)
     if (!_root)
     {
         _root = new_node;
-        return;
+        return _root;
     }
 
     node_type* node_pointer = _root;
@@ -186,8 +187,31 @@ void BinarySearchTree< T, Allocator >::insert(const value_type& value)
             }
         }
     }
+    return (new_node);
 }
 
+template < class T, class Allocator >
+typename BinarySearchTree< T, Allocator >::node_type* BinarySearchTree< T, Allocator >::insert(node_type* hint, const value_type& value)
+{
+    if (!hint)
+        return (insert(value));
+
+    node_type* successor = hint->inorder_successor();
+    if (!(hint->data() < value && (!successor || successor->data() > value)))
+        return (insert(value));
+    else
+    {
+        node_allocator allocator;
+
+        node_type* new_node = allocator.allocate(1);
+        allocator.construct(new_node, value);
+
+        hint->set_right(new_node);
+        new_node->parent() = hint;
+
+        return (new_node);
+    }
+}
 // Erase
 template < class T, class Allocator >
 bool BinarySearchTree< T, Allocator >::erase(const value_type& value)
