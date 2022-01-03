@@ -17,53 +17,83 @@
 
 #include <list>
 
-#define T1 int
-#define T2 std::string
-typedef NAMESPACE::pair<const T1, T2> T3;
+#include "mli_tests/srcs/map/common.hpp"
 
-template <typename T>
-std::string printPair(const T& iterator, bool nl = true, std::ostream& o = std::cout)
-{
-    o << "key: " << iterator->first << " | value: " << iterator->second;
-    if (nl)
-        o << std::endl;
-    return ("");
-}
+// static int iter = 0;
 
-template <typename T_MAP>
-void printSize(T_MAP const& mp, bool print_content = 1)
-{
-    std::cout << "size: " << mp.size() << std::endl;
-    std::cout << "max_size: " << mp.max_size() << std::endl;
-    if (print_content)
-    {
-        typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
-        std::cout << std::endl
-                  << "Content is:" << std::endl;
-        for (; it != ite; ++it)
-            std::cout << "- " << printPair(it, false) << std::endl;
-    }
-    std::cout << "###############################################" << std::endl;
-}
+// #define T1 int
+// #define T2 std::string
+// typedef _pair<const T1, T2> T3;
 
-static int iter = 0;
-template <typename MAP, typename U>
-void ft_erase(MAP& mp, U param)
-{
-    std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-    mp.erase(param);
-    printSize(mp);
-}
-template <typename MAP, typename U, typename V>
-void ft_erase(MAP& mp, U param, V param2)
-{
-    std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-    mp.erase(param, param2);
-    printSize(mp);
-}
+// template <typename MAP, typename U>
+// void ft_erase(MAP& mp, U param)
+// {
+//     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+//     mp.erase(param);
+//     printSize(mp);
+// }
+
+// template <typename MAP, typename U, typename V>
+// void ft_erase(MAP& mp, U param, V param2)
+// {
+//     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+//     mp.erase(param, param2);
+//     printSize(mp);
+// }
 
 int main()
 {
+    NAMESPACE::pair<int, std::string>                 p1 = NAMESPACE::make_pair(1, "Hello");
+    NAMESPACE::pair<int, std::string>                 p2 = NAMESPACE::make_pair(2, "World");
+    ft::BinarySearchTree<ft::pair<int, std::string> > b;
+    b.insert(p1);
+    b.insert(p2);
+
+    NAMESPACE::map<int, std::string, std::less<ft::pair<int, std::string> > > m;
+    m.insert(p1);
+    m.insert(p2);
+
+    std::less< NAMESPACE::pair<int, std::string> > comp;
+
+    if (comp(b.root()->data(), p2))
+        std::cout << "Yes" << std::endl;
+    else
+        std::cout << "No" << std::endl;
+
+    std::cout << b.search(p2)->data().first << std::endl;
+
+    std::cout << std::endl;
+
+    m.erase(++m.begin());
+
+    // ###############################
+    // std::list<T3> lst;
+    // unsigned int  lst_size = 10;
+    // for (unsigned int i = 0; i < lst_size; ++i)
+    //     lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+    // TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+    // printSize(mp);
+
+    // ft_erase(mp, ++mp.begin());
+
+    // ft_erase(mp, mp.begin());
+    // ft_erase(mp, --mp.end());
+
+    // ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+    // ft_erase(mp, --(--(--mp.end())), --mp.end());
+
+    // mp[10] = "Hello";
+    // mp[11] = "Hi there";
+    // printSize(mp);
+    // ft_erase(mp, --(--(--mp.end())), mp.end()); // 5
+
+    // mp[12] = "ONE";
+    // mp[13] = "TWO";
+    // mp[14] = "THREE";
+    // mp[15] = "FOUR";
+    // printSize(mp);
+    // ft_erase(mp, mp.begin(), mp.end());
+    //#############################
     // NAMESPACE::map<int, int> m;
 
     // NAMESPACE::pair<int, int> a = NAMESPACE::make_pair(10, 100);
@@ -87,32 +117,6 @@ int main()
     // m.insert(NAMESPACE::make_pair(24, 240));
     // NAMESPACE::pair<int, int> b = NAMESPACE::make_pair(26, 260);
     // m.insert(b);
-
-    std::list<T3> lst;
-    unsigned int  lst_size = 10;
-    for (unsigned int i = 0; i < lst_size; ++i)
-        lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-    NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-    printSize(mp);
-    ft_erase(mp, ++mp.begin());
-
-    ft_erase(mp, mp.begin());
-    ft_erase(mp, --mp.end());
-
-    ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-    ft_erase(mp, --(--(--mp.end())), --mp.end());
-
-    mp[10] = "Hello";
-    mp[11] = "Hi there";
-    printSize(mp);
-    ft_erase(mp, --(--(--mp.end())), mp.end());
-
-    mp[12] = "ONE";
-    mp[13] = "TWO";
-    mp[14] = "THREE";
-    mp[15] = "FOUR";
-    printSize(mp);
-    ft_erase(mp, mp.begin(), mp.end());
 
     // NAMESPACE::map<int, int>::iterator       it = m.begin();
     // NAMESPACE::map<int, int>::const_iterator cite = m.end();

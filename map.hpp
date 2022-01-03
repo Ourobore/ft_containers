@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/03 12:16:45 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/03 12:41:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ class map
     };
 
   public:
-    typedef BinarySearchTree< value_type >                               tree_type;
+    typedef BinarySearchTree< value_type, Compare >                      tree_type;
     typedef typename allocator_type::template rebind< tree_type >::other tree_allocator;
 
-    BinarySearchTree< value_type > _tree;
-    size_type                      _size;
-    key_compare                    _comp;
-    allocator_type                 _alloc;
+    tree_type      _tree;
+    size_type      _size;
+    key_compare    _comp;
+    allocator_type _alloc;
 
   public:
     // Constructors and Destructor
