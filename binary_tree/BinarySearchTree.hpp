@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/03 15:18:00 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/04 14:45:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ class BinarySearchTree
 
     // Algorithm
     static node_type* min_elem(node_type* tree_root);
+    static node_type* min_elem(const node_type* tree_root);
     static node_type* max_elem(node_type* tree_root);
+    static node_type* max_elem(const node_type* tree_root);
     node_type*        inorder_successor(node_type* node);   // Left -> Root  -> Right
     node_type*        preorder_successor(node_type* node);  // Root -> Left  -> Right
     node_type*        postorder_successor(node_type* node); // Left -> Right -> Root
@@ -310,15 +312,39 @@ bool BinarySearchTree< Key, T, Compare, Allocator >::erase(const value_type& val
 
 // Algorithm
 template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::min_elem(node_type* tree_root)
+typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::min_elem(node_type* subtree_root)
 {
-    return (node_type::min_child(tree_root));
+    if (subtree_root)
+        return (subtree_root->min_child());
+    else
+        return (NULL);
 }
 
 template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::max_elem(node_type* tree_root)
+typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::min_elem(const node_type* subtree_root)
 {
-    return (node_type::max_child(tree_root));
+    if (subtree_root)
+        return (subtree_root->min_child());
+    else
+        return (NULL);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::max_elem(node_type* subtree_root)
+{
+    if (subtree_root)
+        return (subtree_root->max_child());
+    else
+        return (NULL);
+}
+
+template < class Key, class T, class Compare, class Allocator >
+typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::max_elem(const node_type* subtree_root)
+{
+    if (subtree_root)
+        return (subtree_root->max_child());
+    else
+        return (NULL);
 }
 
 template < class Key, class T, class Compare, class Allocator >

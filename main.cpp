@@ -13,7 +13,7 @@
 #include "binary_tree/Node.hpp"
 #include "utils/Pair.hpp"
 
-#define NAMESPACE ft
+#define NAMESPACE std
 
 #include <list>
 
@@ -41,31 +41,37 @@
 //     printSize(mp);
 // }
 
+#define T1 int
+#define T2 int
+
+#include <typeinfo>
+
+#include "utils/Is_Const.hpp"
 int main()
 {
-    NAMESPACE::pair<int, std::string>                 p1 = NAMESPACE::make_pair(1, "Hello");
-    NAMESPACE::pair<int, std::string>                 p2 = NAMESPACE::make_pair(2, "World");
-    ft::BinarySearchTree<ft::pair<int, std::string> > b;
-    b.insert(p1);
-    b.insert(p2);
+    // const std::pair<const T1, T2>    p = std::make_pair(1, 1);
+    // const std::map<T1, T2>           mp;
+    // std::map<T1, T2>::const_iterator it = mp.begin(); // <-- error expected
 
-    NAMESPACE::map<int, std::string, std::less<ft::pair<int, std::string> > > m;
-    m.insert(p1);
-    m.insert(p2);
+    // Is_Const< std::pair<const T1, T2> > c;
+    // std::cout << c(*it) << std::endl;
+    // std::cout << c(p) << std::endl;
 
-    std::less< NAMESPACE::pair<int, std::string> > comp;
+    // std::cout << typeid(*it).name() << std::endl;
+    // std::cout << typeid(p).name() << std::endl;
+    // (void)it;
 
-    if (comp(b.root()->data(), p2))
-        std::cout << "Yes" << std::endl;
-    else
-        std::cout << "No" << std::endl;
+    const ft::pair<const T1, T2>    pp = ft::make_pair(1, 1);
+    const ft::map<T1, T2>           mmp;
+    ft::map<T1, T2>::const_iterator iit = mmp.begin(); // <-- error expected
 
-    std::cout << b.search(p2)->data().first << std::endl;
+    Is_Const< ft::pair<const T1, T2> > cc;
+    std::cout << cc(*iit) << std::endl;
+    std::cout << cc(pp) << std::endl;
 
-    std::cout << std::endl;
-
-    m.erase(++m.begin());
-
+    std::cout << typeid(*iit).name() << std::endl;
+    std::cout << typeid(pp).name() << std::endl;
+    (void)iit;
     // ###############################
     // std::list<T3> lst;
     // unsigned int  lst_size = 10;
