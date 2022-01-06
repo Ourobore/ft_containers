@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BinarySearchTree.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/04 14:45:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/06 15:27:15 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,22 +284,32 @@ bool BinarySearchTree< Key, T, Compare, Allocator >::erase(const value_type& val
     // If Node has 2 childs
     else
     {
-        node_type* successor = BinarySearchTree::inorder_successor(node);
-        node_type  moved_successor(*successor);
+        node_type*     successor = BinarySearchTree::inorder_successor(node);
+        node_type*     moved_successor;
+        node_allocator allocator;
+        moved_successor = allocator.allocate(1);
+        allocator.construct(moved_successor, successor);
         erase(successor->data());
 
-        moved_successor.left() = node->left();
-        moved_successor.right() = node->right();
-
+        moved_successor->left() = node->left();
         if (node->left())
-            node->left()->parent() = &moved_successor;
-        if (node->right())
-            node->right()->parent() = &moved_successor;
+            node->left()->parent() = moved_successor;
 
-        if (!node->parent())
-            _root = &moved_successor;
+        moved_successor->right() = node->right();
+        if (node->right())
+            node->right()->parent() = moved_successor;
+
+        moved_successor->parent() = node->parent();
+
+        if (node->parent())
+        {
+            if (node->parent()->left() && node->parent()->left() == node)
+                node->parent()->left() = moved_successor;
+            else
+                node->parent()->right() = moved_successor;
+        }
         else
-            moved_successor.parent() = node->parent();
+            _root = moved_successor;
     }
 
     node_allocator allocator;

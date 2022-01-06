@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 09:13:20 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/06 14:50:00 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,9 +316,18 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
 {
+    // map::iterator it;
+    // for (it = first; it != last; ++it)
+    //     erase(it);
+
     map::iterator it;
-    for (it = first; it != last; ++it)
-        erase(it);
+    while (first != last)
+    {
+        it = first;
+        ++it;
+        erase(first);
+        first = it;
+    }
 }
 
 template < class Key, class T, class Compare, class Allocator >

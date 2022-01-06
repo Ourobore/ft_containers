@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 09:31:29 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/06 14:37:12 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator++(int)
 {
     TreeIterator<T, IsConst> tmp(*this);
 
-    // update_back();
+    update_back();
     if (_it)
         _it = _it->inorder_successor();
     else
@@ -165,7 +165,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator++(int)
 template <typename T, bool IsConst>
 TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator--()
 {
-    // update_back();
+    update_back();
     if (_it)
         _it = _it->inorder_predecessor();
     else
@@ -178,7 +178,7 @@ TreeIterator<T, IsConst> TreeIterator<T, IsConst>::operator--(int)
 {
     TreeIterator<T, IsConst> tmp(*this);
 
-    // update_back();
+    update_back();
     if (_it)
         _it = _it->inorder_predecessor();
     else
@@ -192,10 +192,16 @@ void TreeIterator<T, IsConst>::update_back()
     if (_it)
     {
         node_type* node_pointer = _it;
-        while (node_pointer && node_pointer->parent())
+        while (node_pointer && node_pointer->parent() &&
+               (node_pointer->parent()->left() == node_pointer || node_pointer->parent()->right() == node_pointer))
+
             node_pointer = node_pointer->parent();
 
+        // node_type* old_back = _back;
         _back = node_pointer->max_child();
+
+        // if (_back == old_back)
+        //     _back = NULL;
     }
 }
 
