@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RandomAccessIterator.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:43:35 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/26 13:33:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/06 09:38:04 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class RandomAccessIterator
     RandomAccessIterator();
     RandomAccessIterator(pointer p);
     template <bool is_const>
-    RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs);
+    RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs, typename ft::enable_if<!is_const, T>::type* = 0);
     RandomAccessIterator& operator=(const RandomAccessIterator& rhs);
     virtual ~RandomAccessIterator();
 
@@ -100,7 +100,7 @@ RandomAccessIterator<T, IsConst>::RandomAccessIterator(pointer p)
 
 template < class T, bool IsConst >
 template <bool is_const>
-RandomAccessIterator<T, IsConst>::RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs)
+RandomAccessIterator<T, IsConst>::RandomAccessIterator(const RandomAccessIterator<T, is_const>& rhs, typename ft::enable_if<!is_const, T>::type*)
     : _it(rhs.getPointer())
 {
 }

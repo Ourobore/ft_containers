@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Node.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/04 14:48:47 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/06 09:41:05 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ class Node
     // Algorithms
     Node* min_child();
     Node* max_child();
-    Node* min_child() const;
-    Node* max_child() const;
     Node* inorder_successor();
     Node* preorder_successor();
     Node* postorder_successor();
@@ -118,9 +116,9 @@ template < class T >
 Node< T >::~Node()
 {
     // _data = value_type();
-    //     _parent = NULL;
-    //     _left = NULL;
-    //     _right = NULL;
+    // _parent = NULL;
+    // _left = NULL;
+    // _right = NULL;
 }
 
 // Element access
@@ -166,27 +164,7 @@ Node< T >* Node< T >::min_child()
 }
 
 template < class T >
-Node< T >* Node< T >::min_child() const
-{
-    Node* node_pointer = this;
-    while (node_pointer->left())
-        node_pointer = node_pointer->left();
-
-    return (node_pointer);
-}
-
-template < class T >
 Node< T >* Node< T >::max_child()
-{
-    Node* node_pointer = this;
-    while (node_pointer->right())
-        node_pointer = node_pointer->right();
-
-    return (node_pointer);
-}
-
-template < class T >
-Node< T >* Node< T >::max_child() const
 {
     Node* node_pointer = this;
     while (node_pointer->right())
