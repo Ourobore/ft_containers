@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 15:33:53 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/06 15:42:15 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,12 @@ class Node
     Node*&    parent();
     Node*&    left();
     Node*&    right();
-    reference data() const;
-    Node*&    parent() const;
-    Node*&    left() const;
-    Node*&    right() const;
 
     reference operator*();
 
     // Algorithms
     Node* min_child();
     Node* max_child();
-    Node* min_child() const;
-    Node* max_child() const;
     Node* inorder_successor();
     Node* inorder_predecessor();
     Node* preorder_successor();
@@ -152,36 +146,6 @@ Node< T >*& Node< T >::right()
     return (_right);
 }
 
-template < class T >
-typename Node< T >::reference Node< T >::data() const
-{
-    return (_data);
-}
-
-template < class T >
-Node< T >*& Node< T >::parent() const
-{
-    return (_parent);
-}
-
-template < class T >
-Node< T >*& Node< T >::left() const
-{
-    return (_left);
-}
-
-template < class T >
-Node< T >*& Node< T >::right() const
-{
-    return (_right);
-}
-
-template < class T >
-typename Node< T >::reference Node< T >::operator*()
-{
-    return (*this);
-}
-
 // Algorithms
 template < class T >
 Node< T >* Node< T >::min_child()
@@ -194,27 +158,7 @@ Node< T >* Node< T >::min_child()
 }
 
 template < class T >
-Node< T >* Node< T >::min_child() const
-{
-    Node* node_pointer = this;
-    while (node_pointer->left())
-        node_pointer = node_pointer->left();
-
-    return (node_pointer);
-}
-
-template < class T >
 Node< T >* Node< T >::max_child()
-{
-    Node* node_pointer = this;
-    while (node_pointer->right())
-        node_pointer = node_pointer->right();
-
-    return (node_pointer);
-}
-
-template < class T >
-Node< T >* Node< T >::max_child() const
 {
     Node* node_pointer = this;
     while (node_pointer->right())

@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 14:37:12 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/06 15:41:38 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,11 +197,7 @@ void TreeIterator<T, IsConst>::update_back()
 
             node_pointer = node_pointer->parent();
 
-        // node_type* old_back = _back;
         _back = node_pointer->max_child();
-
-        // if (_back == old_back)
-        //     _back = NULL;
     }
 }
 
