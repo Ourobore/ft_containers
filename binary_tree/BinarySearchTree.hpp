@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 15:27:15 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/07 16:34:13 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 namespace ft
 {
 
-template < class Key, class T, class Compare = std::less< Key >, class Allocator = std::allocator< ft::pair<const Key, T> > >
+template < class Key, class T, class Compare = std::less< Key >, class Allocator = std::allocator< ft::pair<const Key, T> >, class NodeType = Node< typename Allocator::value_type > >
 class BinarySearchTree
 {
   public:
@@ -30,9 +30,9 @@ class BinarySearchTree
     typedef typename Allocator::value_type value_type;
     typedef Compare                        key_compare;
 
-    typedef Node< value_type > node_type;
-    typedef node_type*         node_pointer;
-    typedef Allocator          allocator_type;
+    typedef BaseNode<value_type> node_type;
+    typedef node_type*           node_pointer;
+    typedef Allocator            allocator_type;
 
     typedef typename allocator_type::reference       reference;
     typedef typename allocator_type::const_reference const_reference;
@@ -88,14 +88,14 @@ class BinarySearchTree
 };
 
 // Constructor and Destructor
-template < class Key, class T, class Compare, class Allocator >
-BinarySearchTree< Key, T, Compare, Allocator >::BinarySearchTree(const allocator_type& allocator)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+BinarySearchTree< Key, T, Compare, Allocator, NodeType >::BinarySearchTree(const allocator_type& allocator)
     : _root(NULL), _alloc(allocator)
 {
 }
 
-template < class Key, class T, class Compare, class Allocator >
-BinarySearchTree< Key, T, Compare, Allocator >::BinarySearchTree(const BinarySearchTree& rhs)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+BinarySearchTree< Key, T, Compare, Allocator, NodeType >::BinarySearchTree(const BinarySearchTree& rhs)
     : _root(NULL), _alloc(rhs.get_allocator())
 {
     node_type* node_pointer = rhs.root();
@@ -106,8 +106,8 @@ BinarySearchTree< Key, T, Compare, Allocator >::BinarySearchTree(const BinarySea
     }
 }
 
-template < class Key, class T, class Compare, class Allocator >
-void BinarySearchTree< Key, T, Compare, Allocator >::recursive_destroy(node_type* node)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void BinarySearchTree< Key, T, Compare, Allocator, NodeType >::recursive_destroy(node_type* node)
 {
     if (!node)
         return;
@@ -121,16 +121,16 @@ void BinarySearchTree< Key, T, Compare, Allocator >::recursive_destroy(node_type
     node = NULL;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-BinarySearchTree< Key, T, Compare, Allocator >::~BinarySearchTree()
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+BinarySearchTree< Key, T, Compare, Allocator, NodeType >::~BinarySearchTree()
 {
     BinarySearchTree::recursive_destroy(_root);
     _root = NULL;
 }
 
 // Search
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::search(const key_type& key) const
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const key_type& key) const
 {
     node_type* search = _root;
 
@@ -148,8 +148,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
     return (NULL);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::search(const value_type& value) const
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const value_type& value) const
 {
     node_type* search = _root;
 
@@ -168,8 +168,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
 }
 
 // Insert
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::insert(const value_type& value)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(const value_type& value)
 {
     node_allocator allocator;
 
@@ -218,8 +218,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
     return (new_node);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::insert(node_type* hint, const value_type& value)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(node_type* hint, const value_type& value)
 {
     if (!hint)
         return (insert(value));
@@ -241,8 +241,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
     }
 }
 // Erase
-template < class Key, class T, class Compare, class Allocator >
-bool BinarySearchTree< Key, T, Compare, Allocator >::erase(const value_type& value)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value_type& value)
 {
     node_type* node = search(value);
     if (!node)
@@ -321,8 +321,8 @@ bool BinarySearchTree< Key, T, Compare, Allocator >::erase(const value_type& val
 }
 
 // Algorithm
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::min_elem(node_type* subtree_root)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::min_elem(node_type* subtree_root)
 {
     if (subtree_root)
         return (subtree_root->min_child());
@@ -330,8 +330,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
         return (NULL);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::min_elem(const node_type* subtree_root)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::min_elem(const node_type* subtree_root)
 {
     if (subtree_root)
         return (subtree_root->min_child());
@@ -339,8 +339,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
         return (NULL);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::max_elem(node_type* subtree_root)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::max_elem(node_type* subtree_root)
 {
     if (subtree_root)
         return (subtree_root->max_child());
@@ -348,8 +348,8 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
         return (NULL);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::max_elem(const node_type* subtree_root)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::max_elem(const node_type* subtree_root)
 {
     if (subtree_root)
         return (subtree_root->max_child());
@@ -357,52 +357,52 @@ typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearch
         return (NULL);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::inorder_successor(node_type* node)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::inorder_successor(node_type* node)
 {
     return (node->inorder_successor());
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::preorder_successor(node_type* node)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::preorder_successor(node_type* node)
 {
     return (node->preorder_successor());
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::inorder_predecessor(node_type* node)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::inorder_predecessor(node_type* node)
 {
     return (node->inorder_predecessor());
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::preorder_predecessor(node_type* node)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::preorder_predecessor(node_type* node)
 {
     return (node->preorder_predecessor());
 }
 
 // Accessors
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::node_type* BinarySearchTree< Key, T, Compare, Allocator >::root() const
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::root() const
 {
     return (_root);
 }
 
-template < class Key, class T, class Compare, class Allocator >
-void BinarySearchTree< Key, T, Compare, Allocator >::set_root(node_type* root)
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void BinarySearchTree< Key, T, Compare, Allocator, NodeType >::set_root(node_type* root)
 {
     _root = root;
 }
 
-template < class Key, class T, class Compare, class Allocator >
-typename BinarySearchTree< Key, T, Compare, Allocator >::allocator_type BinarySearchTree< Key, T, Compare, Allocator >::get_allocator() const
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::allocator_type BinarySearchTree< Key, T, Compare, Allocator, NodeType >::get_allocator() const
 {
     return (_alloc);
 }
 
 // Print BinarySearchTree
-template < class Key, class T, class Compare, class Allocator >
-void BinarySearchTree< Key, T, Compare, Allocator >::print_inorder()
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void BinarySearchTree< Key, T, Compare, Allocator, NodeType >::print_inorder()
 {
     node_type* node = BinarySearchTree::min_elem(_root);
 

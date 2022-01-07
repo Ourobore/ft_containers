@@ -13,93 +13,50 @@
 #include "binary_tree/Node.hpp"
 #include "utils/Pair.hpp"
 
-#define NAMESPACE std
+#define NAMESPACE ft
 
-#include <list>
-
-#include "mli_tests/srcs/map/common.hpp"
-
-// static int iter = 0;
-
-// #define T1 int
-// #define T2 std::string
-// typedef _pair<const T1, T2> T3;
-
-// template <typename MAP, typename U>
-// void ft_erase(MAP& mp, U param)
-// {
-//     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-//     mp.erase(param);
-//     printSize(mp);
-// }
-
-// template <typename MAP, typename U, typename V>
-// void ft_erase(MAP& mp, U param, V param2)
-// {
-//     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-//     mp.erase(param, param2);
-//     printSize(mp);
-// }
-
-#define T1 int
-#define T2 int
-
+#include "binary_tree/Node.hpp"
+#include "binary_tree/RBNode.hpp"
+#include "binary_tree/RBTree.hpp"
 #include <typeinfo>
-
-#include "utils/Is_Const.hpp"
 int main()
 {
-    // const std::pair<const T1, T2>    p = std::make_pair(1, 1);
-    // const std::map<T1, T2>           mp;
-    // std::map<T1, T2>::const_iterator it = mp.begin(); // <-- error expected
+    ft::BaseNode<int>* b = new ft::Node<int>(3);
+    ft::Node<int>      n(2);
 
-    // Is_Const< std::pair<const T1, T2> > c;
-    // std::cout << c(*it) << std::endl;
-    // std::cout << c(p) << std::endl;
+    std::allocator< ft::BaseNode<int > > alloc;
+    std::allocator< ft::Node<int > >     nalloc;
+    ft::BaseNode<int>*                   bb;
+    ft::Node<int>*                       aa;
+    bb = alloc.allocate(1);
+    aa = nalloc.allocate(1);
+    int val = 6;
+    alloc.construct(bb, val);
+    nalloc.construct(aa, int(6));
 
-    // std::cout << typeid(*it).name() << std::endl;
-    // std::cout << typeid(p).name() << std::endl;
-    // (void)it;
-
-    const ft::pair<const T1, T2>    pp = ft::make_pair(1, 1);
-    const ft::map<T1, T2>           mmp;
-    ft::map<T1, T2>::const_iterator iit = mmp.begin(); // <-- error expected
-
-    Is_Const< ft::pair<const T1, T2> > cc;
-    std::cout << cc(*iit) << std::endl;
-    std::cout << cc(pp) << std::endl;
-
-    std::cout << typeid(*iit).name() << std::endl;
-    std::cout << typeid(pp).name() << std::endl;
-    (void)iit;
-    // ###############################
-    // std::list<T3> lst;
-    // unsigned int  lst_size = 10;
-    // for (unsigned int i = 0; i < lst_size; ++i)
-    //     lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-    // TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-    // printSize(mp);
-
-    // ft_erase(mp, ++mp.begin());
-
-    // ft_erase(mp, mp.begin());
-    // ft_erase(mp, --mp.end());
-
-    // ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-    // ft_erase(mp, --(--(--mp.end())), --mp.end());
-
-    // mp[10] = "Hello";
-    // mp[11] = "Hi there";
-    // printSize(mp);
-    // ft_erase(mp, --(--(--mp.end())), mp.end()); // 5
-
-    // mp[12] = "ONE";
-    // mp[13] = "TWO";
-    // mp[14] = "THREE";
-    // mp[15] = "FOUR";
-    // printSize(mp);
-    // ft_erase(mp, mp.begin(), mp.end());
-    //#############################
+    std::cout << b->data() << std::endl;
+    std::cout << n.data() << std::endl;
+    std::cout << n.right()->data() << std::endl;
+    (void)b;
+    (void)bb;
+    // NAMESPACE::RBTree<int, int> r;
+    // std::cout << typeid(r).name() << std::endl;
+    // std::cout << typeid(r.root()).name() << std::endl;
+    // std::cout << typeid(NAMESPACE::RBTree<int, int>::node_type).name() << std::endl;
+    // r.root()->color();
+    return (0);
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
     // NAMESPACE::map<int, int> m;
 
     // NAMESPACE::pair<int, int> a = NAMESPACE::make_pair(10, 100);
