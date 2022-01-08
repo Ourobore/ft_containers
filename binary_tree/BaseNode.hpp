@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 17:50:56 by lena              #+#    #+#             */
-/*   Updated: 2022/01/08 08:51:00 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 09:48:27 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,16 @@ template < typename Node, typename T >
 void BaseNode<Node, T>::set_left(Node* left)
 {
     _left = left;
-    _left->set_parent(static_cast<Node*>(this));
+    if (_left)
+        _left->set_parent(static_cast<Node*>(this));
 }
 
 template < typename Node, typename T >
 void BaseNode<Node, T>::set_right(Node* right)
 {
     _right = right;
-    _right->set_parent(static_cast<Node*>(this));
+    if (_right)
+        _right->set_parent(static_cast<Node*>(this));
 }
 
 // Algorithms
