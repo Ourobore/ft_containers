@@ -1,0 +1,6 @@
+-I./utils/
+-I./iterator/
+-I./binary_tree/
+-I./
+-std=c++98
+-I/Library/Developer/CommandLineTools/usr/include/c++/v1/

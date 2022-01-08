@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/08 08:26:11 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 09:35:16 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
         allocator.construct(new_node, value);
 
         hint->set_right(new_node);
-        new_node->parent() = hint;
+        new_node->set_parent(hint);
 
         return (new_node);
     }
@@ -255,9 +255,9 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
         if (node->parent())
         {
             if (node->parent()->left() == node)
-                node->parent()->left() = NULL;
+                node->parent()->set_left(NULL);
             else
-                node->parent()->right() = NULL;
+                node->parent()->set_right(NULL);
         }
         else
             _root = NULL;
@@ -269,16 +269,16 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
         node_type* child = node->left() ? node->left() : node->right();
         if (!node->parent())
         {
-            child->parent() = NULL;
+            child->set_parent(NULL);
             _root = child;
         }
         else
         {
             if (node->parent()->left() == node)
-                node->parent()->left() = child;
+                node->parent()->set_left(child);
             else
-                node->parent()->right() = child;
-            child->parent() = node->parent();
+                node->parent()->set_right(child);
+            child->set_parent(node->parent());
         }
     }
 
@@ -292,22 +292,22 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
         allocator.construct(moved_successor, successor);
         erase(successor->data());
 
-        moved_successor->left() = node->left();
+        moved_successor->set_left(node->left());
         if (node->left())
-            node->left()->parent() = moved_successor;
+            node->left()->set_parent(moved_successor);
 
-        moved_successor->right() = node->right();
+        moved_successor->set_right(node->right());
         if (node->right())
-            node->right()->parent() = moved_successor;
+            node->right()->set_parent(moved_successor);
 
-        moved_successor->parent() = node->parent();
+        moved_successor->set_parent(node->parent());
 
         if (node->parent())
         {
             if (node->parent()->left() && node->parent()->left() == node)
-                node->parent()->left() = moved_successor;
+                node->parent()->set_left(moved_successor);
             else
-                node->parent()->right() = moved_successor;
+                node->parent()->set_right(moved_successor);
         }
         else
             _root = moved_successor;
