@@ -6,13 +6,14 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/07 16:34:13 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 08:26:11 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 
+#include "BaseNode.hpp"
 #include "Node.hpp"
 #include "utils/Pair.hpp"
 
@@ -30,9 +31,9 @@ class BinarySearchTree
     typedef typename Allocator::value_type value_type;
     typedef Compare                        key_compare;
 
-    typedef BaseNode<value_type> node_type;
-    typedef node_type*           node_pointer;
-    typedef Allocator            allocator_type;
+    typedef NodeType   node_type;
+    typedef node_type* node_pointer;
+    typedef Allocator  allocator_type;
 
     typedef typename allocator_type::reference       reference;
     typedef typename allocator_type::const_reference const_reference;
@@ -41,7 +42,7 @@ class BinarySearchTree
     typedef std::size_t                              size_type;
 
   protected:
-    typedef typename allocator_type::template rebind< node_type >::other node_allocator;
+    typedef typename allocator_type::template rebind< NodeType >::other node_allocator;
 
     node_type*     _root;
     key_compare    _comp;

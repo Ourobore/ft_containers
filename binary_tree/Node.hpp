@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:20:55 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/07 16:06:52 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 08:34:24 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,165 +15,13 @@
 
 #include <iostream>
 
+#include "BaseNode.hpp"
+
 namespace ft
 {
 
-template < typename T >
-struct BaseNode
-{
-    BaseNode* _parent;
-    BaseNode* _left;
-    BaseNode* _right;
-
-    virtual T& data() = 0;
-
-    virtual ~BaseNode(){};
-    BaseNode()
-        : _parent(NULL), _left(NULL), _right(NULL)
-    {
-    }
-
-    BaseNode(BaseNode* rhs)
-        : _parent(rhs->parent()), _left(rhs->left()), _right(rhs->right())
-    {
-    }
-    BaseNode*& parent()
-    {
-        return (_parent);
-    }
-
-    BaseNode*& left()
-    {
-        return (_left);
-    }
-
-    BaseNode*& right()
-    {
-        return (_right);
-    }
-
-    void set_parent(BaseNode* parent)
-    {
-        _parent = parent;
-    }
-
-    void set_left(BaseNode* left)
-    {
-        _left = left;
-        _left->set_parent(this);
-    }
-
-    void set_right(BaseNode* right)
-    {
-        _right = right;
-        _right->set_parent(this);
-    }
-
-    BaseNode* min_child()
-    {
-        BaseNode* node_pointer = this;
-        while (node_pointer->left())
-            node_pointer = node_pointer->left();
-
-        return (node_pointer);
-    }
-
-    BaseNode* max_child()
-    {
-        BaseNode* node_pointer = this;
-        while (node_pointer->right())
-            node_pointer = node_pointer->right();
-
-        return (node_pointer);
-    }
-
-    BaseNode* inorder_successor()
-    {
-        if (this->right())
-            return (this->right()->min_child());
-        else
-        {
-            BaseNode* ancestor = this->parent();
-            BaseNode* node_pointer = this;
-            while (ancestor && ancestor->right() == node_pointer)
-            {
-                ancestor = ancestor->parent();
-                node_pointer = node_pointer->parent();
-            }
-            if (ancestor)
-                return (ancestor);
-            else
-                return (NULL);
-        }
-    }
-
-    BaseNode* inorder_predecessor()
-    {
-        if (this->left())
-            return (this->left()->max_child());
-        else
-        {
-            BaseNode* ancestor = this->parent();
-            BaseNode* node_pointer = this;
-            while (ancestor && ancestor->left() == node_pointer)
-            {
-                ancestor = ancestor->parent();
-                node_pointer = node_pointer->parent();
-            }
-            if (ancestor && data() > ancestor->data())
-                return (ancestor);
-            else
-                return (NULL);
-        }
-    }
-
-    BaseNode* preorder_successor()
-    {
-        if (this->left())
-            return (this->left());
-        else if (this->right())
-            return (this->right());
-        else
-        {
-            BaseNode* ancestor = this->parent();
-            while (ancestor)
-            {
-                if (this->data() < ancestor->data() && ancestor->right())
-                    break;
-                ancestor = ancestor->parent();
-            }
-            if (ancestor)
-                return (ancestor->right());
-            else
-                return (NULL);
-        }
-    }
-
-    BaseNode* preorder_predecessor()
-    {
-        if (!this->parent())
-            return (NULL);
-        else if (!this->parent()->left() || this->parent()->left() == this)
-            return (this->parent());
-        else
-        {
-            BaseNode* node_pointer = this->parent()->left();
-            while (node_pointer)
-            {
-                if (node_pointer->right())
-                    return (node_pointer->right()->max_child());
-                else if (node_pointer->left())
-                    node_pointer = node_pointer->left();
-                else
-                    return (node_pointer);
-            }
-            return (NULL);
-        }
-    }
-};
-
 template < class T >
-class Node : public BaseNode<T>
+class Node : public BaseNode< Node<T>, T >
 {
   public:
     typedef T                 value_type;
@@ -194,10 +42,10 @@ class Node : public BaseNode<T>
     // Constructors and Destructor
     Node();
     Node(const_reference value);
-    // template < class N >
-    // Node(Node< N >* rhs);
-    // template < class N >
-    // Node(const Node< N >& rhs);
+    template < class N >
+    Node(Node< N >* rhs);
+    template < class N >
+    Node(const Node< N >& rhs);
     Node& operator=(const Node& rhs);
     ~Node();
 
@@ -211,13 +59,13 @@ class Node : public BaseNode<T>
 
     // Algorithms
     // Node* min_child();
-    // // Node* max_child();
+    // Node* max_child();
     // Node* inorder_successor();
     // Node* inorder_predecessor();
     // Node* preorder_successor();
     // Node* preorder_predecessor();
-    Node* postorder_successor();
-    Node* postorder_predecessor();
+    // Node* postorder_successor();
+    // Node* postorder_predecessor();
 
     // Modifiers
     void set_data(const_reference value);
@@ -229,29 +77,29 @@ class Node : public BaseNode<T>
 // Constructors and Destructor
 template < class T >
 Node< T >::Node()
-    : BaseNode<T>(), _data(value_type())
+    : BaseNode<Node, T>(), _data(value_type()) //, _parent(NULL), _left(NULL), _right(NULL)
 {
 }
 
 template < class T >
 Node< T >::Node(const_reference value)
-    : BaseNode<T>(), _data(value)
+    : BaseNode<Node, T>(), _data(value) //, _parent(NULL), _left(NULL), _right(NULL)
 {
 }
 
-// template < class T >
-// template < class N >
-// Node< T >::Node(Node< N >* rhs)
-//     : _data(rhs->data()), _parent(rhs->parent()), _left(rhs->left()), _right(rhs->right())
-// {
-// }
+template < class T >
+template < class N >
+Node< T >::Node(Node< N >* rhs)
+    : BaseNode<Node, T>(rhs), _data(rhs->data()) //, _parent(rhs->parent()), _left(rhs->left()), _right(rhs->right())
+{
+}
 
-// template < class T >
-// template < class N >
-// Node< T >::Node(const Node< N >& rhs)
-//     : _data(rhs.data()), _parent(rhs.parent()), _left(rhs.left()), _right(rhs.right())
-// {
-// }
+template < class T >
+template < class N >
+Node< T >::Node(const Node< N >& rhs)
+    : BaseNode<Node, T>(rhs), _data(rhs.data()) //, _parent(rhs.parent()), _left(rhs.left()), _right(rhs.right())
+{
+}
 
 template < class T >
 Node< T >& Node< T >::operator=(const Node< T >& rhs)
@@ -270,9 +118,9 @@ template < class T >
 Node< T >::~Node()
 {
     // _data = value_type();
-    this->parent() = NULL;
-    this->left() = NULL;
-    this->right() = NULL;
+    // this->parent() = NULL;
+    // this->left() = NULL;
+    // this->right() = NULL;
 }
 
 // Element access
@@ -409,46 +257,46 @@ typename Node< T >::reference Node< T >::data()
 //     }
 // }
 
-template < class T >
-Node< T >* Node< T >::postorder_successor()
-{
-    if (!this->parent())
-        return (NULL);
-    if (this == this->parent()->right())
-        return (this->parent());
-    if (!this->parent()->right())
-        return (this->parent());
-    else
-    {
-        Node* node_pointer = this->parent()->right();
-        while (node_pointer && node_pointer->left())
-            node_pointer = node_pointer->left();
-        return (node_pointer);
-    }
-    // if (!_parent)
-    //     return (NULL);
-    // else if (!_parent->right() || _parent->right() == this)
-    //     return (_parent);
-    // else
-    //     return (Node<T>::min_child(_parent->right()));
-}
+// template < class T >
+// Node< T >* Node< T >::postorder_successor()
+// {
+//     if (!this->parent())
+//         return (NULL);
+//     if (this == this->parent()->right())
+//         return (this->parent());
+//     if (!this->parent()->right())
+//         return (this->parent());
+//     else
+//     {
+//         Node* node_pointer = this->parent()->right();
+//         while (node_pointer && node_pointer->left())
+//             node_pointer = node_pointer->left();
+//         return (node_pointer);
+//     }
+//     // if (!_parent)
+//     //     return (NULL);
+//     // else if (!_parent->right() || _parent->right() == this)
+//     //     return (_parent);
+//     // else
+//     //     return (Node<T>::min_child(_parent->right()));
+// }
 
-template < class T >
-Node< T >* Node< T >::postorder_predecessor()
-{
-    if (this->right())
-        return (this->right());
-    else
-    {
-        Node* ancestor = this->parent();
-        while (ancestor && !ancestor->left())
-            ancestor = ancestor->_parent;
-        if (ancestor && _data > ancestor->data())
-            return (ancestor->left());
-        else
-            return (NULL);
-    }
-}
+// template < class T >
+// Node< T >* Node< T >::postorder_predecessor()
+// {
+//     if (this->right())
+//         return (this->right());
+//     else
+//     {
+//         Node* ancestor = this->parent();
+//         while (ancestor && !ancestor->left())
+//             ancestor = ancestor->_parent;
+//         if (ancestor && _data > ancestor->data())
+//             return (ancestor->left());
+//         else
+//             return (NULL);
+//     }
+// }
 
 // Modifiers
 template < class T >

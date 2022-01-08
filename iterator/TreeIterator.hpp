@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/07 15:49:40 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/07 17:48:37 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ class TreeIterator
     typedef std::bidirectional_iterator_tag iterator_category;
 
   protected:
-    typedef BaseNode<typename remove_const<value_type>::type > node_type;
-    typedef node_type*                                         node_pointer;
+    typedef Node<typename remove_const<value_type>::type > node_type;
+    typedef node_type*                                     node_pointer;
 
     node_pointer _it;
     node_pointer _back;
