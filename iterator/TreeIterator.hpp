@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/07 17:48:37 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 10:29:49 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define TREEITERATOR_HPP
 
 #include "binary_tree/Node.hpp"
+#include "binary_tree/RBNode.hpp"
+
 #include "utils/EnableIf.hpp"
 #include "utils/IteratorType.hpp"
 #include "utils/Remove_const.hpp"
@@ -21,12 +23,12 @@
 namespace ft
 {
 
-template <class T, bool IsConst >
+template <class NodeType, bool IsConst >
 class TreeIterator
 {
   public:
-    typedef typename iterator_type<IsConst, T, const T >::type value_type;
-    // typedef T                               value_type;
+    typedef typename iterator_type<IsConst, typename NodeType::value_type, const typename NodeType::value_type >::type value_type;
+
     typedef value_type&                     reference;
     typedef const value_type&               const_reference;
     typedef value_type*                     pointer;
@@ -34,8 +36,9 @@ class TreeIterator
     typedef std::bidirectional_iterator_tag iterator_category;
 
   protected:
-    typedef Node<typename remove_const<value_type>::type > node_type;
-    typedef node_type*                                     node_pointer;
+    // typedef RBNode<typename remove_const<value_type>::type > node_type;
+    typedef NodeType   node_type;
+    typedef node_type* node_pointer;
 
     node_pointer _it;
     node_pointer _back;
@@ -47,9 +50,9 @@ class TreeIterator
     TreeIterator();
     TreeIterator(node_type* p);
     template <bool is_const>
-    TreeIterator(const TreeIterator<T, is_const>& rhs, typename ft::enable_if<!is_const, T>::type* = 0);
+    TreeIterator(const TreeIterator<NodeType, is_const>& rhs, typename ft::enable_if<!is_const, NodeType>::type* = 0);
     template <bool is_const>
-    TreeIterator& operator=(const TreeIterator<T, is_const>& rhs);
+    TreeIterator& operator=(const TreeIterator<NodeType, is_const>& rhs);
     virtual ~TreeIterator();
 
     // Equivalence

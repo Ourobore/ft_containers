@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/06 15:43:51 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 10:30:09 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "iterator/TreeIterator.hpp"
 
 #include "binary_tree/BinarySearchTree.hpp"
+#include "binary_tree/Node.hpp"
+#include "binary_tree/RBNode.hpp"
 
 #include "utils/LexicographicalCompare.hpp"
 #include "utils/Pair.hpp"
@@ -43,8 +45,9 @@ class map
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef TreeIterator< value_type, false > iterator;
-    typedef TreeIterator< value_type, true >  const_iterator;
+    typedef RBNode<value_type>                node_type;
+    typedef TreeIterator< node_type, false >  iterator;
+    typedef TreeIterator< node_type, true >   const_iterator;
     typedef ReverseIterator< iterator >       reverse_iterator;
     typedef ReverseIterator< const_iterator > const_reverse_iterator;
 
@@ -73,8 +76,8 @@ class map
     };
 
   public:
-    typedef BinarySearchTree< key_type, mapped_type, key_compare >       tree_type;
-    typedef typename allocator_type::template rebind< tree_type >::other tree_allocator;
+    typedef BinarySearchTree< key_type, mapped_type, key_compare, allocator_type, node_type > tree_type;
+    typedef typename allocator_type::template rebind< tree_type >::other                      tree_allocator;
 
     tree_type      _tree;
     size_type      _size;
