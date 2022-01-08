@@ -6,7 +6,7 @@
 /*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/08 10:30:09 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/08 11:07:40 by lena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include "binary_tree/BinarySearchTree.hpp"
 #include "binary_tree/Node.hpp"
 #include "binary_tree/RBNode.hpp"
+#include "binary_tree/RBTree.hpp"
 
 #include "utils/LexicographicalCompare.hpp"
 #include "utils/Pair.hpp"
@@ -76,8 +77,8 @@ class map
     };
 
   public:
-    typedef BinarySearchTree< key_type, mapped_type, key_compare, allocator_type, node_type > tree_type;
-    typedef typename allocator_type::template rebind< tree_type >::other                      tree_allocator;
+    typedef RBTree< key_type, mapped_type, key_compare, allocator_type, node_type > tree_type;
+    typedef typename allocator_type::template rebind< tree_type >::other            tree_allocator;
 
     tree_type      _tree;
     size_type      _size;
