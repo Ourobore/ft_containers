@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/10 12:45:44 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:37:03 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -455,13 +455,13 @@ typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare,
 template < class Key, class T, class Compare, class Allocator >
 pair< typename map< Key, T, Compare, Allocator >::iterator, typename map< Key, T, Compare, Allocator >::iterator > map< Key, T, Compare, Allocator >::equal_range(const key_type& k)
 {
-    return (make_pair(lower_bound(k), upper_bound(k)));
+    return (ft::make_pair(lower_bound(k), upper_bound(k)));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 pair< typename map< Key, T, Compare, Allocator >::const_iterator, typename map< Key, T, Compare, Allocator >::const_iterator > map< Key, T, Compare, Allocator >::equal_range(const key_type& k) const
 {
-    return (make_pair(lower_bound(k), upper_bound(k)));
+    return (ft::make_pair(lower_bound(k), upper_bound(k)));
 }
 
 // Allocator
@@ -497,7 +497,7 @@ bool operator!=(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Co
 template <class Key, class T, class Compare, class Allocator>
 bool operator<(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
 {
-    if (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+    if (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
         return (true);
     else
         return (false);
