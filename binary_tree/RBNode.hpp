@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/10 11:35:21 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:20:47 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class RBNode : public BaseNode< RBNode<T>, T >
   public:
     // Constructors and Destructor
     RBNode();
-    RBNode(const_reference value);
+    RBNode(const_reference value, RBColor color = red);
     template < class N >
     RBNode(RBNode< N >* rhs);
     template < class N >
@@ -63,13 +63,13 @@ class RBNode : public BaseNode< RBNode<T>, T >
 // Constructors and Destructor
 template < class T >
 RBNode< T >::RBNode()
-    : BaseNode<RBNode, T>(), _data(value_type())
+    : BaseNode<RBNode, T>(), _data(value_type()), _color(red)
 {
 }
 
 template < class T >
-RBNode< T >::RBNode(const_reference value)
-    : BaseNode<RBNode, T>(), _data(value)
+RBNode< T >::RBNode(const_reference value, RBColor color)
+    : BaseNode<RBNode, T>(), _data(value), _color(color)
 {
 }
 
