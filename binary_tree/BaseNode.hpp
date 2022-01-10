@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BaseNode.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 17:50:56 by lena              #+#    #+#             */
-/*   Updated: 2022/01/08 10:31:29 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/10 11:36:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ struct BaseNode
     // BaseNode* postorder_successor();
     // BaseNode* postorder_predecessor();
 
-    virtual T& data() = 0; // Could probably remove if fix for data() in inorder_predecessor()
+    virtual T& data() = 0; // Could probably remove if fix for data() in inorder_predecessor(). But with it we get an abstract class
 };
 
 // Constructors and Destructor

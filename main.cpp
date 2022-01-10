@@ -19,31 +19,26 @@
 #include "binary_tree/RBNode.hpp"
 #include "binary_tree/RBTree.hpp"
 #include <typeinfo>
+
 int main()
 {
-    ft::BaseNode<int>* b = new ft::Node<int>(3);
-    ft::Node<int>      n(2);
+    // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(100000000, NAMESPACE::make_pair(42, 42));
+    // NAMESPACE::map<int, int>                      m;
+    // m.insert(v.begin(), v.end());
 
-    std::allocator< ft::BaseNode<int > > alloc;
-    std::allocator< ft::Node<int > >     nalloc;
-    ft::BaseNode<int>*                   bb;
-    ft::Node<int>*                       aa;
-    bb = alloc.allocate(1);
-    aa = nalloc.allocate(1);
-    int val = 6;
-    alloc.construct(bb, val);
-    nalloc.construct(aa, int(6));
-
-    std::cout << b->data() << std::endl;
-    std::cout << n.data() << std::endl;
-    std::cout << n.right()->data() << std::endl;
-    (void)b;
-    (void)bb;
-    // NAMESPACE::RBTree<int, int> r;
+    NAMESPACE::RBTree<int, int> r;
     // std::cout << typeid(r).name() << std::endl;
     // std::cout << typeid(r.root()).name() << std::endl;
     // std::cout << typeid(NAMESPACE::RBTree<int, int>::node_type).name() << std::endl;
-    // r.root()->color();
+    r.insert(ft::make_pair(2, 2));
+    r.insert(ft::make_pair(1, 1));
+    r.insert(ft::make_pair(4, 4));
+    r.insert(ft::make_pair(3, 3));
+    r.insert(ft::make_pair(5, 5));
+    NAMESPACE::RBTree<int, int>::node_type* n = r.rotate_left(r.root());
+    std::cout << n->data().first << std::endl;
+    r.root()->color();
+    (void)n;
     return (0);
     //
     //

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RBNode.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lena <lena@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/08 10:17:27 by lena             ###   ########.fr       */
+/*   Updated: 2022/01/10 11:35:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@
 
 namespace ft
 {
-
-enum RBColor
-{
-    red,
-    black
-};
 
 template < class T >
 class RBNode : public BaseNode< RBNode<T>, T >
@@ -37,6 +31,12 @@ class RBNode : public BaseNode< RBNode<T>, T >
     typedef std::size_t size_type;
 
   protected:
+    enum RBColor
+    {
+        red,
+        black
+    };
+
     value_type _data;
     RBColor    _color;
 
@@ -114,7 +114,7 @@ typename RBNode< T >::reference RBNode< T >::data()
 }
 
 template < class T >
-RBColor RBNode<T>::color() const
+typename RBNode<T>::RBColor RBNode<T>::color() const
 {
     return (_color);
 }
