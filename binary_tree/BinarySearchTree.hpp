@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/11 12:35:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 17:22:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ class BinarySearchTree
     node_type* search(const value_type& value) const;
 
     // Insert
-    node_type* insert(const value_type& value);
-    node_type* insert(node_type* hint, const value_type& value);
+    ft::pair<node_type*, bool> insert(const value_type& value);
+    node_type*                 insert(node_type* hint, const value_type& value);
 
     // Erase
     node_type* erase(const value_type& value);
@@ -170,7 +170,7 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
 
 // Insert
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(const value_type& value)
+ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type*, bool> BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(const value_type& value)
 {
     node_allocator allocator;
 
@@ -179,55 +179,51 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
     if (!_root)
     {
         _root = new_node;
-        return _root;
+        return (ft::make_pair(_root, true));
     }
 
     node_type* node_pointer = _root;
-    bool       inserted = false;
-
-    while (!inserted)
+    while (node_pointer)
     {
-        if (!node_pointer)
+        // If new_node->data() < node_pointer->data()
+        if (_comp(new_node->data().first, node_pointer->data().first))
         {
-            node_pointer = new_node;
-            inserted = true;
+            if (!node_pointer->left())
+            {
+                node_pointer->set_left(new_node);
+                return (ft::make_pair(new_node, true));
+            }
+            else
+                node_pointer = node_pointer->left();
         }
+        // If new_node->data() > node_pointer->data()
+        else if (_comp(node_pointer->data().first, new_node->data().first))
+        {
+            if (!node_pointer->right())
+            {
+                node_pointer->set_right(new_node);
+                return (ft::make_pair(new_node, true));
+            }
+            else
+                node_pointer = node_pointer->right();
+        }
+        // If element already exists
         else
-        {
-            if (_comp(new_node->data().first, node_pointer->data().first))
-            {
-                if (!node_pointer->left())
-                {
-                    node_pointer->set_left(new_node);
-                    inserted = true;
-                }
-                else
-                    node_pointer = node_pointer->left();
-            }
-            else if (_comp(node_pointer->data().first, new_node->data().first))
-            {
-                if (!node_pointer->right())
-                {
-                    node_pointer->set_right(new_node);
-                    inserted = true;
-                }
-                else
-                    node_pointer = node_pointer->right();
-            }
-        }
+            return (ft::make_pair(node_pointer, false));
     }
-    return (new_node);
+
+    return (ft::make_pair(node_pointer, false));
 }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(node_type* hint, const value_type& value)
 {
     if (!hint)
-        return (insert(value));
+        return (insert(value).first);
 
     node_type* successor = hint->inorder_successor();
     if (!(hint->data() < value && (!successor || successor->data() > value)))
-        return (insert(value));
+        return (insert(value).first);
     else
     {
         node_allocator allocator;

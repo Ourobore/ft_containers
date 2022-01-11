@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/11 14:19:32 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 17:23:06 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,14 @@ class map
 
     // Modifiers
     template <class InputIterator>
-    void                   insert(InputIterator first, InputIterator last);
-    pair< iterator, bool > insert(const value_type& val);
-    iterator               insert(iterator position, const value_type& val);
-    void                   erase(iterator position);
-    size_type              erase(const key_type& k);
-    void                   erase(iterator first, iterator last);
-    void                   swap(map& x);
-    void                   clear();
+    void                       insert(InputIterator first, InputIterator last);
+    ft::pair< iterator, bool > insert(const value_type& val);
+    iterator                   insert(iterator position, const value_type& val);
+    void                       erase(iterator position);
+    size_type                  erase(const key_type& k);
+    void                       erase(iterator first, iterator last);
+    void                       swap(map& x);
+    void                       clear();
 
     // Observers
     key_compare   key_comp() const;
@@ -258,19 +258,23 @@ typename map< Key, T, Compare, Allocator >::mapped_type& map< Key, T, Compare, A
 
 // Modifiers
 template < class Key, class T, class Compare, class Allocator >
-pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, Compare, Allocator >::insert(const value_type& val)
+ft::pair< typename map< Key, T, Compare, Allocator >::iterator, bool > map< Key, T, Compare, Allocator >::insert(const value_type& val)
 {
     map::iterator it;
-    bool          inserted = false;
 
-    // If value is not found, must insert the value
-    if ((it = find(val.first)) == end())
+    // If we get a node back, the node is inserted (or already inserted)
+    ft::pair<node_type*, bool> node_inserted = _tree.insert(val);
+    if (node_inserted.first)
     {
-        it = iterator(_tree.insert(val));
-        inserted = true;
-        _size++;
+        // If not already inserted
+        if (node_inserted.second)
+            _size++;
+        it = iterator(node_inserted.first);
     }
-    return (ft::make_pair(it, inserted));
+    else
+        it = end();
+
+    return (ft::make_pair(it, node_inserted.second));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -373,28 +377,12 @@ template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::find(const key_type& k)
 {
     return (iterator(_tree.search(k)));
-    // map::iterator it;
-
-    // for (it = begin(); it != end(); ++it)
-    // {
-    //     if (it->first == k)
-    //         return (it);
-    // }
-    // return (it);
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::find(const key_type& k) const
 {
     return (const_iterator(_tree.search(k)));
-    // map::const_iterator it;
-
-    // for (it = begin(); it != end(); ++it)
-    // {
-    //     if (it->first == k)
-    //         return (it);
-    // }
-    // return (it);
 }
 
 template < class Key, class T, class Compare, class Allocator >

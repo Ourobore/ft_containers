@@ -11,34 +11,38 @@
 
 #include "binary_tree/BinarySearchTree.hpp"
 #include "binary_tree/Node.hpp"
+#include "binary_tree/RBNode.hpp"
+#include "binary_tree/RBTree.hpp"
 #include "utils/Pair.hpp"
 
 #define NAMESPACE ft
 
-#include "binary_tree/Node.hpp"
-#include "binary_tree/RBNode.hpp"
-#include "binary_tree/RBTree.hpp"
-#include <typeinfo>
-
 int main()
 {
-    // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(100000000, NAMESPACE::make_pair(42, 42));
+    // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(100000, NAMESPACE::make_pair(42, 42));
     // NAMESPACE::map<int, int>                      m;
     // m.insert(v.begin(), v.end());
 
-    NAMESPACE::RBTree<int, int> r;
-    // std::cout << typeid(r).name() << std::endl;
-    // std::cout << typeid(r.root()).name() << std::endl;
-    // std::cout << typeid(NAMESPACE::RBTree<int, int>::node_type).name() << std::endl;
-    r.insert(ft::make_pair(2, 2));
-    r.insert(ft::make_pair(1, 1));
-    r.insert(ft::make_pair(4, 4));
-    r.insert(ft::make_pair(3, 3));
-    r.insert(ft::make_pair(5, 5));
-    NAMESPACE::RBTree<int, int>::node_type* n = r.rotate_left(r.root());
-    std::cout << n->data().first << std::endl;
-    r.root()->color();
-    (void)n;
+    NAMESPACE::map< int, int > m;
+    size_t                     min = 0;
+    size_t                     max = 10000;
+    bool                       flag = true;
+
+    for (size_t i = 0; i < (max / 2) - 1;)
+    {
+        if (flag)
+        {
+            m.insert(NAMESPACE::make_pair(min + i, min + i));
+            flag = false;
+        }
+        else
+        {
+            m.insert(NAMESPACE::make_pair(max - i, max - i));
+            flag = true;
+            ++i;
+        }
+    }
+
     return (0);
     //
     //

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/11 14:56:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:27:43 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ RBNode< T > RBNode< T >::grandparent() const
     return (grandparent);
 }
 
+template < class T >
 typename RBNode< T >::size_type RBNode< T >::black_height() const
 {
     RBNode* node_pointer = this;
