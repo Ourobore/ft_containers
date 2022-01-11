@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/10 15:37:03 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 14:19:32 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,8 +308,9 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 {
     map::iterator it = find(k);
 
-    if (it != end() && _tree.erase(*it))
+    if (it != end())
     {
+        _tree.erase(*it);
         --_size;
         return (size_type(1));
     }

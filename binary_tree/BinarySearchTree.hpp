@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/10 11:31:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:35:28 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class BinarySearchTree
     node_type* insert(node_type* hint, const value_type& value);
 
     // Erase
-    bool erase(const value_type& value);
+    node_type* erase(const value_type& value);
 
     // Algorithm
     static node_type* min_elem(node_type* tree_root);
@@ -243,15 +243,17 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
 }
 // Erase
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value_type& value)
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value_type& value)
 {
+    node_type* new_head = NULL;
     node_type* node = search(value);
     if (!node)
-        return (false);
+        return (node);
 
     // If Node has no child
     else if (!node->left() && !node->right())
     {
+        new_head = node->parent();
         if (node->parent())
         {
             if (node->parent()->left() == node)
@@ -267,6 +269,7 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
     else if ((!node->left() && node->right()) || (node->left() && !node->right()))
     {
         node_type* child = node->left() ? node->left() : node->right();
+        new_head = child;
         if (!node->parent())
         {
             child->set_parent(NULL);
@@ -311,6 +314,8 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
         }
         else
             _root = moved_successor;
+
+        new_head = moved_successor;
     }
 
     node_allocator allocator;
@@ -318,7 +323,7 @@ bool BinarySearchTree< Key, T, Compare, Allocator, NodeType >::erase(const value
     allocator.deallocate(node, 1);
     node = NULL;
 
-    return (true);
+    return (new_head);
 }
 
 // Algorithm
