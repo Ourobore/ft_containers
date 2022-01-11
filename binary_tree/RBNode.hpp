@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/11 11:57:10 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 14:56:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ class RBNode : public BaseNode< RBNode<T>, T >
     void set_color(RBColor color);
 
     // Utility
+    RBNode<T> auntie() const;
+    RBNode<T> grandparent() const;
     size_type black_height() const;
 };
 
@@ -137,6 +139,43 @@ void RBNode< T >::set_color(RBColor color)
 
 // Utility
 template < class T >
+RBNode< T > RBNode< T >::auntie() const
+{
+    RBNode* parent = NULL;
+    RBNode* grandparent = NULL;
+    RBNode* auntie = NULL;
+
+    if (this->parent())
+        parent = this->parent();
+
+    if (parent && parent->parent())
+        grandparent = parent->parent();
+
+    if (grandparent)
+    {
+        if (grandparent->left() && grandparent->left() == parent)
+            auntie = grandparent->right();
+        else
+            auntie = grandparent->left();
+    }
+
+    return (auntie);
+}
+
+template < class T >
+RBNode< T > RBNode< T >::grandparent() const
+{
+    RBNode* parent = NULL;
+    RBNode* grandparent = NULL;
+
+    if (this->parent())
+        parent = this->parent();
+    if (parent && parent->parent())
+        grandparent = parent->parent();
+
+    return (grandparent);
+}
+
 typename RBNode< T >::size_type RBNode< T >::black_height() const
 {
     RBNode* node_pointer = this;
@@ -151,7 +190,7 @@ typename RBNode< T >::size_type RBNode< T >::black_height() const
             ++black_height;
         node_pointer = node_pointer->left();
     }
-    ++black_height;
+    ++black_height; // NIL node is counted
 
     return (black_height);
 }
