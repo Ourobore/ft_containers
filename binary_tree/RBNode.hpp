@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/10 14:20:47 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:57:10 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ class RBNode : public BaseNode< RBNode<T>, T >
     // Modifiers
     void set_data(const_reference value);
     void set_color(RBColor color);
+
+    // Utility
+    size_type black_height() const;
 };
 
 // Constructors and Destructor
@@ -130,6 +133,27 @@ template < class T >
 void RBNode< T >::set_color(RBColor color)
 {
     _color = color;
+}
+
+// Utility
+template < class T >
+typename RBNode< T >::size_type RBNode< T >::black_height() const
+{
+    RBNode* node_pointer = this;
+    if (!node_pointer || !node_pointer->left() || !node_pointer->right())
+        return (0);
+
+    size_type black_height = 0;
+    node_pointer = node_pointer->left();
+    while (node_pointer)
+    {
+        if (node_pointer->color() == black)
+            ++black_height;
+        node_pointer = node_pointer->left();
+    }
+    ++black_height;
+
+    return (black_height);
 }
 
 } // namespace ft

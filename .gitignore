@@ -1,7 +1,7 @@
 *a.out*
 *.o
 *ft_containers
-containers_test/
+42TESTERS-CONTAINERS/
 mli_tests/
 Cavalry
 .vscode-ctags

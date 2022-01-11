@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/10 14:09:25 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:57:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
   public:
     typedef typename Allocator::value_type value_type;
     typedef RBNode< value_type >           node_type;
+    typedef std::size_t                    size_type;
 
-  public:
+  public: // Change to protected?
     enum direction
     {
         left,
@@ -38,7 +39,8 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     node_type* rotate_left(node_type* subtree_root);
     node_type* rotate_right(node_type* subtree_root);
 
-  public:
+    // Utility
+    static size_type black_height(node_type* node);
 };
 
 // Rotations
@@ -51,7 +53,7 @@ typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T,
     if (!opposite_child)
         return (NULL);
 
-    // Get child that will change branches
+    // Get child that will change branches, and make it switch branches
     node_type* child_of_child = (direction == left ? opposite_child->left() : opposite_child->right());
     if (direction == left)
         subtree_root->set_right(child_of_child);
@@ -91,6 +93,13 @@ template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::rotate_right(node_type* subtree_root)
 {
     return (rotate_dir(subtree_root, right));
+}
+
+// Utility
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename RBTree<Key, T, Compare, Allocator, NodeType>::size_type RBTree<Key, T, Compare, Allocator, NodeType>::black_height(node_type* node)
+{
+    return (node->black_height());
 }
 
 } // namespace ft
