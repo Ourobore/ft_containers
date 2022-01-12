@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/11 17:23:06 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/12 13:50:38 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,7 @@ void map<Key, T, Compare, Allocator>::insert(InputIterator first, InputIterator 
 template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator position)
 {
-    _tree.erase(*position);
+    _tree.erase(position.getPointer());
     --_size;
 }
 
@@ -314,7 +314,7 @@ typename map< Key, T, Compare, Allocator >::size_type map< Key, T, Compare, Allo
 
     if (it != end())
     {
-        _tree.erase(*it);
+        _tree.erase(it.getPointer());
         --_size;
         return (size_type(1));
     }
