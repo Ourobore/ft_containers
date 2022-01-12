@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/12 13:50:38 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:00:51 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,12 +282,18 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 {
     map::iterator it;
 
-    // If value is not found, must insert the value
-    if ((it = find(val.first)) == end())
+    // If we get a node back, the node is inserted (or already inserted)
+    ft::pair<node_type*, bool> node_inserted = _tree.insert(position.getPointer(), val);
+    if (node_inserted.first)
     {
-        it = _tree.insert(position.getPointer(), val);
-        ++_size;
+        // If not already inserted
+        if (node_inserted.second)
+            _size++;
+        it = iterator(node_inserted.first);
     }
+    else
+        it = end();
+
     return (it);
 }
 

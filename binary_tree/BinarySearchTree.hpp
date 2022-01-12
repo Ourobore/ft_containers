@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/12 13:49:45 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/12 13:59:19 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ class BinarySearchTree
 
     // Insert
     ft::pair<node_type*, bool> insert(const value_type& value);
-    node_type*                 insert(node_type* hint, const value_type& value);
+    ft::pair<node_type*, bool> insert(node_type* hint, const value_type& value);
 
     // Erase
     node_type* erase(node_type* node);
@@ -217,14 +217,14 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
 }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(node_type* hint, const value_type& value)
+ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type*, bool> BinarySearchTree< Key, T, Compare, Allocator, NodeType >::insert(node_type* hint, const value_type& value)
 {
     if (!hint)
-        return (insert(value).first);
+        return (insert(value));
 
     node_type* successor = hint->inorder_successor();
     if (!(hint->data() < value && (!successor || successor->data() > value)))
-        return (insert(value).first);
+        return (insert(value));
     else
     {
         node_allocator allocator;
@@ -235,7 +235,7 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
         hint->set_right(new_node);
         new_node->set_parent(hint);
 
-        return (new_node);
+        return (ft::make_pair(new_node, true));
     }
 }
 // Erase
