@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/13 11:21:38 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:22:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ class BinarySearchTree
     // Constructor
     BinarySearchTree(const allocator_type& allocator = allocator_type());
     BinarySearchTree(const BinarySearchTree& rhs);
-    ~BinarySearchTree();
+    virtual ~BinarySearchTree();
 
     // Search
     node_type* search(const key_type& key) const;
     node_type* search(const value_type& value) const;
 
     // Insert
-    ft::pair<node_type*, bool> insert(const value_type& value);
-    ft::pair<node_type*, bool> insert(node_type* hint, const value_type& value);
+    virtual ft::pair<node_type*, bool> insert(const value_type& value);
+    ft::pair<node_type*, bool>         insert(node_type* hint, const value_type& value);
 
     // Erase
     node_type* erase(node_type* node);

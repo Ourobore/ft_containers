@@ -19,7 +19,7 @@
 
 int main()
 {
-    // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(100000, NAMESPACE::make_pair(42, 42));
+    // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(10000, NAMESPACE::make_pair(42, 42));
     // NAMESPACE::map<int, int>                      m;
     // m.insert(v.begin(), v.end());
 

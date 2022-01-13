@@ -6,12 +6,14 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/13 10:32:25 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:23:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 #define RBTREE_HPP
+
+#include <iostream>
 
 #include "BinarySearchTree.hpp"
 #include "RBNode.hpp"
@@ -34,6 +36,9 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
         right
     };
 
+    // Insert
+    ft::pair<node_type*, bool> insert(const value_type& value);
+
     // Rotations
     node_type* rotate_dir(node_type* subtree_root, enum direction direction);
     node_type* rotate_left(node_type* subtree_root);
@@ -42,6 +47,16 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     // Utility
     static size_type black_height(node_type* node);
 };
+
+// Insert
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+ft::pair<typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type*, bool> RBTree< Key, T, Compare, Allocator, NodeType >::insert(const value_type& value)
+{
+    BinarySearchTree<Key, T, Compare, Allocator, NodeType >::insert(value);
+
+    node_type* null = NULL;
+    return (ft::make_pair(null, false));
+}
 
 // Rotations
 template < class Key, class T, class Compare, class Allocator, class NodeType >
