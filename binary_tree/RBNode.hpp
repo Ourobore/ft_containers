@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/13 14:56:48 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 16:38:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,8 @@
 
 #include "BaseNode.hpp"
 
-#define RED 0
-#define BLACK 0
-
 namespace ft
 {
-
-enum RBColor
-{
-    red = false,
-    black = true
-};
 
 template < class T >
 class RBNode : public BaseNode< RBNode<T>, T >
@@ -38,6 +29,12 @@ class RBNode : public BaseNode< RBNode<T>, T >
     typedef const value_type* const_pointer;
 
     typedef std::size_t size_type;
+
+    enum RBColor
+    {
+        red = false,
+        black = true
+    };
 
   protected:
     value_type _data;
@@ -122,7 +119,7 @@ typename RBNode< T >::reference RBNode< T >::data()
 }
 
 template < class T >
-RBColor RBNode<T>::color() const
+typename RBNode< T >::RBColor RBNode<T>::color() const
 {
     return (_color);
 }
