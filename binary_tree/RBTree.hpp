@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/13 16:41:03 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 17:00:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
 
   private:
     // Insert rebalance cases
-    void insert_rebalance_1(node_type* node);
-    void insert_rebalance_2(node_type* node);
-    void insert_rebalance_3(node_type* node);
+    node_type* insert_rebalance_1(node_type* node);
+    node_type* insert_rebalance_2(node_type* node);
+    node_type* insert_rebalance_3(node_type* node);
 
   public:
     // Insert
@@ -69,31 +69,34 @@ ft::pair<typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type*, bo
         {
             node_type* auntie = node->auntie();
             if (auntie && auntie->color() == RBNode<value_type>::red)
-                insert_rebalance_1(auntie->parent());
+                node = insert_rebalance_1(auntie->parent());
             else if (node->parent()->left() == node)
-                insert_rebalance_2(auntie->parent());
+                node = insert_rebalance_2(auntie->parent());
             else if (node->parent()->right() == node)
-                insert_rebalance_3(node->parent());
+                node = insert_rebalance_3(node->parent());
 
-            node = node->parent();
+            // node = node->parent();
         }
     }
+
     this->root()->set_color(RBNode<value_type>::black);
     return (node_inserted);
 }
 
 // Insert rebalance cases
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_1(node_type* node_grandparent)
+typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_1(node_type* node_grandparent)
 {
     // If node's auntie is also red, just recolor parent, grandparent and auntie
     node_grandparent->set_color(RBNode<value_type>::red);
     node_grandparent->left()->set_color(RBNode<value_type>::black);
     node_grandparent->right()->set_color(RBNode<value_type>::black);
+
+    return (node_grandparent);
 }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_2(node_type* node_parent)
+typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_2(node_type* node_parent)
 {
     // If node is left child of parent, do a right rotation on node's parent
     node_type* new_subtree_root = rotate_right(node_parent);
@@ -103,10 +106,12 @@ void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_2(node_type*
         if (new_subtree_root->right())
             new_subtree_root->right()->set_color(RBNode<value_type>::red);
     }
+
+    return (new_subtree_root);
 }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_3(node_type* node_parent)
+typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_3(node_type* node_parent)
 {
     // If node is right child of parent, do a left rotation on node's parent, then a right rotation on the new parent
     node_type* left_rotation_new_node = rotate_left(node_parent);
@@ -118,8 +123,9 @@ void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_3(node_type*
         //     left_rotation_new_node->left()->set_color(red);
 
         if (left_rotation_new_node->parent())
-            insert_rebalance_2(left_rotation_new_node->parent());
+            return (insert_rebalance_2(left_rotation_new_node->parent()));
     }
+    return (left_rotation_new_node);
 }
 
 // Rotations
