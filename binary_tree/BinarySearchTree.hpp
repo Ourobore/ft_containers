@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/13 12:22:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:34:46 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ class BinarySearchTree
     node_type* search(const value_type& value) const;
 
     // Insert
-    virtual ft::pair<node_type*, bool> insert(const value_type& value);
-    ft::pair<node_type*, bool>         insert(node_type* hint, const value_type& value);
+    ft::pair<node_type*, bool> insert(const value_type& value);
+    ft::pair<node_type*, bool> insert(node_type* hint, const value_type& value);
 
     // Erase
     node_type* erase(node_type* node);

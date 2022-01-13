@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/13 12:23:13 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 15:06:14 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,20 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     typedef RBNode< value_type >           node_type;
     typedef std::size_t                    size_type;
 
-  public: // Change to protected?
+  protected: // Change to protected?
     enum direction
     {
         left,
         right
     };
 
+  private:
+    // Insert rebalance cases
+    void insert_rebalance_1(node_type* node);
+    void insert_rebalance_2(node_type* node);
+    void insert_rebalance_3(node_type* node);
+
+  public:
     // Insert
     ft::pair<node_type*, bool> insert(const value_type& value);
 
@@ -52,10 +59,61 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
 template < class Key, class T, class Compare, class Allocator, class NodeType >
 ft::pair<typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type*, bool> RBTree< Key, T, Compare, Allocator, NodeType >::insert(const value_type& value)
 {
-    BinarySearchTree<Key, T, Compare, Allocator, NodeType >::insert(value);
+    ft::pair<node_type*, bool> node_inserted = BinarySearchTree<Key, T, Compare, Allocator, NodeType >::insert(value);
+    node_type*                 node = node_inserted.first;
 
-    node_type* null = NULL;
-    return (ft::make_pair(null, false));
+    // If parent is also red, that is a tree violation that need fixing
+    if (node_inserted.second && node->parent() && node->parent()->color() == red)
+    {
+        node_type* auntie = node->auntie();
+        if (auntie && auntie->color() == red)
+            insert_rebalance_1(auntie->parent());
+        else if (node->parent()->left() == node)
+            insert_rebalance_2(node->parent());
+        else if (node->parent()->right() == node)
+            insert_rebalance_3(node->parent());
+    }
+
+    return (node_inserted);
+}
+
+// Insert rebalance cases
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_1(node_type* node_grandparent)
+{
+    // If node's auntie is also red, just recolor parent, grandparent and auntie
+    node_grandparent->set_color(red);
+    node_grandparent->left()->set_color(black);
+    node_grandparent->right()->set_color(black);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_2(node_type* node_parent)
+{
+    // If node is left child of parent, do a right rotation on node's parent
+    node_type* new_subtree_root = rotate_right(node_parent);
+    if (new_subtree_root)
+    {
+        new_subtree_root->set_color(black);
+        if (new_subtree_root->right())
+            new_subtree_root->right()->set_color(red);
+    }
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_3(node_type* node_parent)
+{
+    // If node is right child of parent, do a left rotation on node's parent, then a right rotation on the new parent
+    node_type* left_rotation_parent = rotate_left(node_parent);
+
+    if (left_rotation_parent)
+    {
+        left_rotation_parent->set_color(black);
+        if (left_rotation_parent->left())
+            left_rotation_parent->left()->set_color(red);
+
+        insert_rebalance_2(left_rotation_parent);
+    }
 }
 
 // Rotations

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/11 16:27:43 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 14:56:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,17 @@
 
 #include "BaseNode.hpp"
 
+#define RED 0
+#define BLACK 0
+
 namespace ft
 {
+
+enum RBColor
+{
+    red = false,
+    black = true
+};
 
 template < class T >
 class RBNode : public BaseNode< RBNode<T>, T >
@@ -31,12 +40,6 @@ class RBNode : public BaseNode< RBNode<T>, T >
     typedef std::size_t size_type;
 
   protected:
-    enum RBColor
-    {
-        red,
-        black
-    };
-
     value_type _data;
     RBColor    _color;
 
@@ -60,9 +63,9 @@ class RBNode : public BaseNode< RBNode<T>, T >
     void set_color(RBColor color);
 
     // Utility
-    RBNode<T> auntie() const;
-    RBNode<T> grandparent() const;
-    size_type black_height() const;
+    RBNode<T>* auntie() const;
+    RBNode<T>* grandparent() const;
+    size_type  black_height() const;
 };
 
 // Constructors and Destructor
@@ -119,7 +122,7 @@ typename RBNode< T >::reference RBNode< T >::data()
 }
 
 template < class T >
-typename RBNode<T>::RBColor RBNode<T>::color() const
+RBColor RBNode<T>::color() const
 {
     return (_color);
 }
@@ -139,7 +142,7 @@ void RBNode< T >::set_color(RBColor color)
 
 // Utility
 template < class T >
-RBNode< T > RBNode< T >::auntie() const
+RBNode< T >* RBNode< T >::auntie() const
 {
     RBNode* parent = NULL;
     RBNode* grandparent = NULL;
@@ -163,7 +166,7 @@ RBNode< T > RBNode< T >::auntie() const
 }
 
 template < class T >
-RBNode< T > RBNode< T >::grandparent() const
+RBNode< T >* RBNode< T >::grandparent() const
 {
     RBNode* parent = NULL;
     RBNode* grandparent = NULL;
