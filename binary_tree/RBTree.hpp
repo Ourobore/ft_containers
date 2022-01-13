@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/11 11:57:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:32:25 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T,
     node_type* ancestor = subtree_root->parent();
     node_type* opposite_child = (direction == left ? subtree_root->right() : subtree_root->right());
 
+    // This node is the new subtree root
     if (!opposite_child)
         return (NULL);
 

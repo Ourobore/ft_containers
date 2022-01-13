@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/12 13:59:19 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/13 11:21:38 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,10 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
 {
     node_allocator allocator;
 
-    node_type* new_node = allocator.allocate(1);
-    allocator.construct(new_node, value);
     if (!_root)
     {
+        node_type* new_node = allocator.allocate(1);
+        allocator.construct(new_node, value);
         _root = new_node;
         return (ft::make_pair(_root, true));
     }
@@ -187,10 +187,12 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
     while (node_pointer)
     {
         // If new_node->data() < node_pointer->data()
-        if (_comp(new_node->data().first, node_pointer->data().first))
+        if (_comp(value.first, node_pointer->data().first))
         {
             if (!node_pointer->left())
             {
+                node_type* new_node = allocator.allocate(1);
+                allocator.construct(new_node, value);
                 node_pointer->set_left(new_node);
                 return (ft::make_pair(new_node, true));
             }
@@ -198,10 +200,12 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
                 node_pointer = node_pointer->left();
         }
         // If new_node->data() > node_pointer->data()
-        else if (_comp(node_pointer->data().first, new_node->data().first))
+        else if (_comp(node_pointer->data().first, value.first))
         {
             if (!node_pointer->right())
             {
+                node_type* new_node = allocator.allocate(1);
+                allocator.construct(new_node, value);
                 node_pointer->set_right(new_node);
                 return (ft::make_pair(new_node, true));
             }
