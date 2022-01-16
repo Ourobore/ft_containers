@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 15:02:35 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:20:31 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include "BaseNode.hpp"
 #include "Node.hpp"
+
+#include "utils/EnableIf.hpp"
 #include "utils/Pair.hpp"
 
 #include <iostream>
@@ -59,7 +61,7 @@ class BinarySearchTree
 
     // Search
     node_type* search(const key_type& key) const;
-    node_type* search(const value_type& value) const;
+    node_type* search(const value_type& value, typename ft::enable_if<true, value_type*>::type = 0) const;
 
     // Insert
     ft::pair<node_type*, bool> insert(const value_type& value);
@@ -151,7 +153,7 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
 }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
-typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const value_type& value) const
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const value_type& value, typename ft::enable_if<true, value_type*>::type) const
 {
     node_type* search = _root;
 

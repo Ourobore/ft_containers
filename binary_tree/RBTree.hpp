@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/16 15:28:01 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:16:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     typedef RBNode< value_type >           node_type;
     typedef std::size_t                    size_type;
 
-  protected: // Change to protected?
+  protected:
     enum direction
     {
         left,

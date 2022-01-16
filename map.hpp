@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 14:35:51 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:25:10 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include <iostream>
 
-#include "iterator/BidirectionalIterator.hpp"
 #include "iterator/IteratorTraits.hpp"
 #include "iterator/ReverseIterator.hpp"
 #include "iterator/TreeIterator.hpp"
