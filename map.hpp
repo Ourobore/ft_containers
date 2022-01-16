@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 13:43:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 14:35:51 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,16 +332,13 @@ template < class Key, class T, class Compare, class Allocator >
 void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
 {
     map::iterator it;
+
     while (first != last)
     {
         it = first;
         ++first;
         erase(it);
     }
-
-    // map::iterator it;
-    // for (it = first; it != last; ++it)
-    //     erase(it);
 }
 
 template < class Key, class T, class Compare, class Allocator >

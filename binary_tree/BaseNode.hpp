@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 17:50:56 by lena              #+#    #+#             */
-/*   Updated: 2022/01/10 11:36:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 14:33:52 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,16 @@ struct BaseNode
     virtual ~BaseNode();
 
     // Accessors
-    Node* parent();
+    // Node* parent();
     Node* parent() const;
-    Node* left();
+    // Node* left();
     Node* left() const;
-    Node* right();
+    // Node* right();
     Node* right() const;
+
+    Node* sister() const;
+    Node* auntie() const;
+    Node* grandparent() const;
 
     // Modifiers
     void set_parent(Node* parent);
@@ -103,23 +107,11 @@ BaseNode<Node, T>::~BaseNode()
     _right = NULL;
 }
 
-// Accessors
-template < typename Node, typename T >
-Node* BaseNode<Node, T>::parent()
-{
-    return (_parent);
-}
-
+// Accesssors
 template < typename Node, typename T >
 Node* BaseNode<Node, T>::parent() const
 {
     return (_parent);
-}
-
-template < typename Node, typename T >
-Node* BaseNode<Node, T>::left()
-{
-    return (_left);
 }
 
 template < typename Node, typename T >
@@ -129,15 +121,64 @@ Node* BaseNode<Node, T>::left() const
 }
 
 template < typename Node, typename T >
-Node* BaseNode<Node, T>::right()
+Node* BaseNode<Node, T>::right() const
 {
     return (_right);
 }
 
 template < typename Node, typename T >
-Node* BaseNode<Node, T>::right() const
+Node* BaseNode<Node, T>::sister() const
 {
-    return (_right);
+    Node* sister = NULL;
+
+    if (this->parent())
+    {
+        Node* parent = this->parent();
+        if (parent->left() == this)
+            sister = parent->right();
+        else
+            sister = parent->left();
+    }
+
+    return (sister);
+}
+
+template < typename Node, typename T >
+Node* BaseNode<Node, T>::auntie() const
+{
+    Node* parent = NULL;
+    Node* grandparent = NULL;
+    Node* auntie = NULL;
+
+    if (this->parent())
+        parent = this->parent();
+
+    if (parent && parent->parent())
+        grandparent = parent->parent();
+
+    if (grandparent)
+    {
+        if (grandparent->left() && grandparent->left() == parent)
+            auntie = grandparent->right();
+        else
+            auntie = grandparent->left();
+    }
+
+    return (auntie);
+}
+
+template < typename Node, typename T >
+Node* BaseNode<Node, T>::grandparent() const
+{
+    Node* parent = NULL;
+    Node* grandparent = NULL;
+
+    if (this->parent())
+        parent = this->parent();
+    if (parent && parent->parent())
+        grandparent = parent->parent();
+
+    return (grandparent);
 }
 
 // Modifiers
