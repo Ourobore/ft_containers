@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/16 09:23:13 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 10:20:45 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     node_type* insert_rebalance_right(node_type* node);
 
     // Erase rebalance cases
-    void erase_rebalance_wrapper(node_type* node_deleted);
+    void       erase_rebalance_wrapper(node_type* node_deleted);
+    node_type* erase_rebalance_left(node_type* node_deleted);
+    node_type* erase_rebalance_right(node_type* node_deleted);
 
   public:
     // Insert
@@ -261,6 +263,78 @@ void RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_wrapper(node_
     }
     if (node_deleted)
         node_deleted->set_color(RBNode<value_type>::black);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_left(node_type* node_deleted)
+{
+    node_type* sister = node_deleted->sister();
+    if (sister->color() == RBNode<value_type>::red)
+    {
+        sister->set_color(RBNode<value_type>::black);
+        node_deleted->parent()->set_color(RBNode<value_type>::red);
+        rotate_left(node_deleted->parent());
+        sister = node_deleted->parent()->right();
+    }
+    if (sister->left()->color() == RBNode<value_type>::black &&
+        sister->right()->color() == RBNode<value_type>::black)
+    {
+        sister->set_color(RBNode<value_type>::red);
+        node_deleted = node_deleted->parent();
+    }
+    else
+    {
+        if (sister->right()->color() == RBNode<value_type>::black)
+        {
+            sister->left()->set_color(RBNode<value_type>::black);
+            sister->set_color(RBNode<value_type>::red);
+            rotate_right(sister);
+            sister = node_deleted->parent()->right();
+        }
+        sister->set_color(node_deleted->parent()->color());
+        node_deleted->parent()->set_color(RBNode<value_type>::black);
+        sister->right()->set_color(RBNode<value_type>::black);
+        rotate_left(node_deleted->parent());
+        node_deleted = this->root();
+    }
+
+    return (node_deleted);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_right(node_type* node_deleted)
+{
+    node_type* sister = node_deleted->sister();
+    if (sister->color() == RBNode<value_type>::red)
+    {
+        sister->set_color(RBNode<value_type>::black);
+        node_deleted->parent()->set_color(RBNode<value_type>::red);
+        rotate_right(node_deleted->parent());
+        sister = node_deleted->parent()->left();
+    }
+    if (sister->left()->color() == RBNode<value_type>::black &&
+        sister->right()->color() == RBNode<value_type>::black)
+    {
+        sister->set_color(RBNode<value_type>::red);
+        node_deleted = node_deleted->parent();
+    }
+    else
+    {
+        if (sister->left()->color() == RBNode<value_type>::black)
+        {
+            sister->right()->set_color(RBNode<value_type>::black);
+            sister->set_color(RBNode<value_type>::red);
+            rotate_left(sister);
+            sister = node_deleted->parent()->left();
+        }
+        sister->set_color(node_deleted->parent()->color());
+        node_deleted->parent()->set_color(RBNode<value_type>::black);
+        sister->left()->set_color(RBNode<value_type>::black);
+        rotate_right(node_deleted->parent());
+        node_deleted = this->root();
+    }
+
+    return (node_deleted);
 }
 
 // Rotations
