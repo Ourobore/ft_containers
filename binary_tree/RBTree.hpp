@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/16 14:37:52 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 15:28:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,8 @@ typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree< Key,
 template < class Key, class T, class Compare, class Allocator, class NodeType >
 void RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_wrapper(node_type* node_deleted)
 {
+    // If we deleted a black node, we have a black height violation that need fixing
+    // We can also have a red violation if it brought 2 red nodes together
     while (node_deleted != this->root() && node_deleted->color() == RBNode<value_type>::black)
     {
         if (node_deleted == node_deleted->parent()->left())
@@ -208,29 +210,38 @@ template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_left(node_type* node_deleted)
 {
     node_type* sister = node_deleted->sister();
+
+    // If sister is red
     if (sister && sister->color() == RBNode<value_type>::red)
     {
+        // Rotate left to set black sister as new subtree root
         sister->set_color(RBNode<value_type>::black);
         node_deleted->parent()->set_color(RBNode<value_type>::red);
         rotate_left(node_deleted->parent());
         sister = node_deleted->parent()->right();
     }
+    // If sister's childs both exist and are black
     if (sister && sister->left() && sister->left()->color() == RBNode<value_type>::black &&
         sister->right() && sister->right()->color() == RBNode<value_type>::black)
     {
+        // Set sister as red and go up to check violations on node's parent
         sister->set_color(RBNode<value_type>::red);
         node_deleted = node_deleted->parent();
     }
     else
     {
+        // If sister's right child is black
         if (sister && sister->right() && sister->right()->color() == RBNode<value_type>::black)
         {
+            // Set also sister's left child as black to equilibrate black height
             if (sister->left())
                 sister->left()->set_color(RBNode<value_type>::black);
+            // Set sister as red and rotate right to make black child as root
             sister->set_color(RBNode<value_type>::red);
             rotate_right(sister);
             sister = node_deleted->parent()->right();
         }
+        // Update colors and rotate left
         if (sister)
             sister->set_color(node_deleted->parent()->color());
         node_deleted->parent()->set_color(RBNode<value_type>::black);
@@ -247,29 +258,38 @@ template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_right(node_type* node_deleted)
 {
     node_type* sister = node_deleted->sister();
+
+    // If sister is red
     if (sister && sister->color() == RBNode<value_type>::red)
     {
+        // Rotate right to set black sister as new subtree root
         sister->set_color(RBNode<value_type>::black);
         node_deleted->parent()->set_color(RBNode<value_type>::red);
         rotate_right(node_deleted->parent());
         sister = node_deleted->parent()->left();
     }
+    // If sister's childs both exist and are black
     if (sister && sister->left() && sister->left()->color() == RBNode<value_type>::black &&
         sister->right() && sister->right()->color() == RBNode<value_type>::black)
     {
+        // Set sister as red and go up to check violations on node's parent
         sister->set_color(RBNode<value_type>::red);
         node_deleted = node_deleted->parent();
     }
     else
     {
+        // If sister's left child is black
         if (sister && sister->left() && sister->left()->color() == RBNode<value_type>::black)
         {
+            // Set also sister's right child as black to equilibrate black height
             if (sister->right())
                 sister->right()->set_color(RBNode<value_type>::black);
+            // Set sister as red and rotate left to make black child as root
             sister->set_color(RBNode<value_type>::red);
             rotate_left(sister);
             sister = node_deleted->parent()->left();
         }
+        // Update colors and rotate right
         if (sister)
             sister->set_color(node_deleted->parent()->color());
         node_deleted->parent()->set_color(RBNode<value_type>::black);
