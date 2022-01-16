@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 14:20:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 15:02:35 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,21 +231,26 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
         return (insert(value));
     else
     {
-        node_allocator allocator;
-
-        node_type* new_node = allocator.allocate(1);
-        allocator.construct(new_node, value);
-
-        hint->set_right(new_node);
-        new_node->set_parent(hint);
-
-        if (successor)
+        if (value.first != hint->inorder_successor()->data().first)
         {
-            new_node->set_right(successor);
-            successor->set_parent(new_node);
-        }
+            node_allocator allocator;
 
-        return (ft::make_pair(new_node, true));
+            node_type* new_node = allocator.allocate(1);
+            allocator.construct(new_node, value);
+
+            hint->set_right(new_node);
+            new_node->set_parent(hint);
+
+            if (successor)
+            {
+                new_node->set_right(successor);
+                successor->set_parent(new_node);
+            }
+
+            return (ft::make_pair(new_node, true));
+        }
+        else
+            return (ft::make_pair(hint, false));
     }
 }
 // Erase

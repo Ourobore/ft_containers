@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/10 11:31:06 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 14:53:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ void TreeIterator<T, IsConst>::update_back()
         node_type* node_pointer = _it;
         while (node_pointer && node_pointer->parent() &&
                (node_pointer->parent()->left() == node_pointer || node_pointer->parent()->right() == node_pointer))
-
             node_pointer = node_pointer->parent();
 
         _back = node_pointer->max_child();
