@@ -17,31 +17,42 @@
 
 #define NAMESPACE ft
 
+using namespace NAMESPACE;
+
+template <class Key, class T>
+void print(map<Key, T>& lst)
+{
+    for (typename map<Key, T>::iterator it = lst.begin(); it != lst.end(); it++)
+        std::cout << it->first << " => " << it->second << '\n';
+}
+
 int main()
 {
+
+    return 0;
     // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(10000, NAMESPACE::make_pair(42, 42));
     // NAMESPACE::map<int, int>                      m;
     // m.insert(v.begin(), v.end());
 
-    NAMESPACE::map< int, int > m;
-    size_t                     min = 0;
-    size_t                     max = 10000;
-    bool                       flag = true;
+    // NAMESPACE::map< int, int > m;
+    // size_t                     min = 0;
+    // size_t                     max = 100000;
+    // bool                       flag = true;
 
-    for (size_t i = 0; i < (max / 2) - 1;)
-    {
-        if (flag)
-        {
-            m.insert(NAMESPACE::make_pair(min + i, min + i));
-            flag = false;
-        }
-        else
-        {
-            m.insert(NAMESPACE::make_pair(max - i, max - i));
-            flag = true;
-            ++i;
-        }
-    }
+    // for (size_t i = 0; i < (max / 2) - 1;)
+    // {
+    //     if (flag)
+    //     {
+    //         m.insert(NAMESPACE::make_pair(min + i, min + i));
+    //         flag = false;
+    //     }
+    //     else
+    //     {
+    //         m.insert(NAMESPACE::make_pair(max - i, max - i));
+    //         flag = true;
+    //         ++i;
+    //     }
+    // }
 
     return (0);
     //

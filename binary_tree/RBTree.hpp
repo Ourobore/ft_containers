@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/14 17:19:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 09:23:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,17 @@ class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
     node_type* insert_rebalance_left(node_type* node);
     node_type* insert_rebalance_right(node_type* node);
 
+    // Erase rebalance cases
+    void erase_rebalance_wrapper(node_type* node_deleted);
+
   public:
     // Insert
     ft::pair<node_type*, bool> insert(const value_type& value);
     ft::pair<node_type*, bool> insert(node_type* hint, const value_type& value);
+
+    // Erase
+    node_type* erase(node_type* node);
+    node_type* erase(const value_type& value);
 
     // Rotations
     node_type* rotate_dir(node_type* subtree_root, enum direction direction);
@@ -71,8 +78,11 @@ template < class Key, class T, class Compare, class Allocator, class NodeType >
 ft::pair<typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type*, bool> RBTree< Key, T, Compare, Allocator, NodeType >::insert(node_type* hint, const value_type& value)
 {
     ft::pair<node_type*, bool> node_inserted = BinarySearchTree<Key, T, Compare, Allocator, NodeType >::insert(hint, value);
-    insert_rebalance_wrapper(node_inserted);
 
+    if (node_inserted.first->right() && node_inserted.first->right()->color() == RBNode< value_type >::red)
+        insert_rebalance_wrapper(ft::make_pair(node_inserted.first->right(), node_inserted.second));
+    else
+        insert_rebalance_wrapper(node_inserted);
     return (node_inserted);
 }
 
@@ -155,6 +165,102 @@ typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T,
 
     // New node to check is now node's parent if right-left rotation, or node
     return (node);
+}
+
+// Erase
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree< Key, T, Compare, Allocator, NodeType >::erase(node_type* node)
+{
+    node_type* node_deleted = BinarySearchTree<Key, T, Compare, Allocator, NodeType >::erase(node);
+    erase_rebalance_wrapper(node_deleted);
+
+    return (node_deleted);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename RBTree< Key, T, Compare, Allocator, NodeType >::node_type* RBTree< Key, T, Compare, Allocator, NodeType >::erase(const value_type& value)
+{
+    node_type* node_deleted = BinarySearchTree<Key, T, Compare, Allocator, NodeType >::erase(value);
+    erase_rebalance_wrapper(node_deleted);
+
+    return (node_deleted);
+}
+
+// Erase rebalance cases
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+void RBTree<Key, T, Compare, Allocator, NodeType>::erase_rebalance_wrapper(node_type* node_deleted)
+{
+    while (node_deleted != this->root() && node_deleted->color() == RBNode<value_type>::black)
+    {
+
+        if (node_deleted == node_deleted->parent()->left())
+        {
+            node_type* brother = node_deleted->parent()->right();
+            if (brother->color() == RBNode<value_type>::red)
+            {
+                brother->set_color(RBNode<value_type>::black);
+                node_deleted->parent()->set_color(RBNode<value_type>::red);
+                rotate_left(node_deleted->parent());
+                brother = node_deleted->parent()->right();
+            }
+            if (brother->left()->color() == RBNode<value_type>::black &&
+                brother->right()->color() == RBNode<value_type>::black)
+            {
+                brother->set_color(RBNode<value_type>::red);
+                node_deleted = node_deleted->parent();
+            }
+            else
+            {
+                if (brother->right()->color() == RBNode<value_type>::black)
+                {
+                    brother->left()->set_color(RBNode<value_type>::black);
+                    brother->set_color(RBNode<value_type>::red);
+                    rotate_right(brother);
+                    brother = node_deleted->parent()->right();
+                }
+                brother->set_color(node_deleted->parent()->color());
+                node_deleted->parent()->set_color(RBNode<value_type>::black);
+                brother->right()->set_color(RBNode<value_type>::black);
+                rotate_left(node_deleted->parent());
+                node_deleted = this->root();
+            }
+        }
+
+        else
+        {
+            node_type* brother = node_deleted->parent()->left();
+            if (brother->color() == RBNode<value_type>::red)
+            {
+                brother->set_color(RBNode<value_type>::black);
+                node_deleted->parent()->set_color(RBNode<value_type>::red);
+                rotate_right(node_deleted->parent());
+                brother = node_deleted->parent()->left();
+            }
+            if (brother->right()->color() == RBNode<value_type>::black &&
+                brother->left()->color() == RBNode<value_type>::black)
+            {
+                brother->set_color(RBNode<value_type>::red);
+                node_deleted = node_deleted->parent();
+            }
+            else
+            {
+                if (brother->left()->color() == RBNode<value_type>::black)
+                {
+                    brother->right()->set_color(RBNode<value_type>::black);
+                    brother->set_color(RBNode<value_type>::red);
+                    rotate_left(brother);
+                    brother = node_deleted->parent()->left();
+                }
+                brother->set_color(node_deleted->parent()->color());
+                node_deleted->parent()->set_color(RBNode<value_type>::black);
+                brother->left()->set_color(RBNode<value_type>::black);
+                rotate_right(node_deleted->parent());
+                node_deleted = this->root();
+            }
+        }
+    }
+    if (node_deleted)
+        node_deleted->set_color(RBNode<value_type>::black);
 }
 
 // Rotations

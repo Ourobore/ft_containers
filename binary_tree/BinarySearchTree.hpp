@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/13 12:34:46 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 08:58:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,12 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
 
         hint->set_right(new_node);
         new_node->set_parent(hint);
+
+        if (successor)
+        {
+            new_node->set_right(successor);
+            successor->set_parent(new_node);
+        }
 
         return (ft::make_pair(new_node, true));
     }

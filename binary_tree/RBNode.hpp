@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/13 16:38:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 09:22:04 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class RBNode : public BaseNode< RBNode<T>, T >
     void set_color(RBColor color);
 
     // Utility
+    RBNode<T>* sister() const;
     RBNode<T>* auntie() const;
     RBNode<T>* grandparent() const;
     size_type  black_height() const;
@@ -138,6 +139,22 @@ void RBNode< T >::set_color(RBColor color)
 }
 
 // Utility
+template < class T >
+RBNode< T >* RBNode< T >::sister() const
+{
+    RBNode* sister = NULL;
+
+    if (this->parent())
+    {
+        RBNode<T>* parent = this->parent();
+        if (parent->left() == this)
+            sister = parent->right();
+        else
+            sister = parent->left();
+    }
+
+    return (sister);
+}
 template < class T >
 RBNode< T >* RBNode< T >::auntie() const
 {
