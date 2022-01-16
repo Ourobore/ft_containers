@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 08:58:01 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 14:20:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,34 +296,36 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
     // If Node has 2 childs
     else
     {
-        node_type*     successor = BinarySearchTree::inorder_successor(node);
-        node_type*     moved_successor;
-        node_allocator allocator;
-        moved_successor = allocator.allocate(1);
-        allocator.construct(moved_successor, successor);
-        erase(successor->data());
+        node_type* successor = BinarySearchTree::inorder_successor(node);
 
-        moved_successor->set_left(node->left());
+        // "Erasing" / moving successor's child to be able to move successor later without losing nodes
+        node_type* successor_child = successor->left() ? successor->left() : successor->right();
+        if (successor->parent()->left() == successor)
+            successor->parent()->set_left(successor_child);
+        else
+            successor->parent()->set_right(successor_child);
+
+        // Setting up successor in it's new place
+        successor->set_left(node->left());
         if (node->left())
-            node->left()->set_parent(moved_successor);
+            node->left()->set_parent(successor);
 
-        moved_successor->set_right(node->right());
+        successor->set_right(node->right());
         if (node->right())
-            node->right()->set_parent(moved_successor);
+            node->right()->set_parent(successor);
 
-        moved_successor->set_parent(node->parent());
-
+        successor->set_parent(node->parent());
         if (node->parent())
         {
             if (node->parent()->left() && node->parent()->left() == node)
-                node->parent()->set_left(moved_successor);
+                node->parent()->set_left(successor);
             else
-                node->parent()->set_right(moved_successor);
+                node->parent()->set_right(successor);
         }
         else
-            _root = moved_successor;
+            _root = successor;
 
-        new_head = moved_successor;
+        new_head = successor;
     }
 
     node_allocator allocator;

@@ -28,8 +28,6 @@ void print(map<Key, T>& lst)
 
 int main()
 {
-
-    return 0;
     // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(10000, NAMESPACE::make_pair(42, 42));
     // NAMESPACE::map<int, int>                      m;
     // m.insert(v.begin(), v.end());

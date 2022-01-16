@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/13 11:05:59 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/16 13:43:49 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,9 +335,8 @@ void map< Key, T, Compare, Allocator >::erase(iterator first, iterator last)
     while (first != last)
     {
         it = first;
-        ++it;
-        erase(first);
-        first = it;
+        ++first;
+        erase(it);
     }
 
     // map::iterator it;
