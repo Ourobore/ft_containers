@@ -15,7 +15,7 @@
 #include "binary_tree/RBTree.hpp"
 #include "utils/Pair.hpp"
 
-#define NAMESPACE ft
+#define NAMESPACE std
 
 using namespace NAMESPACE;
 
@@ -31,6 +31,10 @@ int main()
     // NAMESPACE::vector<NAMESPACE::pair<int, int> > v(10000, NAMESPACE::make_pair(42, 42));
     // NAMESPACE::map<int, int>                      m;
     // m.insert(v.begin(), v.end());
+
+    // NAMESPACE::map< int, int > m;
+    // for (size_t i = 0; i < 100000; ++i)
+    //     m.insert(NAMESPACE::make_pair(i, i));
 
     // NAMESPACE::map< int, int > m;
     // size_t                     min = 0;
