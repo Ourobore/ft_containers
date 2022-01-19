@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 16:06:42 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/19 17:46:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ vector< T, Allocator >::vector(typename enable_if< !is_integral< InputIterator >
     InputIterator count = first;
 
     for (; count != last; count++)
-        _size++;
+        ++_size;
 
     _capacity = _size;
     _c = _alloc.allocate(_capacity);
@@ -277,6 +277,7 @@ void vector< T, Allocator >::reserve(size_type n)
         throw std::length_error("vector::reserve"); // "vector::reserve() : n is greater than vector::max_size()"
     else if (n > _capacity)
     {
+        // std::cout << "prout" << std::endl;
         pointer realloc;
 
         realloc = _alloc.allocate(n);
@@ -434,16 +435,16 @@ template < class InputIterator >
 void vector< T, Allocator >::insert(iterator position, typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type first, InputIterator last)
 {
     size_type pos = static_cast< size_type >(position - this->begin());
-    size_type n = 0;
-    for (InputIterator it = first; it != last; ++it, ++n)
-        ;
+    size_type old_capacity = _capacity;
+    vector    tmp(first, last);
+    size_type n = tmp.size();
 
     if (_size + n > _capacity)
     {
         if (_capacity * 2 < _size + n)
             reserve(_size + n);
         else
-            reserve(_capacity * 2);
+            reserve(_size * 2);
     }
 
     _size += n;
@@ -453,8 +454,15 @@ void vector< T, Allocator >::insert(iterator position, typename enable_if< !is_i
         _alloc.destroy(&_c[i - n]);
     }
 
-    for (size_type i = pos; i != pos + n; ++i, ++first)
-        _alloc.construct(&_c[i], *first);
+    if (old_capacity == _capacity)
+        for (size_type i = pos; i != pos + n; ++i, ++first)
+            _alloc.construct(&_c[i], *first);
+    else
+    {
+        vector::iterator it = tmp.begin();
+        for (size_type i = pos; i != pos + n; ++i, ++it)
+            _alloc.construct(&_c[i], *it);
+    }
 }
 
 template < class T, class Allocator >
