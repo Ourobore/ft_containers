@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/20 11:55:19 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/22 15:25:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,9 +441,9 @@ template < class InputIterator >
 void vector< T, Allocator >::insert(iterator position, typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type first, InputIterator last)
 {
     size_type pos = static_cast< size_type >(position - this->begin());
-    size_type old_capacity = _capacity;
-    vector    tmp(first, last);
-    size_type n = tmp.size();
+    size_type n = 0;
+    for (InputIterator it = first; it != last; ++it)
+        ++n;
 
     if (_size + n > _capacity)
     {
@@ -460,15 +460,8 @@ void vector< T, Allocator >::insert(iterator position, typename enable_if< !is_i
         _alloc.destroy(&_c[i - n]);
     }
 
-    if (old_capacity == _capacity)
-        for (size_type i = pos; i != pos + n; ++i, ++first)
-            _alloc.construct(&_c[i], *first);
-    else
-    {
-        vector::iterator it = tmp.begin();
-        for (size_type i = pos; i != pos + n; ++i, ++it)
-            _alloc.construct(&_c[i], *it);
-    }
+    for (size_type i = pos; i != pos + n; ++i, ++first)
+        _alloc.construct(&_c[i], *first);
 }
 
 template < class T, class Allocator >
