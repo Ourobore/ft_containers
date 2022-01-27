@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/22 15:38:29 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/27 14:59:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ void vector< T, Allocator >::reserve(size_type n)
         throw std::length_error("vector::reserve"); // "vector::reserve() : n is greater than vector::max_size()"
     else if (n > _capacity)
     {
-        pointer realloc;
+        pointer realloc = NULL;
 
         realloc = _alloc.allocate(n);
         for (size_type i = 0; i < _size; ++i)
@@ -288,6 +288,7 @@ void vector< T, Allocator >::reserve(size_type n)
             _alloc.destroy(&_c[i]);
         }
         _alloc.deallocate(_c, _capacity);
+        _c = NULL;
 
         _c = realloc;
         _capacity = n;

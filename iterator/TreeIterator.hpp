@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 14:53:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/27 22:09:55 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ template < class T, bool IsConst >
 template <bool is_const>
 TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator<T, is_const>& rhs)
 {
-    if (this != &rhs)
-    {
-        _it = rhs.getPointer();
-        _back = rhs.getBack();
-    }
+    // if (this != &rhs)
+    // {
+    _it = rhs.getPointer();
+    _back = rhs.getBack();
+    // }
     return (*this);
 }
 
