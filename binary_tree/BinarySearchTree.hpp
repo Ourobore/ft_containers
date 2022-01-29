@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 17:20:31 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/29 14:22:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ class BinarySearchTree
     node_type* erase(const value_type& value);
 
     // Algorithm
+    static node_type* far_left(node_type* tree_root);
+    static node_type* far_left(const node_type* tree_root);
+    static node_type* far_right(node_type* tree_root);
+    static node_type* far_right(const node_type* tree_root);
     static node_type* min_elem(node_type* tree_root);
     static node_type* min_elem(const node_type* tree_root);
     static node_type* max_elem(node_type* tree_root);
@@ -350,6 +354,46 @@ typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* Bi
 }
 
 // Algorithm
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::far_left(node_type* tree_root)
+{
+    node_type* node_pointer = tree_root;
+    while (tree_root && node_pointer->left())
+        node_pointer = node_pointer->left();
+
+    return (node_pointer);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::far_left(const node_type* tree_root)
+{
+    node_type* node_pointer = tree_root;
+    while (tree_root && node_pointer->left())
+        node_pointer = node_pointer->left();
+
+    return (node_pointer);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::far_right(node_type* tree_root)
+{
+    node_type* node_pointer = tree_root;
+    while (tree_root && node_pointer->right())
+        node_pointer = node_pointer->right();
+
+    return (node_pointer);
+}
+
+template < class Key, class T, class Compare, class Allocator, class NodeType >
+typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::far_right(const node_type* tree_root)
+{
+    node_type* node_pointer = tree_root;
+    while (tree_root && node_pointer->right())
+        node_pointer = node_pointer->right();
+
+    return (node_pointer);
+}
+
 template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::min_elem(node_type* subtree_root)
 {

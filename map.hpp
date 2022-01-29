@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 17:25:10 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/29 14:35:04 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,25 +184,25 @@ map< Key, T, Compare, Allocator >& map< Key, T, Compare, Allocator >::operator=(
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::begin()
 {
-    return (iterator(tree_type::min_elem(_tree.root())));
+    return (iterator(tree_type::far_left(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::begin() const
 {
-    return (const_iterator(tree_type::min_elem(_tree.root())));
+    return (const_iterator(tree_type::far_left(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::end()
 {
-    return (++iterator(tree_type::max_elem(_tree.root())));
+    return (++iterator(tree_type::far_right(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::end() const
 {
-    return (++iterator(tree_type::max_elem(_tree.root())));
+    return (++iterator(tree_type::far_right(_tree.root())));
 }
 
 template < class Key, class T, class Compare, class Allocator >
@@ -403,8 +403,12 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 
     map::iterator it = begin();
 
-    while (it != end() && key_comp()(it->first, k))
+    while (it != end())
+    {
+        if (!key_comp()(it->first, k))
+            break;
         ++it;
+    }
     return (it);
 }
 
@@ -413,8 +417,12 @@ typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare,
 {
     map::const_iterator it = begin();
 
-    while (it != end() && key_comp()(it->first, k))
+    while (it != end())
+    {
+        if (!key_comp()(it->first, k))
+            break;
         ++it;
+    }
     return (it);
 }
 
@@ -423,10 +431,12 @@ typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Alloc
 {
     map::iterator it = begin();
 
-    while (it != end() && key_comp()(it->first, k))
+    while (it != end())
+    {
+        if (key_comp()(k, it->first))
+            break;
         ++it;
-    if (it != end() && !(k < it->first))
-        ++it;
+    }
     return (it);
 }
 
@@ -435,10 +445,12 @@ typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare,
 {
     map::const_iterator it = begin();
 
-    while (it != end() && key_comp()(it->first, k))
+    while (it != end())
+    {
+        if (key_comp()(k, it->first))
+            break;
         ++it;
-    if (it != end() && !(k < it->first))
-        ++it;
+    }
     return (it);
 }
 
