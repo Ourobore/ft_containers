@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 11:52:58 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/27 22:09:55 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/29 18:12:52 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ class TreeIterator
     TreeIterator(node_type* p);
     template <bool is_const>
     TreeIterator(const TreeIterator<NodeType, is_const>& rhs, typename ft::enable_if<!is_const, NodeType>::type* = 0);
-    template <bool is_const>
-    TreeIterator& operator=(const TreeIterator<NodeType, is_const>& rhs);
+    TreeIterator& operator=(const TreeIterator& rhs);
     virtual ~TreeIterator();
 
     // Equivalence
@@ -96,14 +95,13 @@ TreeIterator<T, IsConst>::TreeIterator(const TreeIterator<T, is_const>& rhs, typ
 }
 
 template < class T, bool IsConst >
-template <bool is_const>
-TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator<T, is_const>& rhs)
+TreeIterator<T, IsConst>& TreeIterator<T, IsConst>::operator=(const TreeIterator& rhs)
 {
-    // if (this != &rhs)
-    // {
-    _it = rhs.getPointer();
-    _back = rhs.getBack();
-    // }
+    if (this != &rhs)
+    {
+        _it = rhs.getPointer();
+        _back = rhs.getBack();
+    }
     return (*this);
 }
 
