@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/29 14:22:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/30 12:02:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
         return (insert(value));
     else
     {
-        if (value.first != hint->inorder_successor()->data().first)
+        if (!successor || value.first != successor->data().first)
         {
             node_allocator allocator;
 
