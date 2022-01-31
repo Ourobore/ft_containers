@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 16:19:05 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/16 17:28:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 10:23:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class set
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef RBNode<value_type>                node_type;
+    typedef RBNode<value_type, Compare>       node_type;
     typedef TreeIterator< node_type, false >  iterator;
     typedef TreeIterator< node_type, true >   const_iterator;
     typedef ReverseIterator< iterator >       reverse_iterator;
@@ -118,6 +118,12 @@ template < class T, class Compare, class Allocator >
 set<T, Compare, Allocator>::set(const set& x)
     : _c(x.base())
 {
+}
+
+template < class T, class Compare, class Allocator >
+set<T, Compare, Allocator>::~set()
+{
+    this->clear();
 }
 
 template < class T, class Compare, class Allocator >

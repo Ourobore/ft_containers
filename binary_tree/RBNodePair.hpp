@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RBNode.hpp                                         :+:      :+:    :+:   */
+/*   RBNodePair.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/07 09:39:06 by lena              #+#    #+#             */
-/*   Updated: 2022/01/31 15:16:45 by lchapren         ###   ########.fr       */
+/*   Created: 2022/01/31 11:03:37 by lchapren          #+#    #+#             */
+/*   Updated: 2022/01/31 11:06:43 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RBNODE_HPP
-#define RBNODE_HPP
+#ifndef RBNODEPAIR_HPP
+#define RBNODEPAIR_HPP
 
 #include "BaseNode.hpp"
 
@@ -19,7 +19,7 @@ namespace ft
 {
 
 template < class T, class Compare = std::less<T> >
-class RBNode : public BaseNode< RBNode<T, Compare>, T >
+class RBNodePair : public BaseNode< RBNodePair<T, Compare>, T >
 {
   public:
     typedef T                 value_type;
@@ -43,22 +43,22 @@ class RBNode : public BaseNode< RBNode<T, Compare>, T >
 
   public:
     // Constructors and Destructor
-    RBNode(const Compare& comp = Compare());
-    RBNode(const_reference value, const Compare& comp = Compare(), RBColor color = red);
+    RBNodePair(const Compare& comp = Compare());
+    RBNodePair(const_reference value, const Compare& comp = Compare(), RBColor color = red);
     template < class N >
-    RBNode(RBNode< N, Compare >* rhs);
+    RBNodePair(RBNodePair< N, Compare >* rhs);
     template < class N >
-    RBNode(const RBNode< N, Compare >& rhs);
-    RBNode& operator=(const RBNode& rhs);
-    ~RBNode();
+    RBNodePair(const RBNodePair< N, Compare >& rhs);
+    RBNodePair& operator=(const RBNodePair& rhs);
+    ~RBNodePair();
 
     // Relational
-    bool operator==(const RBNode<T, Compare>& rhs) const;
-    bool operator!=(const RBNode<T, Compare>& rhs) const;
-    bool operator<(const RBNode<T, Compare>& rhs) const;
-    bool operator>(const RBNode<T, Compare>& rhs) const;
-    bool operator<=(const RBNode<T, Compare>& rhs) const;
-    bool operator>=(const RBNode<T, Compare>& rhs) const;
+    bool operator==(const RBNodePair<T, Compare>& rhs) const;
+    bool operator!=(const RBNodePair<T, Compare>& rhs) const;
+    bool operator<(const RBNodePair<T, Compare>& rhs) const;
+    bool operator>(const RBNodePair<T, Compare>& rhs) const;
+    bool operator<=(const RBNodePair<T, Compare>& rhs) const;
+    bool operator>=(const RBNodePair<T, Compare>& rhs) const;
 
     // Element access
     reference data();
@@ -75,33 +75,33 @@ class RBNode : public BaseNode< RBNode<T, Compare>, T >
 
 // Constructors and Destructor
 template < class T, class Compare >
-RBNode< T, Compare >::RBNode(const Compare& comp)
-    : BaseNode<RBNode, T>(), _data(value_type()), _comp(comp), _color(red)
+RBNodePair< T, Compare >::RBNodePair(const Compare& comp)
+    : BaseNode<RBNodePair, T>(), _data(value_type()), _comp(comp), _color(red)
 {
 }
 
 template < class T, class Compare >
-RBNode< T, Compare >::RBNode(const_reference value, const Compare& comp, RBColor color)
-    : BaseNode<RBNode, T>(), _data(value), _comp(comp), _color(color)
+RBNodePair< T, Compare >::RBNodePair(const_reference value, const Compare& comp, RBColor color)
+    : BaseNode<RBNodePair, T>(), _data(value), _comp(comp), _color(color)
 {
 }
 
 template < class T, class Compare >
 template < class N>
-RBNode< T, Compare >::RBNode(RBNode< N, Compare >* rhs)
-    : BaseNode<RBNode, T>(rhs), _data(rhs->data()), _comp(rhs->compare()), _color(rhs->color())
+RBNodePair< T, Compare >::RBNodePair(RBNodePair< N, Compare >* rhs)
+    : BaseNode<RBNodePair, T>(rhs), _data(rhs->data()), _comp(rhs->compare()), _color(rhs->color())
 {
 }
 
 template < class T, class Compare >
 template < class N >
-RBNode< T, Compare >::RBNode(const RBNode< N, Compare >& rhs)
-    : BaseNode<RBNode, T>(rhs), _data(rhs.data()), _comp(rhs.compare()), _color(rhs.color())
+RBNodePair< T, Compare >::RBNodePair(const RBNodePair< N, Compare >& rhs)
+    : BaseNode<RBNodePair, T>(rhs), _data(rhs.data()), _comp(rhs.compare()), _color(rhs.color())
 {
 }
 
 template < class T, class Compare >
-RBNode< T, Compare >& RBNode< T, Compare >::operator=(const RBNode& rhs)
+RBNodePair< T, Compare >& RBNodePair< T, Compare >::operator=(const RBNodePair& rhs)
 {
     if (this != &rhs)
     {
@@ -114,48 +114,48 @@ RBNode< T, Compare >& RBNode< T, Compare >::operator=(const RBNode& rhs)
 }
 
 template < class T, class Compare >
-RBNode< T, Compare >::~RBNode()
+RBNodePair< T, Compare >::~RBNodePair()
 {
     // _data = value_type();
 }
 
 // Element access
 template < class T, class Compare >
-typename RBNode< T, Compare >::reference RBNode< T, Compare >::data()
+typename RBNodePair< T, Compare >::reference RBNodePair< T, Compare >::data()
 {
     return (_data);
 }
 
 template < class T, class Compare >
-Compare& RBNode< T, Compare >::compare()
+Compare& RBNodePair< T, Compare >::compare()
 {
     return (_comp);
 }
 
 template < class T, class Compare >
-typename RBNode< T, Compare >::RBColor RBNode<T, Compare>::color() const
+typename RBNodePair< T, Compare >::RBColor RBNodePair<T, Compare>::color() const
 {
     return (_color);
 }
 
 // Modifiers
 template < class T, class Compare >
-void RBNode< T, Compare >::set_data(const_reference value)
+void RBNodePair< T, Compare >::set_data(const_reference value)
 {
     _data = value;
 }
 
 template < class T, class Compare >
-void RBNode< T, Compare >::set_color(RBColor color)
+void RBNodePair< T, Compare >::set_color(RBColor color)
 {
     _color = color;
 }
 
 // Utility
 template < class T, class Compare >
-typename RBNode< T, Compare >::size_type RBNode< T, Compare >::black_height() const
+typename RBNodePair< T, Compare >::size_type RBNodePair< T, Compare >::black_height() const
 {
-    RBNode* node_pointer = this;
+    RBNodePair* node_pointer = this;
     if (!node_pointer || !node_pointer->left() || !node_pointer->right())
         return (0);
 
@@ -174,37 +174,37 @@ typename RBNode< T, Compare >::size_type RBNode< T, Compare >::black_height() co
 
 // Relational
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator==(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator==(const RBNodePair<T, Compare>& rhs) const
 {
-    return (!_comp(_data, rhs._data) && !_comp(rhs._data, _data));
+    return (!_comp(_data.first, rhs._data.first) && !_comp(rhs._data.first, _data.first));
 }
 
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator!=(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator!=(const RBNodePair<T, Compare>& rhs) const
 {
     return !(*this == rhs);
 }
 
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator<(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator<(const RBNodePair<T, Compare>& rhs) const
 {
-    return (_comp(this->_data, rhs._data));
+    return (_comp(this->_data.first, rhs._data.first));
 }
 
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator>(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator>(const RBNodePair<T, Compare>& rhs) const
 {
     return (!(*this < rhs) && *this != rhs);
 }
 
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator<=(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator<=(const RBNodePair<T, Compare>& rhs) const
 {
     return (*this < rhs || *this == rhs);
 }
 
 template < class T, class Compare >
-bool RBNode< T, Compare >::operator>=(const RBNode<T, Compare>& rhs) const
+bool RBNodePair< T, Compare >::operator>=(const RBNodePair<T, Compare>& rhs) const
 {
     return (!(*this < rhs));
 }

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/29 14:35:04 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 15:40:15 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "binary_tree/BinarySearchTree.hpp"
 #include "binary_tree/Node.hpp"
 #include "binary_tree/RBNode.hpp"
+#include "binary_tree/RBNodePair.hpp"
 #include "binary_tree/RBTree.hpp"
 
 #include "utils/LexicographicalCompare.hpp"
@@ -34,10 +35,10 @@ template < class Key, class T, class Compare = std::less< Key >, class Allocator
 class map
 {
   public:
-    typedef Key                            key_type;
-    typedef T                              mapped_type;
-    typedef typename Allocator::value_type value_type;
-    typedef Compare                        key_compare;
+    typedef Key                    key_type;
+    typedef T                      mapped_type;
+    typedef ft::pair<const Key, T> value_type;
+    typedef Compare                key_compare;
 
     typedef Allocator                                allocator_type;
     typedef typename allocator_type::reference       reference;
@@ -45,11 +46,11 @@ class map
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
 
-    typedef RBNode<value_type>                node_type;
-    typedef TreeIterator< node_type, false >  iterator;
-    typedef TreeIterator< node_type, true >   const_iterator;
-    typedef ReverseIterator< iterator >       reverse_iterator;
-    typedef ReverseIterator< const_iterator > const_reverse_iterator;
+    typedef RBNodePair<value_type, key_compare> node_type;
+    typedef TreeIterator< node_type, false >    iterator;
+    typedef TreeIterator< node_type, true >     const_iterator;
+    typedef ReverseIterator< iterator >         reverse_iterator;
+    typedef ReverseIterator< const_iterator >   const_reverse_iterator;
 
     typedef typename iterator_traits< iterator >::difference_type difference_type;
     typedef std::size_t                                           size_type;
@@ -75,7 +76,7 @@ class map
         }
     };
 
-  public:
+  protected:
     typedef RBTree< key_type, mapped_type, key_compare, allocator_type, node_type > tree_type;
     typedef typename allocator_type::template rebind< tree_type >::other            tree_allocator;
 

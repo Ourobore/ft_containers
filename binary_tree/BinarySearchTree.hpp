@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/30 12:02:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 15:32:33 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include "BaseNode.hpp"
 #include "Node.hpp"
+#include "RBNode.hpp"
+#include "RBNodePair.hpp"
 
 #include "utils/EnableIf.hpp"
 #include "utils/Pair.hpp"
@@ -24,7 +26,7 @@
 namespace ft
 {
 
-template < class Key, class T, class Compare = std::less< Key >, class Allocator = std::allocator< ft::pair<const Key, T> >, class NodeType = Node< typename Allocator::value_type > >
+template < class Key, class T, class Compare = std::less< Key >, class Allocator = std::allocator< ft::pair<const Key, T> >, class NodeType = RBNode< ft::pair<const Key, T>, Compare > >
 class BinarySearchTree
 {
   public:
@@ -193,7 +195,9 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
     while (node_pointer)
     {
         // If new_node->data() < node_pointer->data()
-        if (_comp(value.first, node_pointer->data().first))
+        node_type value_node(value);
+        if (value_node < *node_pointer)
+        // if (_comp(value.first, node_pointer->data().first))
         {
             if (!node_pointer->left())
             {
@@ -206,7 +210,8 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
                 node_pointer = node_pointer->left();
         }
         // If new_node->data() > node_pointer->data()
-        else if (_comp(node_pointer->data().first, value.first))
+        else if (value_node > *node_pointer)
+        // else if (_comp(node_pointer->data().first, value.first))
         {
             if (!node_pointer->right())
             {
