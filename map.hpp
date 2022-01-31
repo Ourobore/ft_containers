@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/31 15:40:15 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:56:57 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,6 +480,7 @@ void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y)
     x.swap(y);
 }
 
+// Relational
 template <class Key, class T, class Compare, class Allocator>
 bool operator==(const map<Key, T, Compare, Allocator>& lhs, const map<Key, T, Compare, Allocator>& rhs)
 {

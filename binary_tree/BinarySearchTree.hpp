@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/31 15:32:33 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 22:55:56 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ template < class Key, class T, class Compare = std::less< Key >, class Allocator
 class BinarySearchTree
 {
   public:
-    typedef Key                            key_type;
-    typedef T                              mapped_type;
-    typedef typename Allocator::value_type value_type;
-    typedef Compare                        key_compare;
+    typedef Key                           key_type;
+    typedef T                             mapped_type;
+    typedef typename NodeType::value_type value_type;
+    typedef Compare                       key_compare;
 
     typedef NodeType   node_type;
     typedef node_type* node_pointer;
@@ -210,9 +210,11 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
                 node_pointer = node_pointer->left();
         }
         // If new_node->data() > node_pointer->data()
-        else if (value_node > *node_pointer)
+        else // if (value_node > *node_pointer)
         // else if (_comp(node_pointer->data().first, value.first))
         {
+            if (!(*node_pointer < value))
+                return (ft::make_pair(node_pointer, false));
             if (!node_pointer->right())
             {
                 node_type* new_node = allocator.allocate(1);
@@ -224,8 +226,7 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
                 node_pointer = node_pointer->right();
         }
         // If element already exists
-        else
-            return (ft::make_pair(node_pointer, false));
+        // else return (ft::make_pair(node_pointer, false));
     }
 
     return (ft::make_pair(node_pointer, false));
@@ -237,12 +238,13 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
     if (!hint)
         return (insert(value));
 
+    node_type  value_node(value);
     node_type* successor = hint->inorder_successor();
-    if (!(hint->data() < value && (!successor || successor->data() > value)))
+    if (!(*hint < value_node && (!successor || *successor > value_node)))
         return (insert(value));
     else
     {
-        if (!successor || value.first != successor->data().first)
+        if (!successor || value_node != successor)
         {
             node_allocator allocator;
 

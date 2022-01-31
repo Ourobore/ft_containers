@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 09:48:48 by lena              #+#    #+#             */
-/*   Updated: 2022/01/31 15:32:07 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/01/31 21:06:29 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ template < class Key, class T, class Compare = std::less< Key >, class Allocator
 class RBTree : public BinarySearchTree<Key, T, Compare, Allocator, NodeType>
 {
   public:
-    typedef typename Allocator::value_type value_type;
-    typedef NodeType                       node_type;
-    typedef std::size_t                    size_type;
+    typedef typename NodeType::value_type value_type;
+    typedef NodeType                      node_type;
+    typedef std::size_t                   size_type;
 
   protected:
     enum direction
@@ -107,7 +107,7 @@ void RBTree<Key, T, Compare, Allocator, NodeType>::insert_rebalance_wrapper(ft::
                 node = insert_rebalance_color(auntie->parent());
 
             // If parent is left child of grandparent
-            else if (node->parent() == node->parent()->parent()->left())
+            else if (node->parent()->parent() && node->parent() == node->parent()->parent()->left())
                 node = insert_rebalance_left(node);
 
             // If parent is right child of grandparent
@@ -143,8 +143,11 @@ typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T,
 
     // Recolor and do a right rotation on node's parent
     node->parent()->set_color(node_type::black);
-    node->parent()->parent()->set_color(node_type::red);
-    rotate_right(node->parent()->parent());
+    if (node->parent()->parent())
+    {
+        node->parent()->parent()->set_color(node_type::red);
+        rotate_right(node->parent()->parent());
+    }
 
     // New node to check is now node's parent if left-right rotation, or node
     return (node);
@@ -163,8 +166,11 @@ typename RBTree<Key, T, Compare, Allocator, NodeType>::node_type* RBTree<Key, T,
 
     // Recolor and do a left rotation on node's parent
     node->parent()->set_color(node_type::black);
-    node->parent()->parent()->set_color(node_type::red);
-    rotate_left(node->parent()->parent());
+    if (node->parent()->parent())
+    {
+        node->parent()->parent()->set_color(node_type::red);
+        rotate_left(node->parent()->parent());
+    }
 
     // New node to check is now node's parent if right-left rotation, or node
     return (node);
