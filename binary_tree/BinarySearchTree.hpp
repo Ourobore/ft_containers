@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/31 22:55:56 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 08:09:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ class BinarySearchTree
     virtual ~BinarySearchTree();
 
     // Search
-    node_type* search(const key_type& key) const;
+    // node_type* search(const key_type& key) const;
     node_type* search(const value_type& value, typename ft::enable_if<true, value_type*>::type = 0) const;
 
     // Insert
@@ -139,37 +139,38 @@ BinarySearchTree< Key, T, Compare, Allocator, NodeType >::~BinarySearchTree()
 }
 
 // Search
-template < class Key, class T, class Compare, class Allocator, class NodeType >
-typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const key_type& key) const
-{
-    node_type* search = _root;
+// template < class Key, class T, class Compare, class Allocator, class NodeType >
+// typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const key_type& key) const
+// {
+//     node_type* search = _root;
 
-    while (search)
-    {
-        // If equal: !(a < b) && !(b < a)
-        if (!_comp(search->data().first, key) && !_comp(key, search->data().first))
-            return (search);
+//     while (search)
+//     {
+//         // If equal: !(a < b) && !(b < a)
+//         if (!_comp(search->data().first, key) && !_comp(key, search->data().first))
+//             return (search);
 
-        if (_comp(key, search->data().first))
-            search = search->left();
-        else
-            search = search->right();
-    }
-    return (NULL);
-}
+//         if (_comp(key, search->data().first))
+//             search = search->left();
+//         else
+//             search = search->right();
+//     }
+//     return (NULL);
+// }
 
 template < class Key, class T, class Compare, class Allocator, class NodeType >
 typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node_type* BinarySearchTree< Key, T, Compare, Allocator, NodeType >::search(const value_type& value, typename ft::enable_if<true, value_type*>::type) const
 {
     node_type* search = _root;
 
+    node_type value_node(value);
     while (search)
     {
         // If equal: !(a < b) && !(b < a)
-        if (!_comp(search->data().first, value.first) && !_comp(value.first, search->data().first))
+        if (!(*search < value_node) && !(value_node < *search))
             return (search);
 
-        if (_comp(value.first, search->data().first))
+        if (value_node < *search)
             search = search->left();
         else
             search = search->right();

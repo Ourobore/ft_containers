@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/31 20:56:57 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 08:11:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,13 +378,13 @@ typename map< Key, T, Compare, Allocator >::value_compare map< Key, T, Compare, 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::iterator map< Key, T, Compare, Allocator >::find(const key_type& k)
 {
-    return (iterator(_tree.search(k)));
+    return (iterator(_tree.search(ft::make_pair(k, mapped_type()))));
 }
 
 template < class Key, class T, class Compare, class Allocator >
 typename map< Key, T, Compare, Allocator >::const_iterator map< Key, T, Compare, Allocator >::find(const key_type& k) const
 {
-    return (const_iterator(_tree.search(k)));
+    return (const_iterator(_tree.search(ft::make_pair(k, mapped_type()))));
 }
 
 template < class Key, class T, class Compare, class Allocator >
