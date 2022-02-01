@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 16:19:05 by lchapren          #+#    #+#             */
-/*   Updated: 2022/02/01 15:19:44 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:52:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ class set
     value_compare value_comp() const;
 
     // Operations
-    iterator                             find(const value_type& val) const;
+    iterator                             find(const value_type& val);
+    const_iterator                       find(const value_type& val) const;
     size_type                            count(const value_type& val) const;
     iterator                             lower_bound(const value_type& val);
     const_iterator                       lower_bound(const value_type& val) const;
@@ -334,9 +335,15 @@ typename set<T, Compare, Allocator>::value_compare set<T, Compare, Allocator>::v
 
 // Operations
 template < class T, class Compare, class Allocator >
-typename set<T, Compare, Allocator>::iterator set<T, Compare, Allocator>::find(const value_type& val) const
+typename set<T, Compare, Allocator>::iterator set<T, Compare, Allocator>::find(const value_type& val)
 {
     return (iterator(_tree.search(val)));
+}
+
+template < class T, class Compare, class Allocator >
+typename set<T, Compare, Allocator>::const_iterator set<T, Compare, Allocator>::find(const value_type& val) const
+{
+    return (const_iterator(_tree.search(val)));
 }
 
 template < class T, class Compare, class Allocator >

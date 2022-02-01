@@ -6,12 +6,14 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 09:30:37 by lchapren          #+#    #+#             */
-/*   Updated: 2021/12/21 17:43:45 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:47:09 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATORTRAITS_HPP
 #define ITERATORTRAITS_HPP
+
+#include <iostream>
 
 namespace ft
 {
@@ -24,6 +26,26 @@ struct iterator_traits
     typedef typename Iterator::pointer           pointer;
     typedef typename Iterator::reference         reference;
     typedef typename Iterator::iterator_category iterator_category;
+};
+
+template < class T >
+struct iterator_traits<T*>
+{
+    typedef std::ptrdiff_t                  difference_type;
+    typedef T                               value_type;
+    typedef T*                              pointer;
+    typedef T&                              reference;
+    typedef std::random_access_iterator_tag iterator_category;
+};
+
+template < class T >
+struct iterator_traits<const T*>
+{
+    typedef std::ptrdiff_t                  difference_type;
+    typedef T                               value_type;
+    typedef const T*                        pointer;
+    typedef const T&                        reference;
+    typedef std::random_access_iterator_tag iterator_category;
 };
 
 } // namespace ft
