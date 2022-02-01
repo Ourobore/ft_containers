@@ -36,10 +36,12 @@ define MAIN_CODE
 #include "vector.hpp"
 #include "stack.hpp"
 #include "map.hpp"
+#include "set.hpp"
 
 #include <vector>
 #include <stack>
 #include <map>
+#include <set>
 
 #include <iostream>
 
