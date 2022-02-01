@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 16:19:05 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/31 22:54:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:19:44 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,9 @@ set<T, Compare, Allocator>::set(InputIterator first, InputIterator last, const k
 
 template < class T, class Compare, class Allocator >
 set<T, Compare, Allocator>::set(const set& x)
-    : _tree(x._tree), _size(x._size), _comp(x._comp), _alloc(x._alloc)
+    : _tree(), _size(0), _comp(x._comp), _alloc(x._alloc)
 {
+    this->insert(x.begin(), x.end());
 }
 
 template < class T, class Compare, class Allocator >

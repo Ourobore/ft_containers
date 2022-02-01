@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 13:38:10 by lchapren          #+#    #+#             */
-/*   Updated: 2022/02/01 08:11:34 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:18:30 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,9 @@ map< Key, T, Compare, Allocator >::map(InputIterator first, InputIterator last, 
 
 template < class Key, class T, class Compare, class Allocator >
 map< Key, T, Compare, Allocator >::map(const map& x)
-    : _tree(x._tree), _size(x._size), _comp(x._comp), _alloc(x._alloc)
+    : _tree(), _size(0), _comp(x._comp), _alloc(x._alloc)
 {
+    this->insert(x.begin(), x.end());
 }
 
 template < class Key, class T, class Compare, class Allocator >
