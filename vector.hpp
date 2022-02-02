@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 13:24:09 by lchapren          #+#    #+#             */
-/*   Updated: 2022/01/27 14:59:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:47:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,23 +418,28 @@ typename vector< T, Allocator >::iterator vector< T, Allocator >::insert(iterato
 template < class T, class Allocator >
 void vector< T, Allocator >::insert(iterator position, size_type n, const_reference val)
 {
-    size_type pos = static_cast< size_type >(position - this->begin());
-    if (_size + n > _capacity)
+    if (n > 0)
     {
-        if (_capacity * 2 < _size + n)
-            reserve(_size + n);
-        else
-            reserve(_size * 2);
-    }
+        size_type pos = static_cast< size_type >(position - this->begin());
+        if (_size + n > _capacity)
+        {
+            if (_capacity * 2 < _size + n)
+                reserve(_size + n);
+            else
+                reserve(_size * 2);
+        }
 
-    _size += n;
-    for (size_type i = _size - 1; i != pos + n - 1; --i)
-    {
-        _alloc.construct(&_c[i], _c[i - n]);
-        _alloc.destroy(&_c[i - n]);
+        for (size_type i = _size + n - 1; i != pos + n - 1; --i)
+        {
+            _alloc.construct(&_c[i], _c[i - n]);
+            _alloc.destroy(&_c[i - n]);
+        }
+
+        for (size_type i = pos; i != pos + n; ++i)
+            _alloc.construct(&_c[i], val);
+
+        _size += n;
     }
-    for (size_type i = pos; i != pos + n; ++i)
-        _alloc.construct(&_c[i], val);
 }
 
 template < class T, class Allocator >
