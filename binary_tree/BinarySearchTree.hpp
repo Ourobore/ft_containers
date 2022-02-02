@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 15:16:56 by lchapren          #+#    #+#             */
-/*   Updated: 2022/02/01 08:09:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2022/02/02 15:42:46 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,9 +241,9 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
 
     node_type  value_node(value);
     node_type* successor = hint->inorder_successor();
-    if (!(*hint < value_node && (!successor || *successor > value_node)))
+    if (*hint > value_node || (successor && *successor < value_node))
         return (insert(value));
-    else
+    else if (value_node != hint)
     {
         if (!successor || value_node != successor)
         {
@@ -252,13 +252,33 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
             node_type* new_node = allocator.allocate(1);
             allocator.construct(new_node, value);
 
-            hint->set_right(new_node);
-            new_node->set_parent(hint);
-
-            if (successor)
+            if (new_node < hint)
             {
-                new_node->set_right(successor);
-                successor->set_parent(new_node);
+                if (hint->left())
+                {
+                    node_type* save_child = hint->left();
+                    hint->set_left(new_node);
+                    if (new_node < save_child)
+                        new_node->set_left(save_child);
+                    else
+                        new_node->set_right(save_child);
+                }
+                else
+                    hint->set_left(new_node);
+            }
+            else
+            {
+                if (hint->right())
+                {
+                    node_type* save_child = hint->right();
+                    hint->set_right(new_node);
+                    if (new_node < save_child)
+                        new_node->set_left(save_child);
+                    else
+                        new_node->set_right(save_child);
+                }
+                else
+                    hint->set_right(new_node);
             }
 
             return (ft::make_pair(new_node, true));
@@ -266,6 +286,8 @@ ft::pair<typename BinarySearchTree< Key, T, Compare, Allocator, NodeType >::node
         else
             return (ft::make_pair(hint, false));
     }
+    else
+        return (ft::make_pair(hint, false));
 }
 // Erase
 
