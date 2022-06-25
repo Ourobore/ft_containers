@@ -20,10 +20,10 @@ _myFile.cpp_
 
 ## Unit testing
 
-To really understand how the STL containers worked, and to be sure that my implementation was behaving correctly, I creating a unit testing tool called [**Cavalry**](https://github.com/Ourobore/Cavalry). You can find more informations about it on it's [repository](https://github.com/Ourobore/Cavalry).
+To really understand how the STL containers worked, and to be sure that my implementation was behaving correctly, I created a unit testing tool called [**Cavalry**](https://github.com/Ourobore/Cavalry). You can find more informations about it on it's [repository](https://github.com/Ourobore/Cavalry).
 
 <br/>
 
 ## Notes
 
-`.devcontainer`, `.vscode`, `.clang-format` and `compile_flags.txt` where files/directories needed to facilitate development. They where used to: have a common dev environment, launch debugger, and use **lldb** and **clang format**.
+`.devcontainer`, `.vscode`, `.clang-format` and `compile_flags.txt` where files/directories needed to facilitate development. They where used to: have a common dev environment, launch debugger, and use **lldb** and **clang-format**.
